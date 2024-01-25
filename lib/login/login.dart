@@ -137,7 +137,7 @@ class _LoginState extends State<Login> {
                         height: 50,
                         margin: const EdgeInsets.all(15),
                         child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(primary: themeColor),
+                          style: ElevatedButton.styleFrom(backgroundColor: themeColor),
                           child: const Text(
                             'LOGIN',
                             key: Key('login'),
