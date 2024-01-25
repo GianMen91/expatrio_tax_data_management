@@ -1,6 +1,4 @@
-import 'package:coding_challenge/login/login.dart';
 import 'package:flutter/material.dart';
-
 import 'login/login.dart';
 
 void main() {
@@ -36,7 +34,7 @@ class MyApp extends StatelessWidget {
         ),
         primaryColorDark: Colors.white,
       ),
-      home: Login()
+      home: const Login()
     );
   }
 }
