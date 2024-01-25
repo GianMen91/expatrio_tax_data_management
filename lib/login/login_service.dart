@@ -6,8 +6,6 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 class LoginService {
-  String email = "tito+bs792@expatrio.com";
-  String password = "nemampojma";
   String userBaseUrl = 'https://dev-api.expatrio.com';
 
   Future<bool> login(
@@ -24,92 +22,70 @@ class LoginService {
         body: jsonEncode(data),
       );
 
+      var body = json.decode(response.body);
       if (response.statusCode == 200) {
-        var body = json.decode(response.body);
         if (context.mounted) {
-          showModalBottomSheet<void>(
-            context: context,
-            builder: (BuildContext context) {
-              return SizedBox(
-                height: 300,
-                child: Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    mainAxisSize: MainAxisSize.min,
-                    children: <Widget>[
-                      const Icon(Icons.check_circle,
-                          color: themeColor, size: 70),
-                      const SizedBox(height: 20),
-                      const Text('Successful Login',
-                          style: TextStyle(
-                            fontSize: 22.0,
-                            fontWeight: FontWeight.bold,
-                          )),
-                      const SizedBox(height: 10),
-                      const Text('You will be redirect to you dashboard'),
-                      const SizedBox(height: 30),
-                      ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                            backgroundColor: themeColor),
-                        child: const Text('GOT IT'),
-                        onPressed: () => Navigator.pop(context),
-                      ),
-                      const SizedBox(height: 30),
-                    ],
-                  ),
-                ),
-              );
-            },
-          );
+          _showBottomSheet(context, "Successful Login",
+              "You will be redirect to you dashboard", true);
         }
         return true;
       } else {
-        var body = json.decode(response.body);
         if (context.mounted) {
-          showModalBottomSheet<void>(
-            context: context,
-            builder: (BuildContext context) {
-              return SizedBox(
-                height: 300,
-                child: Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    mainAxisSize: MainAxisSize.min,
-                    children: <Widget>[
-                      const Icon(Icons.error,
-                          color: errorMessageColor, size: 70),
-                      const SizedBox(height: 15),
-                      const Text('Invalid Credentials',
-                          style: TextStyle(
-                            fontSize: 22.0,
-                            fontWeight: FontWeight.bold,
-                          )),
-                      const SizedBox(height: 10),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 20),
-                        child:
-                            Text(body['message'], textAlign: TextAlign.center),
-                      ),
-                      const SizedBox(height: 15),
-                      ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                            backgroundColor: themeColor),
-                        child: const Text('GOT IT'),
-                        onPressed: () => Navigator.pop(context),
-                      ),
-                      const SizedBox(height: 15),
-                    ],
-                  ),
-                ),
-              );
-            },
-          );
+          _showBottomSheet(
+              context, "Invalid Credentials", body['message'], false);
         }
         return false;
       }
     } on SocketException {
-      //"Impossible to communicate with the server. Check your internet connection and retry!")
+      if (context.mounted) {
+        _showBottomSheet(
+            context,
+            "Connection Error",
+            "Impossible to communicate with the server. Check your internet connection and retry!",
+            false);
+      }
       return false;
     }
+  }
+
+  void _showBottomSheet(
+      BuildContext context, title, message, isSuccessfullAccess) {
+    showModalBottomSheet<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return SizedBox(
+          height: 300,
+          child: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                Icon(isSuccessfullAccess ? Icons.check_circle : Icons.error,
+                    color: isSuccessfullAccess ? themeColor : errorMessageColor,
+                    size: 70),
+                const SizedBox(height: 15),
+                Text(title,
+                    style: const TextStyle(
+                      fontSize: 22.0,
+                      fontWeight: FontWeight.bold,
+                    )),
+                const SizedBox(height: 10),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: Text(message, textAlign: TextAlign.center),
+                ),
+                const SizedBox(height: 15),
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(backgroundColor: themeColor),
+                  child: const Text('GOT IT'),
+                  onPressed: () => Navigator.pop(context),
+                ),
+                const SizedBox(height: 15),
+              ],
+            ),
+          ),
+        );
+      },
+    );
   }
 }
