@@ -6,6 +6,8 @@ import '../shared/constants.dart';
 import 'login_service.dart';
 
 class Login extends StatefulWidget {
+  const Login({super.key});
+
   @override
   State<Login> createState() => _LoginState();
 }
@@ -190,7 +192,7 @@ class _LoginState extends State<Login> {
                         ),
                         onPressed: () {
                           // Open the link in the browser
-                          launch('https://help.expatrio.com/hc/en-us');
+                          launchUrl(Uri.parse('https://help.expatrio.com/hc/en-us'));
                         },
                         child: const Row(
                           children: [
@@ -224,7 +226,7 @@ class _LoginState extends State<Login> {
       children: [
         Icon(icon, size: 15),
         const SizedBox(width: 8),
-        Text(label, style: TextStyle(fontSize: 13)),
+        Text(label, style: const TextStyle(fontSize: 13)),
       ],
     );
   }
