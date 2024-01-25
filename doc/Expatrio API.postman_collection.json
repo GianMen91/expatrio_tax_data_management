@@ -1,0 +1,1057 @@
+{
+	"info": {
+		"_postman_id": "4e1f2476-e607-4418-acac-3982b0289d94",
+		"name": "Expatrio API",
+		"description": "Contact Support:\n Name: Expatrio\n Email: info@expatrio.com",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "29890677"
+	},
+	"item": [
+		{
+			"name": "auth",
+			"item": [
+				{
+					"name": "login",
+					"item": [
+						{
+							"name": "Login request",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var jsonData = JSON.parse(responseBody);",
+											"pm.collectionVariables.set(\"token\", jsonData[\"accessToken\"]);",
+											"pm.collectionVariables.set(\"userId\", jsonData[\"userId\"]);"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "*/*"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"email\": \"tito+bs792@expatrio.com\",\n  \"password\": \"nemampojma\"\n}",
+									"options": {
+										"raw": {
+											"headerFamily": "json",
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/auth/login",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"auth",
+										"login"
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "OK",
+									"originalRequest": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Content-Type",
+												"value": "application/json"
+											},
+											{
+												"key": "Accept",
+												"value": "*/*"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n  \"email\": \"<string>\",\n  \"password\": \"<string>\"\n}",
+											"options": {
+												"raw": {
+													"headerFamily": "json",
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{baseUrl}}/auth/login",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"auth",
+												"login"
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "text",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "*/*"
+										}
+									],
+									"cookie": [],
+									"body": "{\n  \"accessToken\": \"<string>\",\n  \"accessTokenExpiresAt\": \"<dateTime>\",\n  \"maxAgeSeconds\": \"<integer>\",\n  \"subject\": {\n    \"consoleRoles\": [\n      \"SALES\",\n      \"ADMIN\"\n    ],\n    \"isAdmin\": \"<boolean>\",\n    \"role\": \"HUBSPOT\",\n    \"userId\": \"<long>\",\n    \"userUuid\": \"<uuid>\",\n    \"email\": \"<string>\",\n    \"firstName\": \"<string>\",\n    \"fullName\": \"<string>\",\n    \"lastName\": \"<string>\"\n  },\n  \"userId\": \"<long>\",\n  \"userRole\": \"QUNDO\",\n  \"xpm\": \"<boolean>\"\n}"
+								},
+								{
+									"name": "Created",
+									"originalRequest": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Content-Type",
+												"value": "application/json"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n  \"email\": \"<string>\",\n  \"password\": \"<string>\"\n}",
+											"options": {
+												"raw": {
+													"headerFamily": "json",
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{baseUrl}}/auth/login",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"auth",
+												"login"
+											]
+										}
+									},
+									"status": "Created",
+									"code": 201,
+									"_postman_previewlanguage": "text",
+									"header": [],
+									"cookie": [],
+									"body": ""
+								},
+								{
+									"name": "Unauthorized",
+									"originalRequest": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Content-Type",
+												"value": "application/json"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n  \"email\": \"<string>\",\n  \"password\": \"<string>\"\n}",
+											"options": {
+												"raw": {
+													"headerFamily": "json",
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{baseUrl}}/auth/login",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"auth",
+												"login"
+											]
+										}
+									},
+									"status": "Unauthorized",
+									"code": 401,
+									"_postman_previewlanguage": "text",
+									"header": [],
+									"cookie": [],
+									"body": ""
+								},
+								{
+									"name": "Forbidden",
+									"originalRequest": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Content-Type",
+												"value": "application/json"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n  \"email\": \"<string>\",\n  \"password\": \"<string>\"\n}",
+											"options": {
+												"raw": {
+													"headerFamily": "json",
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{baseUrl}}/auth/login",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"auth",
+												"login"
+											]
+										}
+									},
+									"status": "Forbidden",
+									"code": 403,
+									"_postman_previewlanguage": "text",
+									"header": [],
+									"cookie": [],
+									"body": ""
+								},
+								{
+									"name": "Not Found",
+									"originalRequest": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Content-Type",
+												"value": "application/json"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n  \"email\": \"<string>\",\n  \"password\": \"<string>\"\n}",
+											"options": {
+												"raw": {
+													"headerFamily": "json",
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{baseUrl}}/auth/login",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"auth",
+												"login"
+											]
+										}
+									},
+									"status": "Not Found",
+									"code": 404,
+									"_postman_previewlanguage": "text",
+									"header": [],
+									"cookie": [],
+									"body": ""
+								}
+							]
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "portal",
+			"item": [
+				{
+					"name": "users",
+					"item": [
+						{
+							"name": "{userId}",
+							"item": [
+								{
+									"name": "dashboard",
+									"item": [
+										{
+											"name": "Get user dashboard data",
+											"request": {
+												"auth": {
+													"type": "bearer",
+													"bearer": [
+														{
+															"key": "token",
+															"value": "{{token}}",
+															"type": "string"
+														}
+													]
+												},
+												"method": "GET",
+												"header": [
+													{
+														"key": "Accept",
+														"value": "*/*"
+													},
+													{
+														"key": "User-Agen",
+														"value": "Expatrio Mobile",
+														"type": "text"
+													},
+													{
+														"key": "Content-Type",
+														"value": "application/json",
+														"type": "text"
+													},
+													{
+														"key": "security-token",
+														"value": "4f4bc0b11863b1e34178801213fc2e8b82b44115",
+														"type": "text"
+													}
+												],
+												"url": {
+													"raw": "{{baseUrl}}/portal/users/:userId/profile",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"portal",
+														"users",
+														":userId",
+														"profile"
+													],
+													"variable": [
+														{
+															"key": "userId",
+															"value": "{{userId}}",
+															"description": "(Required) userId"
+														}
+													]
+												}
+											},
+											"response": [
+												{
+													"name": "OK",
+													"originalRequest": {
+														"method": "GET",
+														"header": [
+															{
+																"key": "Accept",
+																"value": "*/*"
+															},
+															{
+																"description": "Added as a part of security scheme: apikey",
+																"key": "Authorization",
+																"value": "<API Key>"
+															}
+														],
+														"url": {
+															"raw": "{{baseUrl}}/portal/users/:userId/dashboard",
+															"host": [
+																"{{baseUrl}}"
+															],
+															"path": [
+																"portal",
+																"users",
+																":userId",
+																"dashboard"
+															],
+															"variable": [
+																{
+																	"key": "userId"
+																}
+															]
+														}
+													},
+													"status": "OK",
+													"code": 200,
+													"_postman_previewlanguage": "text",
+													"header": [
+														{
+															"key": "Content-Type",
+															"value": "*/*"
+														}
+													],
+													"cookie": [],
+													"body": "{\n  \"askNewsletterConsent\": \"<boolean>\",\n  \"askStudentProfessionUpdate\": \"<boolean>\",\n  \"blockedAccounts\": [\n    {\n      \"aionApplication\": \"<boolean>\",\n      \"aliPayPaymentMethod\": \"<boolean>\",\n      \"allowToDownloadBankStatement\": \"<boolean>\",\n      \"allowedExtension\": \"<boolean>\",\n      \"allowedNewApplication\": \"<boolean>\",\n      \"allowedToShowManualCashback\": \"<boolean>\",\n      \"allowedToTriggerManualCashback\": \"<boolean>\",\n      \"currentAccountBalance\": \"<double>\",\n      \"files\": [\n        {\n          \"createdAt\": \"<dateTime>\",\n          \"dataType\": \"CLOSING_TRANSFER_RECEIPT\",\n          \"fileName\": \"<string>\",\n          \"id\": \"<long>\",\n          \"modifiedAt\": \"<dateTime>\",\n          \"token\": \"<string>\",\n          \"author\": \"<string>\",\n          \"description\": \"<string>\",\n          \"field\": \"<string>\",\n          \"invalid\": \"<boolean>\",\n          \"label\": \"<string>\",\n          \"state\": \"PENDING\",\n          \"userType\": \"STUDENT\"\n        },\n        {\n          \"createdAt\": \"<dateTime>\",\n          \"dataType\": \"AION_EXPATRIO_BANKING_DECLARATION\",\n          \"fileName\": \"<string>\",\n          \"id\": \"<long>\",\n          \"modifiedAt\": \"<dateTime>\",\n          \"token\": \"<string>\",\n          \"author\": \"<string>\",\n          \"description\": \"<string>\",\n          \"field\": \"<string>\",\n          \"invalid\": \"<boolean>\",\n          \"label\": \"<string>\",\n          \"state\": \"UNCHECKED\",\n          \"userType\": \"PAYER\"\n        }\n      ],\n      \"financialOverviewAvailable\": \"<boolean>\",\n      \"locked\": \"<boolean>\",\n      \"needVisaAuthorityCheckBefore06Download\": \"<boolean>\",\n      \"productId\": \"<long>\",\n      \"pspNeedRenewTransaction\": \"<boolean>\",\n      \"pspRefundProcess\": \"<boolean>\",\n      \"showContactButtonForFundsTransferedState\": \"<boolean>\",\n      \"state\": \"MANGOPAY_MANUAL_REVIEW__DOCUMENT_HAS_EXPIRED\",\n      \"activationStrategy\": \"AION\",\n      \"amountCalculation\": {\n        \"accountBuffer\": \"<double>\",\n        \"additionalBasicSum\": \"<double>\",\n        \"monthlyAccountFee\": \"<double>\",\n        \"monthlyBlockedAmount\": \"<double>\",\n        \"plannedLengthOfStay\": \"<integer>\",\n        \"setupFee\": \"<double>\",\n        \"totalAccountFee\": \"<string>\",\n        \"totalAmount\": \"<double>\",\n        \"totalBlockedAmount\": \"<double>\",\n        \"additionalBasicSumRequired\": \"<boolean>\"\n      },\n      \"bic\": \"<string>\",\n      \"cohortPaymentUrl\": \"<string>\",\n      \"currentAccountBic\": \"<string>\",\n      \"currentAccountIban\": \"<string>\",\n      \"extensionType\": \"EXTENSION\",\n      \"iban\": \"<string>\",\n      \"immediatePaymentUrl\": \"<string>\",\n      \"implementationId\": \"<uuid>\",\n      \"lastPayoutDate\": \"<string>\",\n      \"lockedReason\": \"<string>\",\n      \"outstandingCashback\": \"<integer>\",\n      \"packageId\": \"<string>\",\n      \"packageType\": \"CBA\",\n      \"paymentType\": \"PSP\",\n      \"payoutCashback\": \"<integer>\",\n      \"remainingMonthNumber\": \"<integer>\"\n    },\n    {\n      \"aionApplication\": \"<boolean>\",\n      \"aliPayPaymentMethod\": \"<boolean>\",\n      \"allowToDownloadBankStatement\": \"<boolean>\",\n      \"allowedExtension\": \"<boolean>\",\n      \"allowedNewApplication\": \"<boolean>\",\n      \"allowedToShowManualCashback\": \"<boolean>\",\n      \"allowedToTriggerManualCashback\": \"<boolean>\",\n      \"currentAccountBalance\": \"<double>\",\n      \"files\": [\n        {\n          \"createdAt\": \"<dateTime>\",\n          \"dataType\": \"OTHER\",\n          \"fileName\": \"<string>\",\n          \"id\": \"<long>\",\n          \"modifiedAt\": \"<dateTime>\",\n          \"token\": \"<string>\",\n          \"author\": \"<string>\",\n          \"description\": \"<string>\",\n          \"field\": \"<string>\",\n          \"invalid\": \"<boolean>\",\n          \"label\": \"<string>\",\n          \"state\": \"REJECTED\",\n          \"userType\": \"PAYER\"\n        },\n        {\n          \"createdAt\": \"<dateTime>\",\n          \"dataType\": \"SUMMARY\",\n          \"fileName\": \"<string>\",\n          \"id\": \"<long>\",\n          \"modifiedAt\": \"<dateTime>\",\n          \"token\": \"<string>\",\n          \"author\": \"<string>\",\n          \"description\": \"<string>\",\n          \"field\": \"<string>\",\n          \"invalid\": \"<boolean>\",\n          \"label\": \"<string>\",\n          \"state\": \"REJECTED\",\n          \"userType\": \"PAYER\"\n        }\n      ],\n      \"financialOverviewAvailable\": \"<boolean>\",\n      \"locked\": \"<boolean>\",\n      \"needVisaAuthorityCheckBefore06Download\": \"<boolean>\",\n      \"productId\": \"<long>\",\n      \"pspNeedRenewTransaction\": \"<boolean>\",\n      \"pspRefundProcess\": \"<boolean>\",\n      \"showContactButtonForFundsTransferedState\": \"<boolean>\",\n      \"state\": \"CLOSING_CHECK_ONE_DONE\",\n      \"activationStrategy\": \"MANGOPAY\",\n      \"amountCalculation\": {\n        \"accountBuffer\": \"<double>\",\n        \"additionalBasicSum\": \"<double>\",\n        \"monthlyAccountFee\": \"<double>\",\n        \"monthlyBlockedAmount\": \"<double>\",\n        \"plannedLengthOfStay\": \"<integer>\",\n        \"setupFee\": \"<double>\",\n        \"totalAccountFee\": \"<string>\",\n        \"totalAmount\": \"<double>\",\n        \"totalBlockedAmount\": \"<double>\",\n        \"additionalBasicSumRequired\": \"<boolean>\"\n      },\n      \"bic\": \"<string>\",\n      \"cohortPaymentUrl\": \"<string>\",\n      \"currentAccountBic\": \"<string>\",\n      \"currentAccountIban\": \"<string>\",\n      \"extensionType\": \"EXTENDED\",\n      \"iban\": \"<string>\",\n      \"immediatePaymentUrl\": \"<string>\",\n      \"implementationId\": \"<uuid>\",\n      \"lastPayoutDate\": \"<string>\",\n      \"lockedReason\": \"<string>\",\n      \"outstandingCashback\": \"<integer>\",\n      \"packageId\": \"<string>\",\n      \"packageType\": \"VALUE\",\n      \"paymentType\": \"PSP\",\n      \"payoutCashback\": \"<integer>\",\n      \"remainingMonthNumber\": \"<integer>\"\n    }\n  ],\n  \"enabledBanking\": \"<boolean>\",\n  \"hasNewsletterConsent\": \"<boolean>\",\n  \"profile\": {\n    \"files\": [\n      {\n        \"createdAt\": \"<dateTime>\",\n        \"dataType\": \"TRANSFER_FORM\",\n        \"fileName\": \"<string>\",\n        \"id\": \"<long>\",\n        \"modifiedAt\": \"<dateTime>\",\n        \"token\": \"<string>\",\n        \"author\": \"<string>\",\n        \"description\": \"<string>\",\n        \"field\": \"<string>\",\n        \"invalid\": \"<boolean>\",\n        \"label\": \"<string>\",\n        \"state\": \"PENDING\",\n        \"userType\": \"STUDENT\"\n      },\n      {\n        \"createdAt\": \"<dateTime>\",\n        \"dataType\": \"ACCOUNT_OPENING_CONFIRMATION_05\",\n        \"fileName\": \"<string>\",\n        \"id\": \"<long>\",\n        \"modifiedAt\": \"<dateTime>\",\n        \"token\": \"<string>\",\n        \"author\": \"<string>\",\n        \"description\": \"<string>\",\n        \"field\": \"<string>\",\n        \"invalid\": \"<boolean>\",\n        \"label\": \"<string>\",\n        \"state\": \"REJECTED\",\n        \"userType\": \"PAYER\"\n      }\n    ],\n    \"id\": \"<long>\",\n    \"passportOutdated\": \"<boolean>\",\n    \"userType\": \"LEAD\",\n    \"ageStage\": \"BETWEEN_18_AND_23\",\n    \"arrivalInGermany\": \"<string>\",\n    \"bic\": \"<string>\",\n    \"firstName\": \"<string>\",\n    \"foreignAddress\": {\n      \"city\": \"<string>\",\n      \"postalCode\": \"<string>\",\n      \"streetName\": \"<string>\",\n      \"streetNumber\": \"<string>\",\n      \"coAddress\": \"<string>\",\n      \"countryCode\": \"<string>\",\n      \"state\": \"<string>\",\n      \"province\": \"<string>\",\n      \"district\": \"<string>\"\n    },\n    \"germanAddress\": {\n      \"city\": \"<string>\",\n      \"postalCode\": \"<string>\",\n      \"streetName\": \"<string>\",\n      \"streetNumber\": \"<string>\",\n      \"coAddress\": \"<string>\",\n      \"countryCode\": \"<string>\",\n      \"state\": \"<string>\",\n      \"province\": \"<string>\",\n      \"district\": \"<string>\"\n    },\n    \"iban\": \"<string>\",\n    \"lastName\": \"<string>\",\n    \"major\": \"<string>\",\n    \"nationality\": \"<string>\",\n    \"passportNumber\": \"<string>\",\n    \"phoneCountryCode\": \"<string>\",\n    \"phoneNumber\": \"<string>\",\n    \"profession\": \"INTERN\",\n    \"requestedCurrentAccount\": \"<boolean>\",\n    \"studyBegin\": \"<string>\",\n    \"visaAuthority\": \"<string>\",\n    \"visaStart\": \"<string>\"\n  },\n  \"referralData\": {\n    \"earnedAmount\": \"<integer>\",\n    \"pendingAmount\": \"<integer>\",\n    \"personalCode\": \"<string>\"\n  },\n  \"showArrivalDateInstructionBanner\": \"<boolean>\",\n  \"showFinancialInformationDeclaration\": \"<boolean>\",\n  \"showPortalTour\": \"<boolean>\",\n  \"showPortalTourFirstTime\": \"<boolean>\",\n  \"showSurveyOverlay\": \"<boolean>\",\n  \"showW9\": \"<boolean>\",\n  \"studyApplications\": [\n    {\n      \"files\": [\n        {\n          \"createdAt\": \"<dateTime>\",\n          \"dataType\": \"CLOSING_TRANSFER_RECEIPT\",\n          \"fileName\": \"<string>\",\n          \"id\": \"<long>\",\n          \"modifiedAt\": \"<dateTime>\",\n          \"token\": \"<string>\",\n          \"author\": \"<string>\",\n          \"description\": \"<string>\",\n          \"field\": \"<string>\",\n          \"invalid\": \"<boolean>\",\n          \"label\": \"<string>\",\n          \"state\": \"APPROVED\",\n          \"userType\": \"STUDENT\"\n        },\n        {\n          \"createdAt\": \"<dateTime>\",\n          \"dataType\": \"UNIVERSITY_ENTRANCE_QUALIFICATION\",\n          \"fileName\": \"<string>\",\n          \"id\": \"<long>\",\n          \"modifiedAt\": \"<dateTime>\",\n          \"token\": \"<string>\",\n          \"author\": \"<string>\",\n          \"description\": \"<string>\",\n          \"field\": \"<string>\",\n          \"invalid\": \"<boolean>\",\n          \"label\": \"<string>\",\n          \"state\": \"APPROVED\",\n          \"userType\": \"STUDENT\"\n        }\n      ],\n      \"productId\": \"<long>\",\n      \"state\": \"IN_REVIEW\"\n    },\n    {\n      \"files\": [\n        {\n          \"createdAt\": \"<dateTime>\",\n          \"dataType\": \"LIABILITY_INSURANCE_CERTIFICATE\",\n          \"fileName\": \"<string>\",\n          \"id\": \"<long>\",\n          \"modifiedAt\": \"<dateTime>\",\n          \"token\": \"<string>\",\n          \"author\": \"<string>\",\n          \"description\": \"<string>\",\n          \"field\": \"<string>\",\n          \"invalid\": \"<boolean>\",\n          \"label\": \"<string>\",\n          \"state\": \"PENDING\",\n          \"userType\": \"PAYER\"\n        },\n        {\n          \"createdAt\": \"<dateTime>\",\n          \"dataType\": \"ADDRESS_PROOF_REGISTRATION_CERTIFICATE\",\n          \"fileName\": \"<string>\",\n          \"id\": \"<long>\",\n          \"modifiedAt\": \"<dateTime>\",\n          \"token\": \"<string>\",\n          \"author\": \"<string>\",\n          \"description\": \"<string>\",\n          \"field\": \"<string>\",\n          \"invalid\": \"<boolean>\",\n          \"label\": \"<string>\",\n          \"state\": \"UNCHECKED\",\n          \"userType\": \"STUDENT\"\n        }\n      ],\n      \"productId\": \"<long>\",\n      \"state\": \"APPLICATION_FORWARDED\"\n    }\n  ],\n  \"xpm\": \"<boolean>\",\n  \"affiliateName\": \"<string>\",\n  \"currentAccount\": {\n    \"id\": \"<uuid>\",\n    \"aionData\": {\n      \"actions\": [\n        {\n          \"name\": \"<string>\"\n        },\n        {\n          \"name\": \"<string>\"\n        }\n      ],\n      \"addressProofRequired\": \"<boolean>\",\n      \"id\": \"<uuid>\",\n      \"passedIdentifyVerification\": \"<boolean>\",\n      \"state\": \"OPEN\",\n      \"totalFundsReceived\": \"<integer>\",\n      \"balance\": \"<integer>\",\n      \"customerId\": \"<string>\",\n      \"customerRepresentativeId\": \"<string>\",\n      \"customerUrl\": \"<string>\",\n      \"iban\": \"<string>\",\n      \"idNowProviderCompanyId\": \"<string>\",\n      \"idNowProviderId\": \"<string>\",\n      \"idShopOrderId\": \"<string>\",\n      \"idShopTargetUrl\": \"<string>\",\n      \"idVerificationAppId\": \"<string>\",\n      \"idVerificationState\": \"DOCUMENT_CHECK_SKIPPED\",\n      \"idVerificationType\": \"EXTERNAL\",\n      \"onBoardingAppId\": \"<string>\",\n      \"onBoardingState\": \"AML_VERIFICATION_MANUAL\",\n      \"ownerId\": \"<long>\",\n      \"postIdentCaseId\": \"<string>\",\n      \"postIdentTargetUrl\": \"<string>\",\n      \"prospectId\": \"<string>\",\n      \"prospectRepresentativeId\": \"<string>\",\n      \"riskVerificationStatus\": \"MANUALLY_ACCEPTED\"\n    },\n    \"bic\": \"<string>\",\n    \"createTimestamp\": \"<dateTime>\",\n    \"dailyBankingTimestamp\": \"<dateTime>\",\n    \"iban\": \"<string>\",\n    \"initialCreateTimestamp\": \"<dateTime>\",\n    \"ownerId\": \"<long>\",\n    \"state\": \"ACTIVATION_DOCS_UPLOADED__DOCS_INSUFFICIENT\",\n    \"successAccountRecoveryTimestamp\": \"<dateTime>\",\n    \"updateTimestamp\": \"<dateTime>\"\n  },\n  \"currentBankAccount\": {\n    \"allowedNewApplication\": \"<boolean>\",\n    \"files\": [\n      {\n        \"createdAt\": \"<dateTime>\",\n        \"dataType\": \"ADDRESS_PROOF\",\n        \"fileName\": \"<string>\",\n        \"id\": \"<long>\",\n        \"modifiedAt\": \"<dateTime>\",\n        \"token\": \"<string>\",\n        \"author\": \"<string>\",\n        \"description\": \"<string>\",\n        \"field\": \"<string>\",\n        \"invalid\": \"<boolean>\",\n        \"label\": \"<string>\",\n        \"state\": \"REJECTED\",\n        \"userType\": \"PAYER\"\n      },\n      {\n        \"createdAt\": \"<dateTime>\",\n        \"dataType\": \"USER_PROFILE_PHOTO\",\n        \"fileName\": \"<string>\",\n        \"id\": \"<long>\",\n        \"modifiedAt\": \"<dateTime>\",\n        \"token\": \"<string>\",\n        \"author\": \"<string>\",\n        \"description\": \"<string>\",\n        \"field\": \"<string>\",\n        \"invalid\": \"<boolean>\",\n        \"label\": \"<string>\",\n        \"state\": \"PENDING\",\n        \"userType\": \"STUDENT\"\n      }\n    ],\n    \"productId\": \"<long>\",\n    \"state\": \"MANUAL_REVIEW\",\n    \"bic\": \"<string>\",\n    \"iban\": \"<string>\",\n    \"moneseId\": \"<string>\",\n    \"packageId\": \"<string>\",\n    \"packageType\": \"VALUE\"\n  },\n  \"customerGroup\": \"CUSTOMER\",\n  \"healthInsurance\": {\n    \"allowedNewApplication\": \"<boolean>\",\n    \"files\": [\n      {\n        \"createdAt\": \"<dateTime>\",\n        \"dataType\": \"TRANSFER_PROOF\",\n        \"fileName\": \"<string>\",\n        \"id\": \"<long>\",\n        \"modifiedAt\": \"<dateTime>\",\n        \"token\": \"<string>\",\n        \"author\": \"<string>\",\n        \"description\": \"<string>\",\n        \"field\": \"<string>\",\n        \"invalid\": \"<boolean>\",\n        \"label\": \"<string>\",\n        \"state\": \"UNCHECKED\",\n        \"userType\": \"PAYER\"\n      },\n      {\n        \"createdAt\": \"<dateTime>\",\n        \"dataType\": \"DW_VISA_CHENGDU\",\n        \"fileName\": \"<string>\",\n        \"id\": \"<long>\",\n        \"modifiedAt\": \"<dateTime>\",\n        \"token\": \"<string>\",\n        \"author\": \"<string>\",\n        \"description\": \"<string>\",\n        \"field\": \"<string>\",\n        \"invalid\": \"<boolean>\",\n        \"label\": \"<string>\",\n        \"state\": \"APPROVED\",\n        \"userType\": \"PAYER\"\n      }\n    ],\n    \"productId\": \"<long>\",\n    \"state\": \"MANUAL_REVIEW__UNIVERSITY_MISSING\",\n    \"tkElectronicProcess\": \"<boolean>\",\n    \"bic\": \"<string>\",\n    \"iban\": \"<string>\",\n    \"packageId\": \"<string>\",\n    \"packageType\": \"CBA\",\n    \"tkId\": \"<string>\"\n  },\n  \"incomingInsurance\": {\n    \"allowedNewApplication\": \"<boolean>\",\n    \"files\": [\n      {\n        \"createdAt\": \"<dateTime>\",\n        \"dataType\": \"UNIVERSITY_ENTRANCE_QUALIFICATION\",\n        \"fileName\": \"<string>\",\n        \"id\": \"<long>\",\n        \"modifiedAt\": \"<dateTime>\",\n        \"token\": \"<string>\",\n        \"author\": \"<string>\",\n        \"description\": \"<string>\",\n        \"field\": \"<string>\",\n        \"invalid\": \"<boolean>\",\n        \"label\": \"<string>\",\n        \"state\": \"APPROVED\",\n        \"userType\": \"PAYER\"\n      },\n      {\n        \"createdAt\": \"<dateTime>\",\n        \"dataType\": \"TK_CERTIFICATE_EMPLOYEE\",\n        \"fileName\": \"<string>\",\n        \"id\": \"<long>\",\n        \"modifiedAt\": \"<dateTime>\",\n        \"token\": \"<string>\",\n        \"author\": \"<string>\",\n        \"description\": \"<string>\",\n        \"field\": \"<string>\",\n        \"invalid\": \"<boolean>\",\n        \"label\": \"<string>\",\n        \"state\": \"UNCHECKED\",\n        \"userType\": \"PAYER\"\n      }\n    ],\n    \"productId\": \"<long>\",\n    \"state\": \"MANUAL_REVIEW__UNIVERSITY_MISSING\",\n    \"bic\": \"<string>\",\n    \"drWalterId\": \"<string>\",\n    \"dwPlan\": \"PLUS\",\n    \"iban\": \"<string>\",\n    \"packageId\": \"<string>\",\n    \"packageType\": \"CBA\"\n  },\n  \"liabilityInsurance\": {\n    \"allowedNewApplication\": \"<boolean>\",\n    \"files\": [\n      {\n        \"createdAt\": \"<dateTime>\",\n        \"dataType\": \"VISA_DOCUMENT_TEMPORARY_RESIDENCE_PERMIT\",\n        \"fileName\": \"<string>\",\n        \"id\": \"<long>\",\n        \"modifiedAt\": \"<dateTime>\",\n        \"token\": \"<string>\",\n        \"author\": \"<string>\",\n        \"description\": \"<string>\",\n        \"field\": \"<string>\",\n        \"invalid\": \"<boolean>\",\n        \"label\": \"<string>\",\n        \"state\": \"REJECTED\",\n        \"userType\": \"STUDENT\"\n      },\n      {\n        \"createdAt\": \"<dateTime>\",\n        \"dataType\": \"PASSPORT_PHOTO\",\n        \"fileName\": \"<string>\",\n        \"id\": \"<long>\",\n        \"modifiedAt\": \"<dateTime>\",\n        \"token\": \"<string>\",\n        \"author\": \"<string>\",\n        \"description\": \"<string>\",\n        \"field\": \"<string>\",\n        \"invalid\": \"<boolean>\",\n        \"label\": \"<string>\",\n        \"state\": \"APPROVED\",\n        \"userType\": \"STUDENT\"\n      }\n    ],\n    \"productId\": \"<long>\",\n    \"state\": \"PENDING\",\n    \"packageId\": \"<string>\",\n    \"packageType\": \"LITE\"\n  },\n  \"partnerName\": \"<string>\",\n  \"repatriationInsurance\": {\n    \"allowedNewApplication\": \"<boolean>\",\n    \"productId\": \"<long>\",\n    \"state\": \"CANCELED\",\n    \"packageId\": \"<string>\",\n    \"packageType\": \"VALUE\"\n  },\n  \"travelInsurance\": {\n    \"allowedNewApplication\": \"<boolean>\",\n    \"files\": [\n      {\n        \"createdAt\": \"<dateTime>\",\n        \"dataType\": \"FAMILY_INSURANCE_APPLICATION_FORM\",\n        \"fileName\": \"<string>\",\n        \"id\": \"<long>\",\n        \"modifiedAt\": \"<dateTime>\",\n        \"token\": \"<string>\",\n        \"author\": \"<string>\",\n        \"description\": \"<string>\",\n        \"field\": \"<string>\",\n        \"invalid\": \"<boolean>\",\n        \"label\": \"<string>\",\n        \"state\": \"PENDING\",\n        \"userType\": \"STUDENT\"\n      },\n      {\n        \"createdAt\": \"<dateTime>\",\n        \"dataType\": \"ACTIVATION_ORDER_07\",\n        \"fileName\": \"<string>\",\n        \"id\": \"<long>\",\n        \"modifiedAt\": \"<dateTime>\",\n        \"token\": \"<string>\",\n        \"author\": \"<string>\",\n        \"description\": \"<string>\",\n        \"field\": \"<string>\",\n        \"invalid\": \"<boolean>\",\n        \"label\": \"<string>\",\n        \"state\": \"APPROVED\",\n        \"userType\": \"PAYER\"\n      }\n    ],\n    \"productId\": \"<long>\",\n    \"state\": \"CLOSED__NEVER_FINISHED_APPLICATION\",\n    \"bic\": \"<string>\",\n    \"drWalterId\": \"<string>\",\n    \"dwPlan\": \"COMFORT\",\n    \"iban\": \"<string>\",\n    \"packageId\": \"<string>\",\n    \"packageType\": \"VALUE\"\n  }\n}"
+												},
+												{
+													"name": "Unauthorized",
+													"originalRequest": {
+														"method": "GET",
+														"header": [
+															{
+																"description": "Added as a part of security scheme: apikey",
+																"key": "Authorization",
+																"value": "<API Key>"
+															}
+														],
+														"url": {
+															"raw": "{{baseUrl}}/portal/users/:userId/dashboard",
+															"host": [
+																"{{baseUrl}}"
+															],
+															"path": [
+																"portal",
+																"users",
+																":userId",
+																"dashboard"
+															],
+															"variable": [
+																{
+																	"key": "userId"
+																}
+															]
+														}
+													},
+													"status": "Unauthorized",
+													"code": 401,
+													"_postman_previewlanguage": "text",
+													"header": [],
+													"cookie": [],
+													"body": ""
+												},
+												{
+													"name": "Forbidden",
+													"originalRequest": {
+														"method": "GET",
+														"header": [
+															{
+																"description": "Added as a part of security scheme: apikey",
+																"key": "Authorization",
+																"value": "<API Key>"
+															}
+														],
+														"url": {
+															"raw": "{{baseUrl}}/portal/users/:userId/dashboard",
+															"host": [
+																"{{baseUrl}}"
+															],
+															"path": [
+																"portal",
+																"users",
+																":userId",
+																"dashboard"
+															],
+															"variable": [
+																{
+																	"key": "userId"
+																}
+															]
+														}
+													},
+													"status": "Forbidden",
+													"code": 403,
+													"_postman_previewlanguage": "text",
+													"header": [],
+													"cookie": [],
+													"body": ""
+												},
+												{
+													"name": "Not Found",
+													"originalRequest": {
+														"method": "GET",
+														"header": [
+															{
+																"description": "Added as a part of security scheme: apikey",
+																"key": "Authorization",
+																"value": "<API Key>"
+															}
+														],
+														"url": {
+															"raw": "{{baseUrl}}/portal/users/:userId/dashboard",
+															"host": [
+																"{{baseUrl}}"
+															],
+															"path": [
+																"portal",
+																"users",
+																":userId",
+																"dashboard"
+															],
+															"variable": [
+																{
+																	"key": "userId"
+																}
+															]
+														}
+													},
+													"status": "Not Found",
+													"code": 404,
+													"_postman_previewlanguage": "text",
+													"header": [],
+													"cookie": [],
+													"body": ""
+												}
+											]
+										}
+									]
+								}
+							]
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "v3",
+			"item": [
+				{
+					"name": "customers",
+					"item": [
+						{
+							"name": "{id}",
+							"item": [
+								{
+									"name": "tax-data",
+									"item": [
+										{
+											"name": "Get user tax data information",
+											"request": {
+												"auth": {
+													"type": "bearer",
+													"bearer": [
+														{
+															"key": "token",
+															"value": "{{token}}",
+															"type": "string"
+														}
+													]
+												},
+												"method": "GET",
+												"header": [
+													{
+														"key": "Accept",
+														"value": "*/*"
+													}
+												],
+												"url": {
+													"raw": "{{baseUrl}}/v3/customers/:id/tax-data",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"v3",
+														"customers",
+														":id",
+														"tax-data"
+													],
+													"variable": [
+														{
+															"key": "id",
+															"value": "{{userId}}",
+															"description": "(Required) id"
+														}
+													]
+												}
+											},
+											"response": [
+												{
+													"name": "OK",
+													"originalRequest": {
+														"method": "GET",
+														"header": [
+															{
+																"key": "Accept",
+																"value": "*/*"
+															},
+															{
+																"description": "Added as a part of security scheme: apikey",
+																"key": "Authorization",
+																"value": "<API Key>"
+															}
+														],
+														"url": {
+															"raw": "{{baseUrl}}/v3/customers/:id/tax-data",
+															"host": [
+																"{{baseUrl}}"
+															],
+															"path": [
+																"v3",
+																"customers",
+																":id",
+																"tax-data"
+															],
+															"variable": [
+																{
+																	"key": "id"
+																}
+															]
+														}
+													},
+													"status": "OK",
+													"code": 200,
+													"_postman_previewlanguage": "text",
+													"header": [
+														{
+															"key": "Content-Type",
+															"value": "*/*"
+														}
+													],
+													"cookie": [],
+													"body": "{\n  \"primaryTaxResidence\": {\n    \"country\": \"<string>\",\n    \"id\": \"<string>\"\n  },\n  \"secondaryTaxResidence\": [\n    {\n      \"country\": \"<string>\",\n      \"id\": \"<string>\"\n    },\n    {\n      \"country\": \"<string>\",\n      \"id\": \"<string>\"\n    }\n  ],\n  \"usPerson\": \"<boolean>\",\n  \"usTaxId\": \"<string>\",\n  \"w9File\": {\n    \"createdAt\": \"<dateTime>\",\n    \"dataType\": \"TRANSFER_FORM\",\n    \"fileName\": \"<string>\",\n    \"id\": \"<long>\",\n    \"modifiedAt\": \"<dateTime>\",\n    \"token\": \"<string>\",\n    \"author\": \"<string>\",\n    \"description\": \"<string>\",\n    \"field\": \"<string>\",\n    \"invalid\": \"<boolean>\",\n    \"label\": \"<string>\",\n    \"state\": \"PENDING\",\n    \"userType\": \"STUDENT\"\n  },\n  \"w9FileId\": \"<long>\"\n}"
+												},
+												{
+													"name": "Unauthorized",
+													"originalRequest": {
+														"method": "GET",
+														"header": [
+															{
+																"description": "Added as a part of security scheme: apikey",
+																"key": "Authorization",
+																"value": "<API Key>"
+															}
+														],
+														"url": {
+															"raw": "{{baseUrl}}/v3/customers/:id/tax-data",
+															"host": [
+																"{{baseUrl}}"
+															],
+															"path": [
+																"v3",
+																"customers",
+																":id",
+																"tax-data"
+															],
+															"variable": [
+																{
+																	"key": "id"
+																}
+															]
+														}
+													},
+													"status": "Unauthorized",
+													"code": 401,
+													"_postman_previewlanguage": "text",
+													"header": [],
+													"cookie": [],
+													"body": ""
+												},
+												{
+													"name": "Forbidden",
+													"originalRequest": {
+														"method": "GET",
+														"header": [
+															{
+																"description": "Added as a part of security scheme: apikey",
+																"key": "Authorization",
+																"value": "<API Key>"
+															}
+														],
+														"url": {
+															"raw": "{{baseUrl}}/v3/customers/:id/tax-data",
+															"host": [
+																"{{baseUrl}}"
+															],
+															"path": [
+																"v3",
+																"customers",
+																":id",
+																"tax-data"
+															],
+															"variable": [
+																{
+																	"key": "id"
+																}
+															]
+														}
+													},
+													"status": "Forbidden",
+													"code": 403,
+													"_postman_previewlanguage": "text",
+													"header": [],
+													"cookie": [],
+													"body": ""
+												},
+												{
+													"name": "Not Found",
+													"originalRequest": {
+														"method": "GET",
+														"header": [
+															{
+																"description": "Added as a part of security scheme: apikey",
+																"key": "Authorization",
+																"value": "<API Key>"
+															}
+														],
+														"url": {
+															"raw": "{{baseUrl}}/v3/customers/:id/tax-data",
+															"host": [
+																"{{baseUrl}}"
+															],
+															"path": [
+																"v3",
+																"customers",
+																":id",
+																"tax-data"
+															],
+															"variable": [
+																{
+																	"key": "id"
+																}
+															]
+														}
+													},
+													"status": "Not Found",
+													"code": 404,
+													"_postman_previewlanguage": "text",
+													"header": [],
+													"cookie": [],
+													"body": ""
+												}
+											]
+										},
+										{
+											"name": "Update tax data information",
+											"request": {
+												"auth": {
+													"type": "bearer",
+													"bearer": [
+														{
+															"key": "token",
+															"value": "{{token}}",
+															"type": "string"
+														}
+													]
+												},
+												"method": "PUT",
+												"header": [
+													{
+														"key": "Content-Type",
+														"value": "application/json"
+													}
+												],
+												"body": {
+													"mode": "raw",
+													"raw": "{\n  \"primaryTaxResidence\": {\n    \"country\": \"AF\",\n    \"id\": \"12345\"\n  },\n  \"usPerson\": false,\n  \"usTaxId\": null,\n  \"secondaryTaxResidence\": [\n    {\n      \"country\": \"FR\",\n      \"id\": \"1523\"\n    }\n  ],\n  \"w9FileId\": null\n}",
+													"options": {
+														"raw": {
+															"headerFamily": "json",
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{baseUrl}}/v3/customers/:id/tax-data",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"v3",
+														"customers",
+														":id",
+														"tax-data"
+													],
+													"variable": [
+														{
+															"key": "id",
+															"value": "{{userId}}",
+															"description": "(Required) id"
+														}
+													]
+												}
+											},
+											"response": [
+												{
+													"name": "OK",
+													"originalRequest": {
+														"method": "PUT",
+														"header": [
+															{
+																"key": "Content-Type",
+																"value": "application/json"
+															},
+															{
+																"description": "Added as a part of security scheme: apikey",
+																"key": "Authorization",
+																"value": "<API Key>"
+															}
+														],
+														"body": {
+															"mode": "raw",
+															"raw": "{\n  \"primaryTaxResidence\": {\n    \"country\": \"<string>\",\n    \"id\": \"<string>\"\n  },\n  \"usPerson\": \"<boolean>\",\n  \"usTaxId\": \"<string>\",\n  \"secondaryTaxResidence\": [\n    {\n      \"country\": \"<string>\",\n      \"id\": \"<string>\"\n    },\n    {\n      \"country\": \"<string>\",\n      \"id\": \"<string>\"\n    }\n  ],\n  \"w9FileId\": \"<long>\"\n}",
+															"options": {
+																"raw": {
+																	"headerFamily": "json",
+																	"language": "json"
+																}
+															}
+														},
+														"url": {
+															"raw": "{{baseUrl}}/v3/customers/:id/tax-data",
+															"host": [
+																"{{baseUrl}}"
+															],
+															"path": [
+																"v3",
+																"customers",
+																":id",
+																"tax-data"
+															],
+															"variable": [
+																{
+																	"key": "id"
+																}
+															]
+														}
+													},
+													"status": "OK",
+													"code": 200,
+													"_postman_previewlanguage": "text",
+													"header": [],
+													"cookie": [],
+													"body": ""
+												},
+												{
+													"name": "Created",
+													"originalRequest": {
+														"method": "PUT",
+														"header": [
+															{
+																"key": "Content-Type",
+																"value": "application/json"
+															},
+															{
+																"description": "Added as a part of security scheme: apikey",
+																"key": "Authorization",
+																"value": "<API Key>"
+															}
+														],
+														"body": {
+															"mode": "raw",
+															"raw": "{\n  \"primaryTaxResidence\": {\n    \"country\": \"<string>\",\n    \"id\": \"<string>\"\n  },\n  \"usPerson\": \"<boolean>\",\n  \"usTaxId\": \"<string>\",\n  \"secondaryTaxResidence\": [\n    {\n      \"country\": \"<string>\",\n      \"id\": \"<string>\"\n    },\n    {\n      \"country\": \"<string>\",\n      \"id\": \"<string>\"\n    }\n  ],\n  \"w9FileId\": \"<long>\"\n}",
+															"options": {
+																"raw": {
+																	"headerFamily": "json",
+																	"language": "json"
+																}
+															}
+														},
+														"url": {
+															"raw": "{{baseUrl}}/v3/customers/:id/tax-data",
+															"host": [
+																"{{baseUrl}}"
+															],
+															"path": [
+																"v3",
+																"customers",
+																":id",
+																"tax-data"
+															],
+															"variable": [
+																{
+																	"key": "id"
+																}
+															]
+														}
+													},
+													"status": "Created",
+													"code": 201,
+													"_postman_previewlanguage": "text",
+													"header": [],
+													"cookie": [],
+													"body": ""
+												},
+												{
+													"name": "Unauthorized",
+													"originalRequest": {
+														"method": "PUT",
+														"header": [
+															{
+																"key": "Content-Type",
+																"value": "application/json"
+															},
+															{
+																"description": "Added as a part of security scheme: apikey",
+																"key": "Authorization",
+																"value": "<API Key>"
+															}
+														],
+														"body": {
+															"mode": "raw",
+															"raw": "{\n  \"primaryTaxResidence\": {\n    \"country\": \"<string>\",\n    \"id\": \"<string>\"\n  },\n  \"usPerson\": \"<boolean>\",\n  \"usTaxId\": \"<string>\",\n  \"secondaryTaxResidence\": [\n    {\n      \"country\": \"<string>\",\n      \"id\": \"<string>\"\n    },\n    {\n      \"country\": \"<string>\",\n      \"id\": \"<string>\"\n    }\n  ],\n  \"w9FileId\": \"<long>\"\n}",
+															"options": {
+																"raw": {
+																	"headerFamily": "json",
+																	"language": "json"
+																}
+															}
+														},
+														"url": {
+															"raw": "{{baseUrl}}/v3/customers/:id/tax-data",
+															"host": [
+																"{{baseUrl}}"
+															],
+															"path": [
+																"v3",
+																"customers",
+																":id",
+																"tax-data"
+															],
+															"variable": [
+																{
+																	"key": "id"
+																}
+															]
+														}
+													},
+													"status": "Unauthorized",
+													"code": 401,
+													"_postman_previewlanguage": "text",
+													"header": [],
+													"cookie": [],
+													"body": ""
+												},
+												{
+													"name": "Forbidden",
+													"originalRequest": {
+														"method": "PUT",
+														"header": [
+															{
+																"key": "Content-Type",
+																"value": "application/json"
+															},
+															{
+																"description": "Added as a part of security scheme: apikey",
+																"key": "Authorization",
+																"value": "<API Key>"
+															}
+														],
+														"body": {
+															"mode": "raw",
+															"raw": "{\n  \"primaryTaxResidence\": {\n    \"country\": \"<string>\",\n    \"id\": \"<string>\"\n  },\n  \"usPerson\": \"<boolean>\",\n  \"usTaxId\": \"<string>\",\n  \"secondaryTaxResidence\": [\n    {\n      \"country\": \"<string>\",\n      \"id\": \"<string>\"\n    },\n    {\n      \"country\": \"<string>\",\n      \"id\": \"<string>\"\n    }\n  ],\n  \"w9FileId\": \"<long>\"\n}",
+															"options": {
+																"raw": {
+																	"headerFamily": "json",
+																	"language": "json"
+																}
+															}
+														},
+														"url": {
+															"raw": "{{baseUrl}}/v3/customers/:id/tax-data",
+															"host": [
+																"{{baseUrl}}"
+															],
+															"path": [
+																"v3",
+																"customers",
+																":id",
+																"tax-data"
+															],
+															"variable": [
+																{
+																	"key": "id"
+																}
+															]
+														}
+													},
+													"status": "Forbidden",
+													"code": 403,
+													"_postman_previewlanguage": "text",
+													"header": [],
+													"cookie": [],
+													"body": ""
+												},
+												{
+													"name": "Not Found",
+													"originalRequest": {
+														"method": "PUT",
+														"header": [
+															{
+																"key": "Content-Type",
+																"value": "application/json"
+															},
+															{
+																"description": "Added as a part of security scheme: apikey",
+																"key": "Authorization",
+																"value": "<API Key>"
+															}
+														],
+														"body": {
+															"mode": "raw",
+															"raw": "{\n  \"primaryTaxResidence\": {\n    \"country\": \"<string>\",\n    \"id\": \"<string>\"\n  },\n  \"usPerson\": \"<boolean>\",\n  \"usTaxId\": \"<string>\",\n  \"secondaryTaxResidence\": [\n    {\n      \"country\": \"<string>\",\n      \"id\": \"<string>\"\n    },\n    {\n      \"country\": \"<string>\",\n      \"id\": \"<string>\"\n    }\n  ],\n  \"w9FileId\": \"<long>\"\n}",
+															"options": {
+																"raw": {
+																	"headerFamily": "json",
+																	"language": "json"
+																}
+															}
+														},
+														"url": {
+															"raw": "{{baseUrl}}/v3/customers/:id/tax-data",
+															"host": [
+																"{{baseUrl}}"
+															],
+															"path": [
+																"v3",
+																"customers",
+																":id",
+																"tax-data"
+															],
+															"variable": [
+																{
+																	"key": "id"
+																}
+															]
+														}
+													},
+													"status": "Not Found",
+													"code": 404,
+													"_postman_previewlanguage": "text",
+													"header": [],
+													"cookie": [],
+													"body": ""
+												}
+											]
+										}
+									]
+								}
+							]
+						}
+					]
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "https://dev-api.expatrio.com"
+		},
+		{
+			"key": "token",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "userId",
+			"value": "",
+			"type": "string"
+		}
+	]
+}
