@@ -1,36 +1,37 @@
 import 'dart:io';
-
-import 'package:coding_challenge/shared/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
+import '../shared/constants.dart';
+
 class LoginService {
-  String userBaseUrl = 'https://dev-api.expatrio.com';
+  static const String userBaseUrl = 'https://dev-api.expatrio.com';
 
   Future<bool> login(
       String email, String password, BuildContext context) async {
-    if (context.mounted) {
-      ScaffoldMessenger.of(context)
-          .showSnackBar(const SnackBar(content: Text("Trying to login...")));
-    }
+    ScaffoldMessenger.of(context)
+        .showSnackBar(const SnackBar(content: Text("Trying to login...")));
+
     try {
       final data = {"email": email, "password": password};
-      var response = await http.post(
+      final response = await http.post(
         Uri.parse("$userBaseUrl/auth/login"),
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode(data),
       );
 
-      var body = json.decode(response.body);
+      final body = json.decode(response.body);
       if (response.statusCode == 200) {
         if (context.mounted) {
+          ScaffoldMessenger.of(context).removeCurrentSnackBar();
           _showBottomSheet(context, "Successful Login",
-              "You will be redirect to you dashboard", true);
+              "You will be redirected to your dashboard", true);
         }
         return true;
       } else {
         if (context.mounted) {
+          ScaffoldMessenger.of(context).removeCurrentSnackBar();
           _showBottomSheet(
               context, "Invalid Credentials", body['message'], false);
         }
@@ -38,18 +39,20 @@ class LoginService {
       }
     } on SocketException {
       if (context.mounted) {
+        ScaffoldMessenger.of(context).removeCurrentSnackBar();
         _showBottomSheet(
-            context,
-            "Connection Error",
-            "Impossible to communicate with the server. Check your internet connection and retry!",
-            false);
+          context,
+          "Connection Error",
+          "Impossible to communicate with the server. Check your internet connection and retry!",
+          false,
+        );
       }
       return false;
     }
   }
 
-  void _showBottomSheet(
-      BuildContext context, title, message, isSuccessfullAccess) {
+  void _showBottomSheet(BuildContext context, String title, String message,
+      bool isSuccessfulAccess) {
     showModalBottomSheet<void>(
       context: context,
       builder: (BuildContext context) {
@@ -60,15 +63,19 @@ class LoginService {
               mainAxisAlignment: MainAxisAlignment.center,
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
-                Icon(isSuccessfullAccess ? Icons.check_circle : Icons.error,
-                    color: isSuccessfullAccess ? themeColor : errorMessageColor,
-                    size: 70),
+                Icon(
+                  isSuccessfulAccess ? Icons.check_circle : Icons.error,
+                  color: isSuccessfulAccess ? themeColor : errorMessageColor,
+                  size: 70,
+                ),
                 const SizedBox(height: 15),
-                Text(title,
-                    style: const TextStyle(
-                      fontSize: 22.0,
-                      fontWeight: FontWeight.bold,
-                    )),
+                Text(
+                  title,
+                  style: const TextStyle(
+                    fontSize: 22.0,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
                 const SizedBox(height: 10),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
