@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import '../shared/constants.dart';
 
@@ -126,10 +127,13 @@ class _TaxFormWidgetState extends State<TaxFormWidget> {
             const SizedBox(height: 10),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: TextField(
+              child:  SizedBox(
+                height: 35.0,
+                child: TextField(
                 key: const Key('country'),
                 controller: countryController,
                 decoration: const InputDecoration(
+                  contentPadding: EdgeInsets.symmetric(horizontal: 10.0),
                   focusedBorder: OutlineInputBorder(
                     borderSide: BorderSide(color: themeColor),
                   ),
@@ -140,6 +144,7 @@ class _TaxFormWidgetState extends State<TaxFormWidget> {
                   /*errorText:
                                         _validateEmail ? 'Email Can\'t Be Empty' : null,*/
                 ),
+              )
               ),
             ),
             const SizedBox(height: 20),
@@ -151,16 +156,24 @@ class _TaxFormWidgetState extends State<TaxFormWidget> {
             const SizedBox(height: 10),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: TextField(
-                key: const Key('taxIdentificationNumber'),
-                controller: taxIdentificationNumberController,
-                decoration: const InputDecoration(
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: themeColor),
-                  ),
-                  border: OutlineInputBorder(),
-                  labelStyle: TextStyle(
-                    color: themeColor,
+              child: SizedBox(
+                height: 35.0,
+                child: TextField(
+                  key: const Key('taxIdentificationNumber'),
+                  controller: taxIdentificationNumberController,
+                  keyboardType: TextInputType.number, // Limit keyboard to numeric input
+                  inputFormatters: <TextInputFormatter>[
+                    FilteringTextInputFormatter.digitsOnly, // Allow only numeric input
+                  ],
+                  decoration: const InputDecoration(
+                    contentPadding: EdgeInsets.symmetric(horizontal: 10.0),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: themeColor),
+                    ),
+                    border: OutlineInputBorder(),
+                    labelStyle: TextStyle(
+                      color: themeColor,
+                    ),
                   ),
                 ),
               ),
