@@ -7,7 +7,7 @@ import '../shared/constants.dart';
 import '../taxDataScreen.dart';
 
 class LoginService {
-  static const String userBaseUrl = 'https://dev-api.expatrio.com';
+  static const String baseUrl = 'https://dev-api.expatrio.com';
 
   Future<bool> login(
       String email, String password, BuildContext context) async {
@@ -17,7 +17,7 @@ class LoginService {
     try {
       final data = {"email": email, "password": password};
       final response = await http.post(
-        Uri.parse("$userBaseUrl/auth/login"),
+        Uri.parse("$baseUrl/auth/login"),
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode(data),
       );
@@ -27,14 +27,14 @@ class LoginService {
         if (context.mounted) {
           ScaffoldMessenger.of(context).removeCurrentSnackBar();
           _showBottomSheet(context, "Successful Login",
-              "You will be redirected to your dashboard", true);
+              "You will be redirected to your dashboard", true, body);
         }
         return true;
       } else {
         if (context.mounted) {
           ScaffoldMessenger.of(context).removeCurrentSnackBar();
           _showBottomSheet(
-              context, "Invalid Credentials", body['message'], false);
+              context, "Invalid Credentials", body['message'], false, body);
         }
         return false;
       }
@@ -42,18 +42,18 @@ class LoginService {
       if (context.mounted) {
         ScaffoldMessenger.of(context).removeCurrentSnackBar();
         _showBottomSheet(
-          context,
-          "Connection Error",
-          "Impossible to communicate with the server. Check your internet connection and retry!",
-          false,
-        );
+            context,
+            "Connection Error",
+            "Impossible to communicate with the server. Check your internet connection and retry!",
+            false,
+            null);
       }
       return false;
     }
   }
 
   void _showBottomSheet(BuildContext context, String title, String message,
-      bool isSuccessfulAccess) {
+      bool isSuccessfulAccess, body) {
     showModalBottomSheet<void>(
       context: context,
       builder: (BuildContext context) {
@@ -84,20 +84,22 @@ class LoginService {
                 ),
                 const SizedBox(height: 15),
                 ElevatedButton(
-                  style: ElevatedButton.styleFrom(backgroundColor: themeColor),
-                  child: const Text('GOT IT'),
-                  onPressed: ()
-                    {
-                      if(isSuccessfulAccess){
+                    style:
+                        ElevatedButton.styleFrom(backgroundColor: themeColor),
+                    child: const Text('GOT IT'),
+                    onPressed: () {
+                      if (isSuccessfulAccess) {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => const TaxDataScreen()));
-                      }else{
+                                builder: (context) => TaxDataScreen(
+                                      accessToken: body['accessToken'],
+                                      customerID: body['userId'],
+                                    )));
+                      } else {
                         Navigator.pop(context);
                       }
-                  }
-                ),
+                    }),
                 const SizedBox(height: 15),
               ],
             ),
