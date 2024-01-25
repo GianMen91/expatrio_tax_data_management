@@ -4,6 +4,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 import '../shared/constants.dart';
+import '../taxDataScreen.dart';
 
 class LoginService {
   static const String userBaseUrl = 'https://dev-api.expatrio.com';
@@ -85,7 +86,17 @@ class LoginService {
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(backgroundColor: themeColor),
                   child: const Text('GOT IT'),
-                  onPressed: () => Navigator.pop(context),
+                  onPressed: ()
+                    {
+                      if(isSuccessfulAccess){
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const TaxDataScreen()));
+                      }else{
+                        Navigator.pop(context);
+                      }
+                  }
                 ),
                 const SizedBox(height: 15),
               ],
