@@ -1,11 +1,18 @@
-import 'package:coding_challenge/taxFormWidget.dart';
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import '../shared/constants.dart';
+import 'package:http/http.dart' as http;
 
 class TaxDataScreen extends StatefulWidget {
-  const TaxDataScreen({super.key});
+  const TaxDataScreen(
+      {super.key, required this.customerID, required this.accessToken});
+
+  final String accessToken;
+  final int customerID;
 
   @override
   State<TaxDataScreen> createState() => _TaxDataScreenState();
@@ -77,13 +84,36 @@ class _TaxDataScreenState extends State<TaxDataScreen> {
     );
   }
 
-  Future<void> showTaxForm(BuildContext context) {
-    return showModalBottomSheet<void>(
+  Future<void> showTaxForm(BuildContext context) async {
+    const String baseUrl = 'https://dev-api.expatrio.com';
+    int customerId = widget.customerID;
+
+    try {
+      final response = await http.get(
+        Uri.parse("$baseUrl/v3/customers/$customerId/tax-data"),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': widget.accessToken,
+        },
+      );
+
+      final body = json.decode(response.body);
+      if (response.statusCode == 200) {
+        if (context.mounted) {
+          ScaffoldMessenger.of(context).removeCurrentSnackBar();
+        }
+      } else {
+        //
+      }
+    } on SocketException {
+      //
+    }
+
+    /*return showModalBottomSheet<void>(
       context: context,
       builder: (BuildContext context) {
-        return const TaxFormWidget();
+        return TaxFormWidget(country, taxID);
       },
-    );
+    );*/
   }
 }
-
