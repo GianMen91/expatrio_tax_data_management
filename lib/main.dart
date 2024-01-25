@@ -1,4 +1,7 @@
+import 'package:coding_challenge/login/login.dart';
 import 'package:flutter/material.dart';
+
+import 'login/login.dart';
 
 void main() {
   runApp(const MyApp());
@@ -33,13 +36,7 @@ class MyApp extends StatelessWidget {
         ),
         primaryColorDark: Colors.white,
       ),
-      home: Scaffold(
-          body: SafeArea(
-            child: Container(
-              color: Colors.white,
-            ),
-          ),
-      ),
+      home: Login()
     );
   }
 }
