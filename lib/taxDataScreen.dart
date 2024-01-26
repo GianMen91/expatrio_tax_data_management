@@ -78,7 +78,7 @@ class _TaxDataScreenState extends State<TaxDataScreen> {
                             context: context,
                             builder: (BuildContext context) {
                               return const Center(
-                                child: CircularProgressIndicator(),
+                                child: CircularProgressIndicator(color:themeColor),
                               );
                             },
                           );
@@ -86,6 +86,8 @@ class _TaxDataScreenState extends State<TaxDataScreen> {
                           // Fetch tax data and response
                           Map<String, dynamic> result =
                               await getTaxData(context);
+
+                          await Future.delayed(Duration(seconds: 1), () => () {});
 
                           // Close the loading indicator
                           //Navigator.pop(context);
