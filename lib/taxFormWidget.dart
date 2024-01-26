@@ -50,7 +50,24 @@ class _TaxFormWidgetState extends State<TaxFormWidget> {
             const SizedBox(height: 20),
             for (int i = 0; i < widget.taxResidences.length; i++)
               buildTaxResidenceFields(i),
-            const SizedBox(height: 20),
+            const SizedBox(height: 10),
+            Align(
+    alignment: Alignment.centerRight,
+    child:Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: GestureDetector(
+                onTap: () {},
+                child: const Text("- REMOVE",
+                    textAlign: TextAlign.right,
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.red,
+                    )),
+              ),
+            ),
+            ),
+            const SizedBox(height: 10),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
               child: GestureDetector(
@@ -107,6 +124,7 @@ class _TaxFormWidgetState extends State<TaxFormWidget> {
                 onPressed: () async {},
               ),
             ),
+            const SizedBox(height: 40),
           ],
         ),
       ),
