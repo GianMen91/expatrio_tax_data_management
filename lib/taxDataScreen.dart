@@ -77,7 +77,6 @@ class _TaxDataScreenState extends State<TaxDataScreen> {
                           builder: (BuildContext context) {
                             return FutureBuilder(
                               future: getTaxData(context),
-                              // Replace with your actual asynchronous function
                               builder: (BuildContext context,
                                   AsyncSnapshot snapshot) {
                                 if (snapshot.connectionState ==
@@ -98,7 +97,7 @@ class _TaxDataScreenState extends State<TaxDataScreen> {
                                   return SizedBox(
                                     height: 600,
                                     child: TaxFormWidget(snapshot
-                                        .data), // Replace with your TaxFormWidget
+                                        .data),
                                   );
                                 }
                               },
