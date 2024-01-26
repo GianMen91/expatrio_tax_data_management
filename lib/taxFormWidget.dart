@@ -52,20 +52,20 @@ class _TaxFormWidgetState extends State<TaxFormWidget> {
               buildTaxResidenceFields(i),
             const SizedBox(height: 10),
             Align(
-    alignment: Alignment.centerRight,
-    child:Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: GestureDetector(
-                onTap: () {},
-                child: const Text("- REMOVE",
-                    textAlign: TextAlign.right,
-                    style: TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.red,
-                    )),
+              alignment: Alignment.centerRight,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: GestureDetector(
+                  onTap: () {},
+                  child: const Text("- REMOVE",
+                      textAlign: TextAlign.right,
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.red,
+                      )),
+                ),
               ),
-            ),
             ),
             const SizedBox(height: 10),
             Padding(
