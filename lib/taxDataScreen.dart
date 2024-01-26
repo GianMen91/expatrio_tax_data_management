@@ -72,50 +72,36 @@ class _TaxDataScreenState extends State<TaxDataScreen> {
                     child: const Text('UPDATE YOUR TAX DATA'),
                     onPressed: () async {
                       if (context.mounted) {
-                        try {
-                          // Show loading indicator
-                          showModalBottomSheet<void>(
-                            context: context,
-                            builder: (BuildContext context) {
-                              return const Center(
-                                child: CircularProgressIndicator(color:themeColor),
-                              );
-                            },
-                          );
+                        showModalBottomSheet<void>(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return FutureBuilder(
+                              future: getTaxData(context), // Replace with your actual asynchronous function
+                              builder: (BuildContext context, AsyncSnapshot snapshot) {
+                                if (snapshot.connectionState == ConnectionState.waiting) {
+                                  // While waiting for the response, show CircularProgressIndicator
+                                  return const SizedBox(
+                                    height: 600,
+                                    child: Center(
+                                      child: CircularProgressIndicator(color: themeColor),
+                                    ),
+                                  );
+                                } else if (snapshot.hasError) {
+                                  // Handle error case
+                                  return Text('Error: ${snapshot.error}');
+                                } else {
+                                  // Once you have the response, show TaxFormWidget
+                                  return SizedBox(
+                                    height: 600,
+                                    child: TaxFormWidget(snapshot.data), // Replace with your TaxFormWidget
+                                  );
+                                }
+                              },
+                            );
+                          },
+                        );
 
-                          // Fetch tax data and response
-                          Map<String, dynamic> result =
-                              await getTaxData(context);
 
-                          await Future.delayed(Duration(seconds: 1), () => () {});
-
-                          // Close the loading indicator
-                          //Navigator.pop(context);
-
-                          // Check response status code
-                          if (result['response'] != null &&
-                              result['response'].statusCode == 200 &&
-                              result['taxResidences'] != null) {
-                            // Show TaxFormWidget
-                            if (context.mounted) {
-                              showModalBottomSheet<void>(
-                                context: context,
-                                builder: (BuildContext context) {
-                                  List<TaxResidence> taxResidences =
-                                      result['taxResidences'];
-                                  return TaxFormWidget(taxResidences);
-                                },
-                              );
-                            } else {
-                              // Handle non-200 status code or null tax data
-                              // You might want to show an appropriate message
-                              print('Failed to load tax data');
-                            }
-                          }
-                        } catch (e) {
-                          // Handle error, e.g., show an error message
-                          print('Error: $e');
-                        }
                       }
                     },
                   ),
@@ -130,9 +116,10 @@ class _TaxDataScreenState extends State<TaxDataScreen> {
     );
   }
 
-  Future<Map<String, dynamic>> getTaxData(BuildContext context) async {
+  Future <List<TaxResidence>> getTaxData(BuildContext context) async {
     const String baseUrl = 'https://dev-api.expatrio.com';
     int customerId = widget.customerID;
+    List<TaxResidence> taxResidences = [];
 
     try {
       final response = await http.get(
@@ -146,7 +133,7 @@ class _TaxDataScreenState extends State<TaxDataScreen> {
       if (response.statusCode == 200) {
         Map<String, dynamic> jsonData = json.decode(response.body);
 
-        List<TaxResidence> taxResidences = [];
+
 
         // Handle primary tax residence separately
         taxResidences.add(TaxResidence(
@@ -168,14 +155,14 @@ class _TaxDataScreenState extends State<TaxDataScreen> {
         }
 
         // Return both raw response and parsed tax data
-        return {'response': response, 'taxResidences': taxResidences};
+        return taxResidences;
       } else {
         // Return both raw response and null tax data for non-200 status code
-        return {'response': response, 'taxResidences': null};
+        return taxResidences;
       }
     } catch (e) {
       // Return null tax data for errors
-      return {'response': null, 'taxResidences': null};
+      return taxResidences;
     }
   }
 }
