@@ -1,10 +1,10 @@
+import 'package:coding_challenge/models/taxResidence.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_svg/svg.dart';
 import '../shared/constants.dart';
 
 class TaxFormWidget extends StatefulWidget {
-  const TaxFormWidget({super.key});
+  const TaxFormWidget(List<TaxResidence> taxResidences,  {super.key});
 
   @override
   State<TaxFormWidget> createState() => _TaxFormWidgetState();
@@ -12,7 +12,7 @@ class TaxFormWidget extends StatefulWidget {
 
 class _TaxFormWidgetState extends State<TaxFormWidget> {
   TextEditingController taxIdentificationNumberController =
-  TextEditingController(text: '');
+      TextEditingController(text: '');
 
   TextEditingController countryController = TextEditingController(text: '');
 
@@ -24,7 +24,8 @@ class _TaxFormWidgetState extends State<TaxFormWidget> {
       height: 600,
       child: SingleChildScrollView(
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start, // Ensure the crossAxisAlignment is set to start
+          crossAxisAlignment: CrossAxisAlignment.start,
+          // Ensure the crossAxisAlignment is set to start
 
           children: <Widget>[
             const SizedBox(height: 40),
@@ -44,7 +45,7 @@ class _TaxFormWidgetState extends State<TaxFormWidget> {
             const SizedBox(height: 10),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
-              child:  SizedBox(
+              child: SizedBox(
                   height: 35.0,
                   child: TextField(
                     key: const Key('country'),
@@ -61,8 +62,7 @@ class _TaxFormWidgetState extends State<TaxFormWidget> {
                       /*errorText:
                                         _validateEmail ? 'Email Can\'t Be Empty' : null,*/
                     ),
-                  )
-              ),
+                  )),
             ),
             const SizedBox(height: 20),
             Padding(
@@ -78,9 +78,11 @@ class _TaxFormWidgetState extends State<TaxFormWidget> {
                 child: TextField(
                   key: const Key('taxIdentificationNumber'),
                   controller: taxIdentificationNumberController,
-                  keyboardType: TextInputType.number, // Limit keyboard to numeric input
+                  keyboardType: TextInputType.number,
+                  // Limit keyboard to numeric input
                   inputFormatters: <TextInputFormatter>[
-                    FilteringTextInputFormatter.digitsOnly, // Allow only numeric input
+                    FilteringTextInputFormatter.digitsOnly,
+                    // Allow only numeric input
                   ],
                   decoration: const InputDecoration(
                     contentPadding: EdgeInsets.symmetric(horizontal: 10.0),
@@ -130,8 +132,8 @@ class _TaxFormWidgetState extends State<TaxFormWidget> {
                       });
                     },
                   ),
-                  Expanded(
-                    child: const Text(
+                  const Expanded(
+                    child: Text(
                       "I confirm above tax residency and US self-declaration is true and accurate",
                     ),
                   ),
