@@ -1,6 +1,7 @@
 import 'dart:convert';
-import 'dart:io';
 
+import 'package:coding_challenge/models/taxResidence.dart';
+import 'package:coding_challenge/taxFormWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
@@ -69,8 +70,51 @@ class _TaxDataScreenState extends State<TaxDataScreen> {
                     style:
                         ElevatedButton.styleFrom(backgroundColor: themeColor),
                     child: const Text('UPDATE YOUR TAX DATA'),
-                    onPressed: () {
-                      showTaxForm(context);
+                    onPressed: () async {
+                      if (context.mounted) {
+                        try {
+                          // Show loading indicator
+                          showModalBottomSheet<void>(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return const Center(
+                                child: CircularProgressIndicator(),
+                              );
+                            },
+                          );
+
+                          // Fetch tax data and response
+                          Map<String, dynamic> result =
+                              await getTaxData(context);
+
+                          // Close the loading indicator
+                          //Navigator.pop(context);
+
+                          // Check response status code
+                          if (result['response'] != null &&
+                              result['response'].statusCode == 200 &&
+                              result['taxResidences'] != null) {
+                            // Show TaxFormWidget
+                            if (context.mounted) {
+                              showModalBottomSheet<void>(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  List<TaxResidence> taxResidences =
+                                      result['taxResidences'];
+                                  return TaxFormWidget(taxResidences);
+                                },
+                              );
+                            } else {
+                              // Handle non-200 status code or null tax data
+                              // You might want to show an appropriate message
+                              print('Failed to load tax data');
+                            }
+                          }
+                        } catch (e) {
+                          // Handle error, e.g., show an error message
+                          print('Error: $e');
+                        }
+                      }
                     },
                   ),
                   const SizedBox(height: 15),
@@ -84,7 +128,7 @@ class _TaxDataScreenState extends State<TaxDataScreen> {
     );
   }
 
-  Future<void> showTaxForm(BuildContext context) async {
+  Future<Map<String, dynamic>> getTaxData(BuildContext context) async {
     const String baseUrl = 'https://dev-api.expatrio.com';
     int customerId = widget.customerID;
 
@@ -97,23 +141,39 @@ class _TaxDataScreenState extends State<TaxDataScreen> {
         },
       );
 
-      final body = json.decode(response.body);
       if (response.statusCode == 200) {
-        if (context.mounted) {
-          ScaffoldMessenger.of(context).removeCurrentSnackBar();
-        }
-      } else {
-        //
-      }
-    } on SocketException {
-      //
-    }
+        Map<String, dynamic> jsonData = json.decode(response.body);
 
-    /*return showModalBottomSheet<void>(
-      context: context,
-      builder: (BuildContext context) {
-        return TaxFormWidget(country, taxID);
-      },
-    );*/
+        List<TaxResidence> taxResidences = [];
+
+        // Handle primary tax residence separately
+        taxResidences.add(TaxResidence(
+          country: jsonData["primaryTaxResidence"]["country"],
+          id: jsonData["primaryTaxResidence"]["id"],
+        ));
+
+        // Handle other tax residences
+        for (String key in jsonData.keys) {
+          if (key.contains("TaxResidence") && jsonData[key] is List<dynamic>) {
+            List<dynamic> innerList = jsonData[key];
+            for (var innerMap in innerList) {
+              taxResidences.add(TaxResidence(
+                country: innerMap["country"],
+                id: innerMap["id"],
+              ));
+            }
+          }
+        }
+
+        // Return both raw response and parsed tax data
+        return {'response': response, 'taxResidences': taxResidences};
+      } else {
+        // Return both raw response and null tax data for non-200 status code
+        return {'response': response, 'taxResidences': null};
+      }
+    } catch (e) {
+      // Return null tax data for errors
+      return {'response': null, 'taxResidences': null};
+    }
   }
 }
