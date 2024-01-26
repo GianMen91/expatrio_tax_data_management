@@ -76,14 +76,18 @@ class _TaxDataScreenState extends State<TaxDataScreen> {
                           context: context,
                           builder: (BuildContext context) {
                             return FutureBuilder(
-                              future: getTaxData(context), // Replace with your actual asynchronous function
-                              builder: (BuildContext context, AsyncSnapshot snapshot) {
-                                if (snapshot.connectionState == ConnectionState.waiting) {
+                              future: getTaxData(context),
+                              // Replace with your actual asynchronous function
+                              builder: (BuildContext context,
+                                  AsyncSnapshot snapshot) {
+                                if (snapshot.connectionState ==
+                                    ConnectionState.waiting) {
                                   // While waiting for the response, show CircularProgressIndicator
                                   return const SizedBox(
                                     height: 600,
                                     child: Center(
-                                      child: CircularProgressIndicator(color: themeColor),
+                                      child: CircularProgressIndicator(
+                                          color: themeColor),
                                     ),
                                   );
                                 } else if (snapshot.hasError) {
@@ -93,15 +97,14 @@ class _TaxDataScreenState extends State<TaxDataScreen> {
                                   // Once you have the response, show TaxFormWidget
                                   return SizedBox(
                                     height: 600,
-                                    child: TaxFormWidget(snapshot.data), // Replace with your TaxFormWidget
+                                    child: TaxFormWidget(snapshot
+                                        .data), // Replace with your TaxFormWidget
                                   );
                                 }
                               },
                             );
                           },
                         );
-
-
                       }
                     },
                   ),
@@ -116,7 +119,7 @@ class _TaxDataScreenState extends State<TaxDataScreen> {
     );
   }
 
-  Future <List<TaxResidence>> getTaxData(BuildContext context) async {
+  Future<List<TaxResidence>> getTaxData(BuildContext context) async {
     const String baseUrl = 'https://dev-api.expatrio.com';
     int customerId = widget.customerID;
     List<TaxResidence> taxResidences = [];
@@ -132,8 +135,6 @@ class _TaxDataScreenState extends State<TaxDataScreen> {
 
       if (response.statusCode == 200) {
         Map<String, dynamic> jsonData = json.decode(response.body);
-
-
 
         // Handle primary tax residence separately
         taxResidences.add(TaxResidence(
@@ -154,14 +155,11 @@ class _TaxDataScreenState extends State<TaxDataScreen> {
           }
         }
 
-        // Return both raw response and parsed tax data
         return taxResidences;
       } else {
-        // Return both raw response and null tax data for non-200 status code
         return taxResidences;
       }
     } catch (e) {
-      // Return null tax data for errors
       return taxResidences;
     }
   }
