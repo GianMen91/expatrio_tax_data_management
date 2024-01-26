@@ -165,24 +165,74 @@ class _TaxFormWidgetState extends State<TaxFormWidget> {
             height: 35.0,
             child: GestureDetector(
               onTap: () {
-                showModalBottomSheet<void>(
+                showModalBottomSheet(
                   context: context,
-                  builder: (BuildContext context) {
-                    return Container(
-                      child: ListView(
-                        children: CountriesConstants.nationality.map((country) {
-                          return ListTile(
-                            title: Text(country['label'] as String),
-                            onTap: () {
-                              // Call the callback function to update the state
-                              updateSelectedCountry(country['code'] as String?);
-                              Navigator.pop(context); // Close the bottom sheet
-                            },
-                          );
-                        }).toList(),
+                  isScrollControlled: false,
+                  backgroundColor: Colors.transparent,
+                  builder: (BuildContext context) => StatefulBuilder(
+                    builder: (context, state) => Container(
+                      constraints: BoxConstraints(
+                        maxHeight: 400,
+                        minWidth: double.infinity,
                       ),
-                    );
-                  },
+                      decoration: const BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(30.0),
+                          topRight: Radius.circular(30.0),
+                        ),
+                      ),
+                      child: Column(
+                        children: [
+                          Container(
+                            // Container for the blue background at the top
+                            decoration: const BoxDecoration(
+                              color: themeColor,
+                              borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(30.0),
+                                topRight: Radius.circular(30.0),
+                              ),
+                            ),
+                            child: const Padding(
+                              padding: EdgeInsets.all(15.0),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment
+                                    .center, // Center alignment
+                                children: [
+                                  Text(
+                                    "Country",
+                                    style: TextStyle(
+                                      fontSize: 17,
+                                      color: Colors.white,
+                                      // Text color on blue background
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                          Expanded(
+                            child: ListView(
+                              children:
+                                  CountriesConstants.nationality.map((country) {
+                                return ListTile(
+                                  title: Text(country['label'] as String),
+                                  onTap: () {
+                                    // Call the callback function to update the state
+                                    updateSelectedCountry(
+                                        country['code'] as String?);
+                                    Navigator.pop(
+                                        context); // Close the bottom sheet
+                                  },
+                                );
+                              }).toList(),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
                 );
               },
               child: Container(
