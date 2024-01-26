@@ -1,3 +1,4 @@
+import 'package:coding_challenge/shared/countries_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../shared/constants.dart';
@@ -132,32 +133,70 @@ class _TaxFormWidgetState extends State<TaxFormWidget> {
   }
 
   Widget buildTaxResidenceFields(int index) {
+    String? selectedCountryCode = countryControllers[index].text;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 30),
           child: Text(
-              "Which country serves as your primary tax residence?*"
-                  .toUpperCase(),
-              style: const TextStyle(fontSize: 10)),
+            "Which country serves as your primary tax residence?*".toUpperCase(),
+            style: const TextStyle(fontSize: 10),
+          ),
         ),
         const SizedBox(height: 10),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20),
           child: SizedBox(
             height: 35.0,
-            child: TextField(
-              key: Key('country$index'),
-              controller: countryControllers[index],
-              decoration: const InputDecoration(
-                contentPadding: EdgeInsets.symmetric(horizontal: 10.0),
-                focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: themeColor),
-                ),
-                border: OutlineInputBorder(),
-                labelStyle: TextStyle(
-                  color: themeColor,
+            child: GestureDetector(
+              onTap: () {
+                // Show the modal bottom sheet when the user taps on the dropdown
+                showModalBottomSheet<void>(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return Container(
+                      // Customize the content of your bottom sheet here
+                      child: ListView(
+                        children: CountriesConstants.nationality.map((country) {
+                          return ListTile(
+                            title: Text(country['label'] as String),
+                            onTap: () {
+                              // Handle item selection here if needed
+                              setState(() {
+                                selectedCountryCode = country['code'] as String?;
+                                countryControllers[index].text =
+                                    country['code'] as String ?? '';
+                              });
+                              Navigator.pop(context); // Close the bottom sheet
+                            },
+                          );
+                        }).toList(),
+                      ),
+                    );
+                  },
+                );
+              },
+              child: DropdownButtonFormField<String?>(
+                value: selectedCountryCode,
+                isDense: true,
+                items: [],
+                onChanged: (String? value) {
+                  setState(() {
+                    selectedCountryCode = value;
+                    countryControllers[index].text = value ?? '';
+                  });
+                },
+                decoration: const InputDecoration(
+                  contentPadding: EdgeInsets.symmetric(horizontal: 10.0),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: themeColor),
+                  ),
+                  border: OutlineInputBorder(),
+                  labelStyle: TextStyle(
+                    color: themeColor,
+                  ),
                 ),
               ),
             ),
