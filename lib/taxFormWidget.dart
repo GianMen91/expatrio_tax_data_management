@@ -1,22 +1,35 @@
-import 'package:coding_challenge/models/taxResidence.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../shared/constants.dart';
+import 'package:coding_challenge/models/taxResidence.dart';
 
 class TaxFormWidget extends StatefulWidget {
-  const TaxFormWidget(List<TaxResidence> taxResidences,  {super.key});
+  final List<TaxResidence> taxResidences;
+
+  const TaxFormWidget(this.taxResidences, {Key? key}) : super(key: key);
 
   @override
   State<TaxFormWidget> createState() => _TaxFormWidgetState();
 }
 
 class _TaxFormWidgetState extends State<TaxFormWidget> {
-  TextEditingController taxIdentificationNumberController =
-      TextEditingController(text: '');
-
-  TextEditingController countryController = TextEditingController(text: '');
-
+  List<TextEditingController> countryControllers = [];
+  List<TextEditingController> taxIdControllers = [];
   var _checked = false;
+
+  @override
+  void initState() {
+    super.initState();
+    // Initialize controllers based on the length of the taxResidences list
+    for (int i = 0; i < widget.taxResidences.length; i++) {
+      countryControllers.add(TextEditingController(
+        text: widget.taxResidences[i].country,
+      ));
+      taxIdControllers.add(TextEditingController(
+        text: widget.taxResidences[i].id,
+      ));
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -25,78 +38,18 @@ class _TaxFormWidgetState extends State<TaxFormWidget> {
       child: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          // Ensure the crossAxisAlignment is set to start
-
           children: <Widget>[
             const SizedBox(height: 40),
             const Padding(
               padding: EdgeInsets.symmetric(horizontal: 30),
-              child: Text("Declaration of financial information",
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-            ),
-            const SizedBox(height: 20),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 30),
               child: Text(
-                  "Which country serves as your primary tax residence?*"
-                      .toUpperCase(),
-                  style: const TextStyle(fontSize: 10)),
-            ),
-            const SizedBox(height: 10),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: SizedBox(
-                  height: 35.0,
-                  child: TextField(
-                    key: const Key('country'),
-                    controller: countryController,
-                    decoration: const InputDecoration(
-                      contentPadding: EdgeInsets.symmetric(horizontal: 10.0),
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: themeColor),
-                      ),
-                      border: OutlineInputBorder(),
-                      labelStyle: TextStyle(
-                        color: themeColor,
-                      ),
-                      /*errorText:
-                                        _validateEmail ? 'Email Can\'t Be Empty' : null,*/
-                    ),
-                  )),
-            ),
-            const SizedBox(height: 20),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 30),
-              child: Text("Tax identification number*".toUpperCase(),
-                  style: const TextStyle(fontSize: 10)),
-            ),
-            const SizedBox(height: 10),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: SizedBox(
-                height: 35.0,
-                child: TextField(
-                  key: const Key('taxIdentificationNumber'),
-                  controller: taxIdentificationNumberController,
-                  keyboardType: TextInputType.number,
-                  // Limit keyboard to numeric input
-                  inputFormatters: <TextInputFormatter>[
-                    FilteringTextInputFormatter.digitsOnly,
-                    // Allow only numeric input
-                  ],
-                  decoration: const InputDecoration(
-                    contentPadding: EdgeInsets.symmetric(horizontal: 10.0),
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: themeColor),
-                    ),
-                    border: OutlineInputBorder(),
-                    labelStyle: TextStyle(
-                      color: themeColor,
-                    ),
-                  ),
-                ),
+                "Declaration of financial information",
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
               ),
             ),
+            const SizedBox(height: 20),
+            for (int i = 0; i < widget.taxResidences.length; i++)
+              buildTaxResidenceFields(i),
             const SizedBox(height: 20),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -154,22 +107,77 @@ class _TaxFormWidgetState extends State<TaxFormWidget> {
                 onPressed: () async {},
               ),
             ),
-            const SizedBox(height: 20),
           ],
         ),
       ),
     );
   }
 
-  Color getColor(Set<MaterialState> states) {
-    const Set<MaterialState> interactiveStates = <MaterialState>{
-      MaterialState.pressed,
-      MaterialState.hovered,
-      MaterialState.focused,
-    };
-    if (states.any(interactiveStates.contains)) {
-      return Colors.blue;
-    }
-    return themeColor;
+  Widget buildTaxResidenceFields(int index) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 30),
+          child: Text(
+              "Which country serves as your primary tax residence?*"
+                  .toUpperCase(),
+              style: const TextStyle(fontSize: 10)),
+        ),
+        const SizedBox(height: 10),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          child: SizedBox(
+            height: 35.0,
+            child: TextField(
+              key: Key('country$index'),
+              controller: countryControllers[index],
+              decoration: const InputDecoration(
+                contentPadding: EdgeInsets.symmetric(horizontal: 10.0),
+                focusedBorder: OutlineInputBorder(
+                  borderSide: BorderSide(color: themeColor),
+                ),
+                border: OutlineInputBorder(),
+                labelStyle: TextStyle(
+                  color: themeColor,
+                ),
+              ),
+            ),
+          ),
+        ),
+        const SizedBox(height: 20),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 30),
+          child: Text("Tax identification number*".toUpperCase(),
+              style: const TextStyle(fontSize: 10)),
+        ),
+        const SizedBox(height: 10),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          child: SizedBox(
+            height: 35.0,
+            child: TextField(
+              key: Key('taxIdentificationNumber$index'),
+              controller: taxIdControllers[index],
+              keyboardType: TextInputType.number,
+              inputFormatters: <TextInputFormatter>[
+                FilteringTextInputFormatter.digitsOnly,
+              ],
+              decoration: const InputDecoration(
+                contentPadding: EdgeInsets.symmetric(horizontal: 10.0),
+                focusedBorder: OutlineInputBorder(
+                  borderSide: BorderSide(color: themeColor),
+                ),
+                border: OutlineInputBorder(),
+                labelStyle: TextStyle(
+                  color: themeColor,
+                ),
+              ),
+            ),
+          ),
+        ),
+        const SizedBox(height: 20),
+      ],
+    );
   }
 }
