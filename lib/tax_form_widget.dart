@@ -16,7 +16,9 @@ class TaxFormWidget extends StatefulWidget {
   final String accessToken;
   final int customerID;
 
-  const TaxFormWidget(this.taxResidences, this.accessToken, this.customerID, {Key? key}) : super(key: key);
+  const TaxFormWidget(this.taxResidences, this.accessToken, this.customerID,
+      {Key? key})
+      : super(key: key);
 
   @override
   State<TaxFormWidget> createState() => _TaxFormWidgetState();
@@ -35,7 +37,6 @@ class _TaxFormWidgetState extends State<TaxFormWidget> {
 
   final List<bool> _validateTaxIdentificationNumber = [];
   final List<bool> _validateCountry = [];
-
 
   static const String baseUrl = 'https://dev-api.expatrio.com';
 
@@ -68,8 +69,8 @@ class _TaxFormWidgetState extends State<TaxFormWidget> {
         .toList();
 
     for (int i = 0; i < widget.taxResidences.length; i++) {
-      filteredCountries.removeWhere((item) =>
-      item['code'] == widget.taxResidences[i].country);
+      filteredCountries.removeWhere(
+          (item) => item['code'] == widget.taxResidences[i].country);
     }
 
     return SizedBox(
@@ -190,10 +191,10 @@ class _TaxFormWidgetState extends State<TaxFormWidget> {
                       }
                     });
 
-
                     // Check if any validation failed
                     if (_validateTaxIdentificationNumber.contains(true) ||
-                        _validateCountry.contains(true) || !_checked) {
+                        _validateCountry.contains(true) ||
+                        !_checked) {
                       return; // Stop execution if validation fails
                     }
 
@@ -235,9 +236,7 @@ class _TaxFormWidgetState extends State<TaxFormWidget> {
                     }
 
                     Navigator.pop(context);
-                  }
-
-              ),
+                  }),
             ),
             const SizedBox(height: 40),
           ],
@@ -315,8 +314,8 @@ class _TaxFormWidgetState extends State<TaxFormWidget> {
                           child: const Padding(
                             padding: EdgeInsets.all(15.0),
                             child: Row(
-                              mainAxisAlignment:
-                                  MainAxisAlignment.center, // Center alignment
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              // Center alignment
                               children: [
                                 Text(
                                   "Country",
@@ -415,6 +414,12 @@ class _TaxFormWidgetState extends State<TaxFormWidget> {
             inputFormatters: <TextInputFormatter>[
               FilteringTextInputFormatter.digitsOnly,
             ],
+            onChanged: (value) {
+              setState(() {
+                _validateTaxIdentificationNumber[index] = value.isEmpty;
+                widget.taxResidences[index].id = value;
+              });
+            },
             decoration: InputDecoration(
               contentPadding: const EdgeInsets.symmetric(horizontal: 10.0),
               focusedBorder: const OutlineInputBorder(
@@ -469,12 +474,9 @@ class _TaxFormWidgetState extends State<TaxFormWidget> {
         .toList();
 
     for (int i = 0; i < widget.taxResidences.length; i++) {
-      listOfCountries.removeWhere((item) =>
-      item['code'] == widget.taxResidences[i].country);
+      listOfCountries.removeWhere(
+          (item) => item['code'] == widget.taxResidences[i].country);
     }
-
-
-
     return listOfCountries;
   }
 }

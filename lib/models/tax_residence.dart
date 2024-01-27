@@ -1,7 +1,7 @@
 class TaxResidence {
   // Properties of a TaxResidence item
   String country;
-  final String id;
+  String id;
 
   // Constructor for creating a TaxResidence item
   TaxResidence({
