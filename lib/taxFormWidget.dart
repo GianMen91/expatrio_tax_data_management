@@ -19,7 +19,7 @@ class _TaxFormWidgetState extends State<TaxFormWidget> {
   List<TextEditingController> taxIdControllers = [];
   var _checked = false;
 
-  var _searchedValue;
+  var _searchedValue="";
 
   @override
   void initState() {
