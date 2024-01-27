@@ -25,7 +25,6 @@ class _TaxFormWidgetState extends State<TaxFormWidget> {
 
   // Filter countries based on the searched value
 
-
   @override
   void initState() {
     super.initState();
@@ -42,12 +41,13 @@ class _TaxFormWidgetState extends State<TaxFormWidget> {
 
   @override
   Widget build(BuildContext context) {
-
     filteredCountries = CountriesConstants.nationality
-        .where((country) =>
-        country['label'].toString().toLowerCase().contains(_searchedValue.toLowerCase()))
+        .where((country) => country['label']
+            .toString()
+            .toLowerCase()
+            .contains(_searchedValue.toLowerCase()))
         .toList();
-    
+
     return SizedBox(
       height: 600,
       child: SingleChildScrollView(
@@ -149,8 +149,6 @@ class _TaxFormWidgetState extends State<TaxFormWidget> {
   Widget buildTaxResidenceFields(int index) {
     String? selectedCountryCode = countryControllers[index].text;
 
-
-
     String? selectedCountryLabel = CountriesConstants.nationality.firstWhere(
       (country) => country['code'] == selectedCountryCode,
       orElse: () => {'label': ''},
@@ -162,9 +160,6 @@ class _TaxFormWidgetState extends State<TaxFormWidget> {
         countryControllers[index].text = value ?? '';
       });
     }
-
-
-
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -235,27 +230,34 @@ class _TaxFormWidgetState extends State<TaxFormWidget> {
                             // Update the searched value and refresh the item manager
                             state(() {
                               _searchedValue = value;
-                              filteredCountries = filterCountries(_searchedValue);
+                              filteredCountries =
+                                  filterCountries(_searchedValue);
                             });
                           }),
                           Expanded(
-                            child: ListView.builder(
-                              itemCount: filteredCountries.length,
-                              itemBuilder: (context, index) {
-                                Map<String, dynamic> country = filteredCountries[index];
+                            child: filteredCountries.isNotEmpty
+                                ? ListView.builder(
+                                    itemCount: filteredCountries.length,
+                                    itemBuilder: (context, index) {
+                                      Map<String, dynamic> country =
+                                          filteredCountries[index];
 
-                                return ListTile(
-                                  title: Text(country['label'] as String),
-                                  onTap: () {
-                                    // Call the callback function to update the state
-                                    updateSelectedCountry(country['code'] as String?);
-                                    Navigator.pop(context); // Close the bottom sheet
-                                  },
-                                );
-                              },
-                            ),
+                                      return ListTile(
+                                        title: Text(country['label'] as String),
+                                        onTap: () {
+                                          // Call the callback function to update the state
+                                          updateSelectedCountry(
+                                              country['code'] as String?);
+                                          Navigator.pop(
+                                              context); // Close the bottom sheet
+                                        },
+                                      );
+                                    },
+                                  )
+                                : Center(
+                                    child: Text("No data found"),
+                                  ),
                           ),
-
                         ],
                       ),
                     ),
@@ -319,9 +321,10 @@ class _TaxFormWidgetState extends State<TaxFormWidget> {
 
   List<Map<String, dynamic>> filterCountries(String searchValue) {
     return CountriesConstants.nationality
-        .where((country) =>
-        country['label'].toString().toLowerCase().contains(searchValue.toLowerCase()))
+        .where((country) => country['label']
+            .toString()
+            .toLowerCase()
+            .contains(searchValue.toLowerCase()))
         .toList();
   }
-
 }
