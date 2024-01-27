@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_shakemywidget/flutter_shakemywidget.dart';
 import '../shared/constants.dart';
-import 'package:coding_challenge/models/taxResidence.dart';
+import 'package:coding_challenge/models/tax_residence.dart';
 
 class TaxFormWidget extends StatefulWidget {
   final List<TaxResidence> taxResidences;
@@ -104,10 +104,8 @@ class _TaxFormWidgetState extends State<TaxFormWidget> {
             ShakeMe(
               // pass the GlobalKey as an argument
               key: shakeKey,
-              // configure the animation parameters
-              shakeCount: 3,
               shakeOffset: 10,
-              shakeDuration: Duration(milliseconds: 500),
+              shakeDuration: const Duration(milliseconds: 500),
               // Add the child widget that will be animated
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 8),
@@ -218,7 +216,7 @@ class _TaxFormWidgetState extends State<TaxFormWidget> {
                 backgroundColor: Colors.transparent,
                 builder: (BuildContext context) => StatefulBuilder(
                   builder: (context, state) => Container(
-                    constraints: BoxConstraints(
+                    constraints: const BoxConstraints(
                       maxHeight: 400,
                       minWidth: double.infinity,
                     ),
@@ -287,7 +285,7 @@ class _TaxFormWidgetState extends State<TaxFormWidget> {
                                     );
                                   },
                                 )
-                              : Center(
+                              : const Center(
                                   child: Text("No data found"),
                                 ),
                         ),
@@ -301,7 +299,7 @@ class _TaxFormWidgetState extends State<TaxFormWidget> {
               height: 50,
               padding: const EdgeInsets.symmetric(horizontal: 20),
               decoration: BoxDecoration(
-                border: Border.all(color: Colors.black),
+                border: Border.all(),
                 borderRadius: BorderRadius.circular(5.0),
               ),
               child: Row(
@@ -333,12 +331,12 @@ class _TaxFormWidgetState extends State<TaxFormWidget> {
               FilteringTextInputFormatter.digitsOnly,
             ],
             decoration:  InputDecoration(
-              contentPadding: EdgeInsets.symmetric(horizontal: 10.0),
-              focusedBorder: OutlineInputBorder(
+              contentPadding: const EdgeInsets.symmetric(horizontal: 10.0),
+              focusedBorder: const OutlineInputBorder(
                 borderSide: BorderSide(color: themeColor),
               ),
-              border: OutlineInputBorder(),
-              labelStyle: TextStyle(
+              border: const OutlineInputBorder(),
+              labelStyle: const TextStyle(
                 color: themeColor,
               ),
               errorText: _validateTaxIdentificationNumber[index]

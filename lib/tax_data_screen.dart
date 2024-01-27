@@ -1,9 +1,8 @@
 import 'dart:convert';
 
-import 'package:coding_challenge/models/taxResidence.dart';
-import 'package:coding_challenge/taxFormWidget.dart';
+import 'package:coding_challenge/models/tax_residence.dart';
+import 'package:coding_challenge/tax_form_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import '../shared/constants.dart';
 import 'package:http/http.dart' as http;
@@ -158,7 +157,7 @@ class _TaxDataScreenState extends State<TaxDataScreen> {
       } else {
         return taxResidences;
       }
-    } catch (e) {
+    }  on Exception {
       return taxResidences;
     }
   }
