@@ -2,6 +2,7 @@ import 'package:coding_challenge/search_box.dart';
 import 'package:coding_challenge/shared/countries_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_shakemywidget/flutter_shakemywidget.dart';
 import '../shared/constants.dart';
 import 'package:coding_challenge/models/taxResidence.dart';
 
@@ -18,6 +19,7 @@ class _TaxFormWidgetState extends State<TaxFormWidget> {
   List<TextEditingController> countryControllers = [];
   List<TextEditingController> taxIdControllers = [];
   var _checked = false;
+  final shakeKey = GlobalKey<ShakeWidgetState>();
 
   List<Map<String, dynamic>> filteredCountries = [];
 
@@ -97,32 +99,41 @@ class _TaxFormWidgetState extends State<TaxFormWidget> {
               ),
             ),
             const SizedBox(height: 20),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8),
-              child: Row(
-                children: [
-                  Checkbox(
-                    checkColor: Colors.white,
-                    fillColor: MaterialStateProperty.resolveWith((states) {
-                      if (!states.contains(MaterialState.selected)) {
-                        return Colors.transparent;
-                      }
-                      return themeColor;
-                    }),
-                    side: const BorderSide(color: themeColor, width: 2),
-                    value: _checked,
-                    onChanged: (bool? value) {
-                      setState(() {
-                        _checked = value!;
-                      });
-                    },
-                  ),
-                  const Expanded(
-                    child: Text(
-                      "I confirm above tax residency and US self-declaration is true and accurate",
+            ShakeMe(
+              // pass the GlobalKey as an argument
+              key: shakeKey,
+              // configure the animation parameters
+              shakeCount: 3,
+              shakeOffset: 10,
+              shakeDuration: Duration(milliseconds: 500),
+              // Add the child widget that will be animated
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8),
+                child: Row(
+                  children: [
+                    Checkbox(
+                      checkColor: Colors.white,
+                      fillColor: MaterialStateProperty.resolveWith((states) {
+                        if (!states.contains(MaterialState.selected)) {
+                          return Colors.transparent;
+                        }
+                        return themeColor;
+                      }),
+                      side: const BorderSide(color: themeColor, width: 2),
+                      value: _checked,
+                      onChanged: (bool? value) {
+                        setState(() {
+                          _checked = value!;
+                        });
+                      },
                     ),
-                  ),
-                ],
+                    const Expanded(
+                      child: Text(
+                        "I confirm above tax residency and US self-declaration is true and accurate",
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
             const SizedBox(height: 20),
@@ -136,7 +147,9 @@ class _TaxFormWidgetState extends State<TaxFormWidget> {
                     fontSize: 17,
                   ),
                 ),
-                onPressed: () async {},
+                onPressed: () {
+                  shakeKey.currentState?.shake();
+                }
               ),
             ),
             const SizedBox(height: 40),
