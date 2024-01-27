@@ -13,18 +13,18 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
-  TextEditingController emailController =
-      TextEditingController(text: 'tito+bs792@expatrio.com');
-  TextEditingController passwordController =
-      TextEditingController(text: 'nemampojma');
-  LoginService loginService = LoginService();
+  TextEditingController _emailController =
+  TextEditingController(text: 'tito+bs792@expatrio.com');
+  TextEditingController _passwordController =
+  TextEditingController(text: 'nemampojma');
+  LoginService _loginService = LoginService();
   bool _validateEmail = false;
-  bool _validatePass = false;
-  late bool _passwordVisible;
+  bool _validatePassword = false;
+  late bool _isPasswordVisible;
 
   @override
   void initState() {
-    _passwordVisible = false;
+    _isPasswordVisible = false;
     super.initState();
   }
 
@@ -58,51 +58,54 @@ class _LoginState extends State<Login> {
                     ),
                   ),
                   const SizedBox(height: 30),
-                  buildRowWithIconAndText(Icons.mail_outline, 'EMAIL ADDRESS'),
+                  _buildRowWithIconAndText(
+                      Icons.mail_outline, 'EMAIL ADDRESS'),
                   const SizedBox(height: 10),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 20),
                     child: TextField(
                       key: const Key('email'),
-                      controller: emailController,
+                      controller: _emailController,
                       decoration: InputDecoration(
                         focusedBorder: const OutlineInputBorder(
-                          borderSide: BorderSide(color: themeColor),
+                          borderSide: BorderSide(color: kThemeColor),
                         ),
                         border: const OutlineInputBorder(),
-                        labelStyle: const TextStyle(color: themeColor),
+                        labelStyle: const TextStyle(color: kThemeColor),
                         errorText:
-                            _validateEmail ? 'Email Can\'t Be Empty' : null,
+                        _validateEmail ? 'Email Can\'t Be Empty' : null,
                       ),
                     ),
                   ),
                   const SizedBox(height: 10),
-                  buildRowWithIconAndText(Icons.lock_outline, 'PASSWORD'),
+                  _buildRowWithIconAndText(
+                      Icons.lock_outline, 'PASSWORD'),
                   const SizedBox(height: 10),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 20),
                     child: TextField(
                       key: const Key('password'),
-                      obscureText: !_passwordVisible,
-                      controller: passwordController,
+                      obscureText: !_isPasswordVisible,
+                      controller: _passwordController,
                       decoration: InputDecoration(
                         focusedBorder: const OutlineInputBorder(
-                          borderSide: BorderSide(color: themeColor),
+                          borderSide: BorderSide(color: kThemeColor),
                         ),
                         border: const OutlineInputBorder(),
-                        labelStyle: const TextStyle(color: themeColor),
-                        errorText:
-                            _validatePass ? 'Password Can\'t Be Empty' : null,
+                        labelStyle: const TextStyle(color: kThemeColor),
+                        errorText: _validatePassword
+                            ? 'Password Can\'t Be Empty'
+                            : null,
                         suffixIcon: IconButton(
                           icon: Icon(
-                            _passwordVisible
+                            _isPasswordVisible
                                 ? Icons.visibility_off
                                 : Icons.visibility,
-                            color: themeColor,
+                            color: kThemeColor,
                           ),
                           onPressed: () {
                             setState(() {
-                              _passwordVisible = !_passwordVisible;
+                              _isPasswordVisible = !_isPasswordVisible;
                             });
                           },
                         ),
@@ -116,7 +119,7 @@ class _LoginState extends State<Login> {
                     margin: const EdgeInsets.all(15),
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: themeColor,
+                        backgroundColor: kThemeColor,
                       ),
                       child: const Text(
                         'LOGIN',
@@ -126,23 +129,26 @@ class _LoginState extends State<Login> {
                         ),
                       ),
                       onPressed: () async {
-                        String emailWithoutWhiteSpace = emailController.text
-                            .replaceAll(RegExp(r"\s+\b|\b\s"), "");
+                        String emailWithoutWhiteSpace =
+                        _emailController.text.replaceAll(
+                            RegExp(r"\s+\b|\b\s"), "");
 
                         setState(() {
-                          emailController.text.isEmpty
+                          _emailController.text.isEmpty
                               ? _validateEmail = true
                               : _validateEmail = false;
                         });
                         setState(() {
-                          passwordController.text.isEmpty
-                              ? _validatePass = true
-                              : _validatePass = false;
+                          _passwordController.text.isEmpty
+                              ? _validatePassword = true
+                              : _validatePassword = false;
                         });
 
-                        if (!_validateEmail && !_validatePass) {
-                          await loginService.login(emailWithoutWhiteSpace,
-                              passwordController.text, context);
+                        if (!_validateEmail && !_validatePassword) {
+                          await _loginService.login(
+                              emailWithoutWhiteSpace,
+                              _passwordController.text,
+                              context);
                         }
                       },
                     ),
@@ -161,7 +167,8 @@ class _LoginState extends State<Login> {
                     ElevatedButton(
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.white,
-                        maximumSize: Size(size.width > 600 ? 130 : 100,
+                        maximumSize: Size(
+                            size.width > 600 ? 130 : 100,
                             size.width > 600 ? 530 : 130),
                       ),
                       onPressed: () {
@@ -172,13 +179,13 @@ class _LoginState extends State<Login> {
                       child: Row(
                         children: [
                           Icon(CupertinoIcons.question_circle,
-                              color: themeColor,
+                              color: kThemeColor,
                               size: size.width > 600 ? 28 : 20),
                           Text(
                             'Help',
                             style: TextStyle(
                               fontSize: size.width > 600 ? 22 : 10.0,
-                              color: themeColor,
+                              color: kThemeColor,
                             ),
                           ),
                         ],
@@ -195,7 +202,7 @@ class _LoginState extends State<Login> {
     );
   }
 
-  Widget buildRowWithIconAndText(IconData icon, String label) {
+  Widget _buildRowWithIconAndText(IconData icon, String label) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 30),
       child: Row(
