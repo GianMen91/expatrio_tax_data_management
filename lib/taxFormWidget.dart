@@ -26,6 +26,8 @@ class _TaxFormWidgetState extends State<TaxFormWidget> {
 
   String _searchedValue = "";
 
+  final List<bool> _validateTaxIdentificationNumber = [];
+
   // Filter countries based on the searched value
 
   @override
@@ -39,6 +41,8 @@ class _TaxFormWidgetState extends State<TaxFormWidget> {
       taxIdControllers.add(TextEditingController(
         text: widget.taxResidences[i].id,
       ));
+
+      _validateTaxIdentificationNumber.add(false);
     }
   }
 
@@ -104,7 +108,10 @@ class _TaxFormWidgetState extends State<TaxFormWidget> {
                         }
                         return themeColor;
                       }),
-                      side:  BorderSide(color: !savingAttemptedFailed ? themeColor : Colors.red, width: 2),
+                      side: BorderSide(
+                          color:
+                              !savingAttemptedFailed ? themeColor : Colors.red,
+                          width: 2),
                       value: _checked,
                       onChanged: (bool? value) {
                         setState(() {
@@ -124,24 +131,29 @@ class _TaxFormWidgetState extends State<TaxFormWidget> {
             const SizedBox(height: 20),
             Center(
               child: ElevatedButton(
-                style: ElevatedButton.styleFrom(backgroundColor: themeColor),
-                child: const Text(
-                  'SAVE',
-                  key: Key('save'),
-                  style: TextStyle(
-                    fontSize: 17,
+                  style: ElevatedButton.styleFrom(backgroundColor: themeColor),
+                  child: const Text(
+                    'SAVE',
+                    key: Key('save'),
+                    style: TextStyle(
+                      fontSize: 17,
+                    ),
                   ),
-                ),
-                onPressed: () {
-                  if(!_checked){
-                    shakeKey.currentState?.shake();
+                  onPressed: () {
+                    if (!_checked) {
+                      shakeKey.currentState?.shake();
+                      setState(() {
+                        savingAttemptedFailed = true;
+                      });
+                    }
                     setState(() {
-                      savingAttemptedFailed = true;
+                      for (int i = 0; i < taxIdControllers.length; i++) {
+                        taxIdControllers[i].text.isEmpty
+                            ? _validateTaxIdentificationNumber[i] = true
+                            : _validateTaxIdentificationNumber[i] = false;
+                      }
                     });
-                  }
-
-                }
-              ),
+                  }),
             ),
             const SizedBox(height: 40),
           ],
@@ -171,123 +183,122 @@ class _TaxFormWidgetState extends State<TaxFormWidget> {
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 30),
           child: Text(
-            index== 0 ? "Which country serves as your primary tax residence?*"
-                .toUpperCase() : "Do you have other tax residences?".toUpperCase(),
+            index == 0
+                ? "Which country serves as your primary tax residence?*"
+                    .toUpperCase()
+                : "Do you have other tax residences?".toUpperCase(),
             style: const TextStyle(fontSize: 10),
           ),
         ),
         const SizedBox(height: 10),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20),
-          child: SizedBox(
-            height: 35.0,
-            child: GestureDetector(
-              onTap: () {
-                setState(() {
-                  _searchedValue = "";
-                  filteredCountries = filterCountries(_searchedValue);
-                });
-
-                showModalBottomSheet(
-                  context: context,
-                  isScrollControlled: false,
-                  backgroundColor: Colors.transparent,
-                  builder: (BuildContext context) => StatefulBuilder(
-                    builder: (context, state) => Container(
-                      constraints: BoxConstraints(
-                        maxHeight: 400,
-                        minWidth: double.infinity,
+          child: GestureDetector(
+            onTap: () {
+              setState(() {
+                _searchedValue = "";
+                filteredCountries = filterCountries(_searchedValue);
+              });
+              showModalBottomSheet(
+                context: context,
+                isScrollControlled: false,
+                backgroundColor: Colors.transparent,
+                builder: (BuildContext context) => StatefulBuilder(
+                  builder: (context, state) => Container(
+                    constraints: BoxConstraints(
+                      maxHeight: 400,
+                      minWidth: double.infinity,
+                    ),
+                    decoration: const BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(30.0),
+                        topRight: Radius.circular(30.0),
                       ),
-                      decoration: const BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(30.0),
-                          topRight: Radius.circular(30.0),
+                    ),
+                    child: Column(
+                      children: [
+                        Container(
+                          // Container for the blue background at the top
+                          decoration: const BoxDecoration(
+                            color: themeColor,
+                            borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(30.0),
+                              topRight: Radius.circular(30.0),
+                            ),
+                          ),
+                          child: const Padding(
+                            padding: EdgeInsets.all(15.0),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment
+                                  .center, // Center alignment
+                              children: [
+                                Text(
+                                  "Country",
+                                  style: TextStyle(
+                                    fontSize: 17,
+                                    color: Colors.white,
+                                    // Text color on blue background
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
                         ),
-                      ),
-                      child: Column(
-                        children: [
-                          Container(
-                            // Container for the blue background at the top
-                            decoration: const BoxDecoration(
-                              color: themeColor,
-                              borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(30.0),
-                                topRight: Radius.circular(30.0),
-                              ),
-                            ),
-                            child: const Padding(
-                              padding: EdgeInsets.all(15.0),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment
-                                    .center, // Center alignment
-                                children: [
-                                  Text(
-                                    "Country",
-                                    style: TextStyle(
-                                      fontSize: 17,
-                                      color: Colors.white,
-                                      // Text color on blue background
-                                      fontWeight: FontWeight.w600,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                          SearchBox(onChanged: (value) {
-                            // Update the searched value and refresh the item manager
-                            state(() {
-                              _searchedValue = value;
-                              filteredCountries =
-                                  filterCountries(_searchedValue);
-                            });
-                          }),
-                          Expanded(
-                            child: filteredCountries.isNotEmpty
-                                ? ListView.builder(
-                                    itemCount: filteredCountries.length,
-                                    itemBuilder: (context, index) {
-                                      Map<String, dynamic> country =
-                                          filteredCountries[index];
+                        SearchBox(onChanged: (value) {
+                          // Update the searched value and refresh the item manager
+                          state(() {
+                            _searchedValue = value;
+                            filteredCountries =
+                                filterCountries(_searchedValue);
+                          });
+                        }),
+                        Expanded(
+                          child: filteredCountries.isNotEmpty
+                              ? ListView.builder(
+                                  itemCount: filteredCountries.length,
+                                  itemBuilder: (context, index) {
+                                    Map<String, dynamic> country =
+                                        filteredCountries[index];
 
-                                      return ListTile(
-                                        title: Text(country['label'] as String),
-                                        onTap: () {
-                                          // Call the callback function to update the state
-                                          updateSelectedCountry(
-                                              country['code'] as String?);
-                                          Navigator.pop(
-                                              context); // Close the bottom sheet
-                                        },
-                                      );
-                                    },
-                                  )
-                                : Center(
-                                    child: Text("No data found"),
-                                  ),
-                          ),
-                        ],
-                      ),
+                                    return ListTile(
+                                      title: Text(country['label'] as String),
+                                      onTap: () {
+                                        // Call the callback function to update the state
+                                        updateSelectedCountry(
+                                            country['code'] as String?);
+                                        Navigator.pop(
+                                            context); // Close the bottom sheet
+                                      },
+                                    );
+                                  },
+                                )
+                              : Center(
+                                  child: Text("No data found"),
+                                ),
+                        ),
+                      ],
                     ),
                   ),
-                );
-              },
-              child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                decoration: BoxDecoration(
-                  border: Border.all(color: Colors.black),
-                  borderRadius: BorderRadius.circular(5.0),
                 ),
-                child: Row(
-                  children: [
-                    Text(
-                      selectedCountryLabel ?? 'Select Country',
-                    ),
-                    const Spacer(),
-                    const Icon(Icons.arrow_drop_down, color: Colors.black),
-                  ],
-                ),
+              );
+            },
+            child: Container(
+              height: 50,
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              decoration: BoxDecoration(
+                border: Border.all(color: Colors.black),
+                borderRadius: BorderRadius.circular(5.0),
+              ),
+              child: Row(
+                children: [
+                  Text(
+                    selectedCountryLabel ?? 'Select Country',
+                  ),
+                  const Spacer(),
+                  const Icon(Icons.arrow_drop_down, color: Colors.black),
+                ],
               ),
             ),
           ),
@@ -301,51 +312,51 @@ class _TaxFormWidgetState extends State<TaxFormWidget> {
         const SizedBox(height: 10),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20),
-          child: SizedBox(
-            height: 35.0,
-            child: TextField(
-              key: Key('taxIdentificationNumber$index'),
-              controller: taxIdControllers[index],
-              keyboardType: TextInputType.number,
-              inputFormatters: <TextInputFormatter>[
-                FilteringTextInputFormatter.digitsOnly,
-              ],
-              decoration: const InputDecoration(
-                contentPadding: EdgeInsets.symmetric(horizontal: 10.0),
-                focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: themeColor),
-                ),
-                border: OutlineInputBorder(),
-                labelStyle: TextStyle(
-                  color: themeColor,
-                ),
+          child: TextField(
+            key: Key('taxIdentificationNumber$index'),
+            controller: taxIdControllers[index],
+            keyboardType: TextInputType.number,
+            inputFormatters: <TextInputFormatter>[
+              FilteringTextInputFormatter.digitsOnly,
+            ],
+            decoration:  InputDecoration(
+              contentPadding: EdgeInsets.symmetric(horizontal: 10.0),
+              focusedBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: themeColor),
               ),
+              border: OutlineInputBorder(),
+              labelStyle: TextStyle(
+                color: themeColor,
+              ),
+              errorText: _validateTaxIdentificationNumber[index]
+                  ? 'Field is required'
+                  : null,
             ),
           ),
         ),
         const SizedBox(height: 10),
-        if(index!=0)
+        if (index != 0)
           Align(
-          alignment: Alignment.centerRight,
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            child: GestureDetector(
-              onTap: () {
+            alignment: Alignment.centerRight,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: GestureDetector(
+                onTap: () {
                   setState(() {
                     // Remove the last tax residence field
                     widget.taxResidences.removeLast();
                   });
-              },
-              child: const Text("- REMOVE",
-                  textAlign: TextAlign.right,
-                  style: TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.red,
-                  )),
+                },
+                child: const Text("- REMOVE",
+                    textAlign: TextAlign.right,
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.red,
+                    )),
+              ),
             ),
           ),
-        ),
         const SizedBox(height: 20),
       ],
     );
