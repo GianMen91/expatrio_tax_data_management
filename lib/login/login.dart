@@ -172,6 +172,7 @@ class _LoginState extends State<Login> {
                           },
                         ),
                       ),
+                      const Text("Developed by Giancarlo Mennillo", style: TextStyle(fontSize: 10)),
                     ],
                   ),
                 ),
