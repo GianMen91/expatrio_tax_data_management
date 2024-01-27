@@ -96,7 +96,7 @@ class _TaxDataScreenState extends State<TaxDataScreen> {
                                   return SizedBox(
                                     height: 600,
                                     child: TaxFormWidget(snapshot
-                                        .data),
+                                        .data, widget.accessToken, widget.customerID),
                                   );
                                 }
                               },

@@ -1,3 +1,6 @@
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:coding_challenge/search_box.dart';
 import 'package:coding_challenge/shared/countries_constants.dart';
 import 'package:flutter/material.dart';
@@ -6,10 +9,14 @@ import 'package:flutter_shakemywidget/flutter_shakemywidget.dart';
 import '../shared/constants.dart';
 import 'package:coding_challenge/models/tax_residence.dart';
 
+import 'package:http/http.dart' as http;
+
 class TaxFormWidget extends StatefulWidget {
   final List<TaxResidence> taxResidences;
+  final String accessToken;
+  final int customerID;
 
-  const TaxFormWidget(this.taxResidences, {Key? key}) : super(key: key);
+  const TaxFormWidget(this.taxResidences, this.accessToken, this.customerID, {Key? key}) : super(key: key);
 
   @override
   State<TaxFormWidget> createState() => _TaxFormWidgetState();
@@ -28,6 +35,9 @@ class _TaxFormWidgetState extends State<TaxFormWidget> {
 
   final List<bool> _validateTaxIdentificationNumber = [];
   final List<bool> _validateCountry = [];
+
+
+  static const String baseUrl = 'https://dev-api.expatrio.com';
 
   // Filter countries based on the searched value
 
@@ -82,18 +92,20 @@ class _TaxFormWidgetState extends State<TaxFormWidget> {
                 onTap: () {
                   setState(() {
                     // Add a new tax residence field
-                    TaxResidence newTaxResidence = TaxResidence(country: "", id: "");
+                    TaxResidence newTaxResidence =
+                        TaxResidence(country: "", id: "");
                     widget.taxResidences.add(newTaxResidence);
 
                     // Initialize controllers for the new element
-                    countryControllers.add(TextEditingController(text: newTaxResidence.country));
-                    taxIdControllers.add(TextEditingController(text: newTaxResidence.id));
+                    countryControllers.add(
+                        TextEditingController(text: newTaxResidence.country));
+                    taxIdControllers
+                        .add(TextEditingController(text: newTaxResidence.id));
 
                     _validateTaxIdentificationNumber.add(false);
                     _validateCountry.add(false);
                   });
                 },
-
                 child: const Text("+ ADD ANOTHER",
                     textAlign: TextAlign.left,
                     style: TextStyle(
@@ -153,7 +165,7 @@ class _TaxFormWidgetState extends State<TaxFormWidget> {
                       fontSize: 17,
                     ),
                   ),
-                  onPressed: () {
+                  onPressed: () async {
                     if (!_checked) {
                       shakeKey.currentState?.shake();
                       setState(() {
@@ -172,6 +184,47 @@ class _TaxFormWidgetState extends State<TaxFormWidget> {
                             : _validateCountry[i] = false;
                       }
                     });
+
+
+
+                    try {
+                      int id = widget.customerID;
+                      final response = await http.put(
+                        Uri.parse("$baseUrl/v3/customers/$id/tax-data"),
+                        headers: {
+                          'Content-Type': 'application/json',
+                          'Authorization': widget.accessToken,
+                        },
+                        body: jsonEncode({
+                          "primaryTaxResidence": {
+                            "country": "JP",
+                            "id": "777",
+                          },
+                          "usPerson": false,
+                          "usTaxId": null,
+                          "secondaryTaxResidence": [
+                            {
+                              "country": "JM",
+                              "id": "666",
+                            }
+                          ],
+                          "w9FileId": null,
+                        }),
+                      );
+
+                      if (response.statusCode == 200) {
+                        // Handle success
+                        print('Success');
+                      } else {
+                        // Handle other status codes
+                        print('Error: ${response.statusCode}');
+                      }
+                    } on SocketException {
+                      // Handle SocketException
+                      print('SocketException occurred');
+                    }
+                    Navigator.pop(context);
+
                   }),
             ),
             const SizedBox(height: 40),
@@ -249,8 +302,8 @@ class _TaxFormWidgetState extends State<TaxFormWidget> {
                           child: const Padding(
                             padding: EdgeInsets.all(15.0),
                             child: Row(
-                              mainAxisAlignment: MainAxisAlignment
-                                  .center, // Center alignment
+                              mainAxisAlignment:
+                                  MainAxisAlignment.center, // Center alignment
                               children: [
                                 Text(
                                   "Country",
@@ -269,8 +322,7 @@ class _TaxFormWidgetState extends State<TaxFormWidget> {
                           // Update the searched value and refresh the item manager
                           state(() {
                             _searchedValue = value;
-                            filteredCountries =
-                                filterCountries(_searchedValue);
+                            filteredCountries = filterCountries(_searchedValue);
                           });
                         }),
                         Expanded(
@@ -307,7 +359,8 @@ class _TaxFormWidgetState extends State<TaxFormWidget> {
               height: 50,
               padding: const EdgeInsets.symmetric(horizontal: 20),
               decoration: BoxDecoration(
-                border: Border.all(color: _validateCountry[index] ? Colors.red : Colors.black),
+                border: Border.all(
+                    color: _validateCountry[index] ? Colors.red : Colors.black),
                 borderRadius: BorderRadius.circular(5.0),
               ),
               child: Row(
@@ -323,8 +376,8 @@ class _TaxFormWidgetState extends State<TaxFormWidget> {
           ),
         ),
         if (_validateCountry[index])
-            const Padding(
-            padding: EdgeInsets.only(left: 30,top:8),
+          const Padding(
+            padding: EdgeInsets.only(left: 30, top: 8),
             child: Text(
               "Please choose a country",
               style: TextStyle(fontSize: 12, color: Colors.red),
@@ -346,7 +399,7 @@ class _TaxFormWidgetState extends State<TaxFormWidget> {
             inputFormatters: <TextInputFormatter>[
               FilteringTextInputFormatter.digitsOnly,
             ],
-            decoration:  InputDecoration(
+            decoration: InputDecoration(
               contentPadding: const EdgeInsets.symmetric(horizontal: 10.0),
               focusedBorder: const OutlineInputBorder(
                 borderSide: BorderSide(color: themeColor),
