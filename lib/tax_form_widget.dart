@@ -316,11 +316,11 @@ class _TaxFormWidgetState extends State<TaxFormWidget> {
                 filteredCountries = filterCountries(_searchedValue);
               });
               showModalBottomSheet(
+                isScrollControlled: true,
                 context: context,
                 constraints: const BoxConstraints(
                   minWidth: double.infinity,
                 ),
-                isScrollControlled: false,
                 backgroundColor: Colors.transparent,
                 builder: (BuildContext context) => StatefulBuilder(
                   builder: (context, state) => Container(

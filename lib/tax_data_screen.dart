@@ -25,6 +25,7 @@ class _TaxDataScreenState extends State<TaxDataScreen> {
     final Size size = MediaQuery.of(context).size;
 
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       backgroundColor: Colors.white,
       appBar: AppBar(
         key: const Key('app_bar'),
@@ -80,6 +81,7 @@ class _TaxDataScreenState extends State<TaxDataScreen> {
                     onPressed: () async {
                       if (context.mounted) {
                         showModalBottomSheet<void>(
+                          isScrollControlled: true,
                           context: context,
                           constraints: const BoxConstraints(
                             minWidth: double.infinity,
@@ -89,26 +91,19 @@ class _TaxDataScreenState extends State<TaxDataScreen> {
                               future: getTaxData(context),
                               builder: (BuildContext context,
                                   AsyncSnapshot snapshot) {
-                                if (snapshot.connectionState ==
-                                    ConnectionState.waiting) {
+                                if (snapshot.data == null) {
                                   // While waiting for the response, show CircularProgressIndicator
-                                  return SizedBox(
-                                    height: size.height / 2,
-                                    child: Center(
-                                      child: CircularProgressIndicator(
-                                          color: themeColor),
-                                    ),
+                                  return Center(
+                                    child: CircularProgressIndicator(
+                                        color: themeColor),
                                   );
                                 } else if (snapshot.hasError) {
                                   // Handle error case
                                   return Text('Error: ${snapshot.error}');
                                 } else {
                                   // Once you have the response, show TaxFormWidget
-                                  return SizedBox(
-                                    height: 600,
-                                    child: TaxFormWidget(snapshot.data,
-                                        widget.accessToken, widget.customerID),
-                                  );
+                                  return TaxFormWidget(snapshot.data,
+                                      widget.accessToken, widget.customerID);
                                 }
                               },
                             );
@@ -117,7 +112,6 @@ class _TaxDataScreenState extends State<TaxDataScreen> {
                       }
                     },
                   ),
-                  const SizedBox(height: 15),
                 ],
               ),
             ),
