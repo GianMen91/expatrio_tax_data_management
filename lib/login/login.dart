@@ -13,11 +13,11 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
-  TextEditingController _emailController =
+  final TextEditingController _emailController =
   TextEditingController(text: 'tito+bs792@expatrio.com');
-  TextEditingController _passwordController =
+  final TextEditingController _passwordController =
   TextEditingController(text: 'nemampojma');
-  LoginService _loginService = LoginService();
+  final LoginService _loginService = LoginService();
   bool _validateEmail = false;
   bool _validatePassword = false;
   late bool _isPasswordVisible;
