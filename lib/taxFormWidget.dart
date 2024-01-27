@@ -1,3 +1,4 @@
+import 'package:coding_challenge/search_box.dart';
 import 'package:coding_challenge/shared/countries_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -17,6 +18,8 @@ class _TaxFormWidgetState extends State<TaxFormWidget> {
   List<TextEditingController> countryControllers = [];
   List<TextEditingController> taxIdControllers = [];
   var _checked = false;
+
+  var _searchedValue;
 
   @override
   void initState() {
@@ -212,6 +215,13 @@ class _TaxFormWidgetState extends State<TaxFormWidget> {
                               ),
                             ),
                           ),
+                          SearchBox(onChanged: (value) {
+                            // Update the searched value and refresh the item manager
+                            setState(() {
+                              _searchedValue = value;
+
+                            });
+                          }),
                           Expanded(
                             child: ListView(
                               children:
