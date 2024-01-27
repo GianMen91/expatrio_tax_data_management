@@ -89,6 +89,7 @@ class LoginService {
                     child: const Text('GOT IT'),
                     onPressed: () {
                       if (isSuccessfulAccess) {
+                        Navigator.pop(context);
                         Navigator.push(
                             context,
                             MaterialPageRoute(
