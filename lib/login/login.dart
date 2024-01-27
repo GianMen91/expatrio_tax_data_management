@@ -55,7 +55,7 @@ class _LoginState extends State<Login> {
               ),
               // Existing content remains here
               SizedBox(
-                height: 400,
+                height: 450,
                 child: SingleChildScrollView(
                   child: Column(
                     children: <Widget>[
