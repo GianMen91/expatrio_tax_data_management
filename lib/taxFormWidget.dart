@@ -179,6 +179,11 @@ class _TaxFormWidgetState extends State<TaxFormWidget> {
             height: 35.0,
             child: GestureDetector(
               onTap: () {
+                setState(() {
+                  _searchedValue = "";
+                  filteredCountries = filterCountries(_searchedValue);
+                });
+
                 showModalBottomSheet(
                   context: context,
                   isScrollControlled: false,
