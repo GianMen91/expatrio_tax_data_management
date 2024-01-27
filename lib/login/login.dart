@@ -13,7 +13,7 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
-  TextEditingController nameController =
+  TextEditingController emailController =
       TextEditingController(text: 'tito+bs792@expatrio.com');
   TextEditingController passwordController =
       TextEditingController(text: 'nemampojma');
@@ -79,7 +79,7 @@ class _LoginState extends State<Login> {
                         padding: const EdgeInsets.symmetric(horizontal: 20),
                         child: TextField(
                           key: const Key('email'),
-                          controller: nameController,
+                          controller: emailController,
                           decoration: InputDecoration(
                             focusedBorder: const OutlineInputBorder(
                               borderSide: BorderSide(color: themeColor),
@@ -148,11 +148,11 @@ class _LoginState extends State<Login> {
                             ),
                           ),
                           onPressed: () async {
-                            String emailWithoutWhiteSpace = nameController.text
+                            String emailWithoutWhiteSpace = emailController.text
                                 .replaceAll(RegExp(r"\s+\b|\b\s"), "");
 
                             setState(() {
-                              nameController.text.isEmpty
+                              emailController.text.isEmpty
                                   ? _validateEmail = true
                                   : _validateEmail = false;
                             });
@@ -163,14 +163,10 @@ class _LoginState extends State<Login> {
                             });
 
                             if (!_validateEmail && !_validatePass) {
-                              var validCredential = await loginService.login(
+                              await loginService.login(
                                   emailWithoutWhiteSpace,
                                   passwordController.text,
                                   context);
-
-                              if (validCredential) {
-                                // Do something on successful login
-                              }
                             }
                           },
                         ),
