@@ -27,6 +27,7 @@ class _TaxFormWidgetState extends State<TaxFormWidget> {
   String _searchedValue = "";
 
   final List<bool> _validateTaxIdentificationNumber = [];
+  final List<bool> _validateCountry = [];
 
   // Filter countries based on the searched value
 
@@ -43,6 +44,7 @@ class _TaxFormWidgetState extends State<TaxFormWidget> {
       ));
 
       _validateTaxIdentificationNumber.add(false);
+      _validateCountry.add(false);
     }
   }
 
@@ -88,6 +90,7 @@ class _TaxFormWidgetState extends State<TaxFormWidget> {
                     taxIdControllers.add(TextEditingController(text: newTaxResidence.id));
 
                     _validateTaxIdentificationNumber.add(false);
+                    _validateCountry.add(false);
                   });
                 },
 
@@ -162,6 +165,11 @@ class _TaxFormWidgetState extends State<TaxFormWidget> {
                         taxIdControllers[i].text.isEmpty
                             ? _validateTaxIdentificationNumber[i] = true
                             : _validateTaxIdentificationNumber[i] = false;
+                      }
+                      for (int i = 0; i < countryControllers.length; i++) {
+                        countryControllers[i].text.isEmpty
+                            ? _validateCountry[i] = true
+                            : _validateCountry[i] = false;
                       }
                     });
                   }),
@@ -299,7 +307,7 @@ class _TaxFormWidgetState extends State<TaxFormWidget> {
               height: 50,
               padding: const EdgeInsets.symmetric(horizontal: 20),
               decoration: BoxDecoration(
-                border: Border.all(),
+                border: Border.all(color: _validateCountry[index] ? Colors.red : Colors.black),
                 borderRadius: BorderRadius.circular(5.0),
               ),
               child: Row(
@@ -314,6 +322,14 @@ class _TaxFormWidgetState extends State<TaxFormWidget> {
             ),
           ),
         ),
+        if (_validateCountry[index])
+            const Padding(
+            padding: EdgeInsets.only(left: 30,top:8),
+            child: Text(
+              "Please choose a country",
+              style: TextStyle(fontSize: 12, color: Colors.red),
+            ),
+          ),
         const SizedBox(height: 20),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 30),
