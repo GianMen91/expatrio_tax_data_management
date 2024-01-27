@@ -356,8 +356,10 @@ class _TaxFormWidgetState extends State<TaxFormWidget> {
               child: GestureDetector(
                 onTap: () {
                   setState(() {
-                    // Remove the last tax residence field
-                    widget.taxResidences.removeLast();
+                    widget.taxResidences.removeAt(index);
+                    countryControllers.removeAt(index);
+                    taxIdControllers.removeAt(index);
+                    _validateTaxIdentificationNumber.removeAt(index);
                   });
                 },
                 child: const Text("- REMOVE",
