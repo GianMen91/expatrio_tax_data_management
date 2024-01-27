@@ -71,7 +71,7 @@ class _TaxDataScreenState extends State<TaxDataScreen> {
                   SizedBox(height: size.width > 600 ? 35 : 15),
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: themeColor,
+                      backgroundColor: kThemeColor,
                       minimumSize: Size(size.width > 600 ? 168.0 : 48.0,
                           size.width > 600 ? 68.0 : 48.0),
                     ),
@@ -95,7 +95,7 @@ class _TaxDataScreenState extends State<TaxDataScreen> {
                                   // While waiting for the response, show CircularProgressIndicator
                                   return const Center(
                                     child: CircularProgressIndicator(
-                                        color: themeColor),
+                                        color: kThemeColor),
                                   );
                                 } else if (snapshot.hasError) {
                                   // Handle error case

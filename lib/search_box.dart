@@ -22,15 +22,15 @@ class SearchBox extends StatelessWidget {
     // Return a container with a styled text field for searching
     return Container(
       key: const Key('search_box_container'),
-      margin: const EdgeInsets.all(defaultPadding),
+      margin: const EdgeInsets.all(kDefaultPadding),
       padding: const EdgeInsets.symmetric(
-        horizontal: defaultPadding,
-        vertical: defaultPadding / 4, // 5 top and bottom
+        horizontal: kDefaultPadding,
+        vertical: kDefaultPadding / 4, // 5 top and bottom
       ),
       decoration: BoxDecoration(
         color: Colors.white.withOpacity(0.4),
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: themeColor), // Set the border color to black
+        border: Border.all(color: kThemeColor), // Set the border color to black
       ),
       child: TextField(
         key: const Key('search_text_field'),

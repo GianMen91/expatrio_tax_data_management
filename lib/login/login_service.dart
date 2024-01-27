@@ -75,7 +75,7 @@ class LoginService {
               children: <Widget>[
                 Icon(
                   isSuccessfulAccess ? Icons.check_circle : Icons.error,
-                  color: isSuccessfulAccess ? themeColor : errorMessageColor,
+                  color: isSuccessfulAccess ? kThemeColor : kErrorMessageColor,
                   size: size.width > 600 ? 90 : 70,
                 ),
                 SizedBox(height: size.width > 600 ? 35 : 15),
@@ -98,7 +98,7 @@ class LoginService {
                     style: ElevatedButton.styleFrom(
                         minimumSize: Size(size.width > 600 ? 168.0 : 48.0,
                             size.width > 600 ? 68.0 : 48.0),
-                        backgroundColor: themeColor),
+                        backgroundColor: kThemeColor),
                     child: Text('GOT IT',
                         style:
                             TextStyle(fontSize: size.width > 600 ? 22 : 14.0)),

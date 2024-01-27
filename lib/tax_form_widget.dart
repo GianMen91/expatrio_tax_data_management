@@ -122,7 +122,7 @@ class _TaxFormWidgetState extends State<TaxFormWidget> {
                     style: TextStyle(
                       fontSize: size.width > 600 ? 18 : 14.0,
                       fontWeight: FontWeight.bold,
-                      color: themeColor,
+                      color: kThemeColor,
                     )),
               ),
             ),
@@ -143,11 +143,11 @@ class _TaxFormWidgetState extends State<TaxFormWidget> {
                         if (!states.contains(MaterialState.selected)) {
                           return Colors.transparent;
                         }
-                        return themeColor;
+                        return kThemeColor;
                       }),
                       side: BorderSide(
                           color:
-                              !savingAttemptedFailed ? themeColor : Colors.red,
+                              !savingAttemptedFailed ? kThemeColor : Colors.red,
                           width: 2),
                       value: _checked,
                       onChanged: (bool? value) {
@@ -170,7 +170,7 @@ class _TaxFormWidgetState extends State<TaxFormWidget> {
             Center(
               child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                      backgroundColor: themeColor,
+                      backgroundColor: kThemeColor,
                       minimumSize: Size(size.width > 600 ? 168.0 : 48.0,
                           size.width > 600 ? 68.0 : 48.0)),
                   child: Text('SAVE',
@@ -336,7 +336,7 @@ class _TaxFormWidgetState extends State<TaxFormWidget> {
                         Container(
                           // Container for the blue background at the top
                           decoration: const BoxDecoration(
-                            color: themeColor,
+                            color: kThemeColor,
                             borderRadius: BorderRadius.only(
                               topLeft: Radius.circular(30.0),
                               topRight: Radius.circular(30.0),
@@ -454,11 +454,11 @@ class _TaxFormWidgetState extends State<TaxFormWidget> {
             decoration: InputDecoration(
               contentPadding: const EdgeInsets.symmetric(horizontal: 10.0),
               focusedBorder: const OutlineInputBorder(
-                borderSide: BorderSide(color: themeColor),
+                borderSide: BorderSide(color: kThemeColor),
               ),
               border: const OutlineInputBorder(),
               labelStyle: const TextStyle(
-                color: themeColor,
+                color: kThemeColor,
               ),
               errorText: _validateTaxIdentificationNumber[index]
                   ? 'Field is required'
