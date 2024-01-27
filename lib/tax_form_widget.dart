@@ -67,6 +67,11 @@ class _TaxFormWidgetState extends State<TaxFormWidget> {
             .contains(_searchedValue.toLowerCase()))
         .toList();
 
+    for (int i = 0; i < widget.taxResidences.length; i++) {
+      filteredCountries.removeWhere((item) =>
+      item['code'] == widget.taxResidences[i].country);
+    }
+
     return SizedBox(
       height: 600,
       child: SingleChildScrollView(
@@ -246,6 +251,7 @@ class _TaxFormWidgetState extends State<TaxFormWidget> {
       setState(() {
         selectedCountryCode = value;
         countryControllers[index].text = value ?? '';
+        widget.taxResidences[index].country = value ?? '';
       });
     }
 
@@ -336,6 +342,9 @@ class _TaxFormWidgetState extends State<TaxFormWidget> {
                                     return ListTile(
                                       title: Text(country['label'] as String),
                                       onTap: () {
+                                        /*setState(() {
+                                          filteredCountries = filterCountries(_searchedValue);
+                                        });*/
                                         // Call the callback function to update the state
                                         updateSelectedCountry(
                                             country['code'] as String?);
@@ -445,11 +454,20 @@ class _TaxFormWidgetState extends State<TaxFormWidget> {
   }
 
   List<Map<String, dynamic>> filterCountries(String searchValue) {
-    return CountriesConstants.nationality
+    var listOfCountries = CountriesConstants.nationality
         .where((country) => country['label']
             .toString()
             .toLowerCase()
             .contains(searchValue.toLowerCase()))
         .toList();
+
+    for (int i = 0; i < widget.taxResidences.length; i++) {
+      listOfCountries.removeWhere((item) =>
+      item['code'] == widget.taxResidences[i].country);
+    }
+
+
+
+    return listOfCountries;
   }
 }
