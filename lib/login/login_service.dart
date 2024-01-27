@@ -27,38 +27,51 @@ class LoginService {
         body: jsonEncode(data),
       );
 
-      final body = json.decode(response.body);
+      final responseBody = json.decode(response.body);
       if (response.statusCode == 200) {
         if (context.mounted) {
           ScaffoldMessenger.of(context).removeCurrentSnackBar();
-          _showBottomSheet(context, "Successful Login",
-              "You will be redirected to your dashboard", true, body);
+          _showSuccessBottomSheet(context, responseBody);
         }
         return true;
       } else {
         if (context.mounted) {
           ScaffoldMessenger.of(context).removeCurrentSnackBar();
-          _showBottomSheet(
-              context, "Invalid Credentials", body['message'], false, body);
+          _showErrorBottomSheet(context, responseBody['message']);
         }
         return false;
       }
-    } on SocketException {
+    } on SocketException catch (e) {
       if (context.mounted) {
         ScaffoldMessenger.of(context).removeCurrentSnackBar();
-        _showBottomSheet(
+        _showErrorBottomSheet(
             context,
-            "Connection Error",
-            "Impossible to communicate with the server. Check your internet connection and retry!",
-            false,
-            null);
+            "Unable to communicate with the server. Check your internet connection and retry! Error: $e");
       }
       return false;
     }
   }
 
+  void _showSuccessBottomSheet(BuildContext context, Map<String, dynamic> responseBody) {
+    _showBottomSheet(
+        context,
+        "Successful Login",
+        "Redirecting to your dashboard",
+        true,
+        responseBody);
+  }
+
+  void _showErrorBottomSheet(BuildContext context, String errorMessage) {
+    _showBottomSheet(
+        context,
+        "Invalid Credentials",
+        errorMessage,
+        false,
+        null);
+  }
+
   void _showBottomSheet(BuildContext context, String title, String message,
-      bool isSuccessfulAccess, body) {
+      bool successfulAccess, Map<String, dynamic>? responseBody) {
     showModalBottomSheet<void>(
       context: context,
       constraints: const BoxConstraints(
@@ -67,15 +80,15 @@ class LoginService {
       builder: (BuildContext context) {
         final Size size = MediaQuery.of(context).size;
         return SizedBox(
-          height: size.width > 600 ?  size.height / 2 : 300,
+          height: size.width > 600 ? size.height / 2 : 300,
           child: Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
                 Icon(
-                  isSuccessfulAccess ? Icons.check_circle : Icons.error,
-                  color: isSuccessfulAccess ? kThemeColor : kErrorMessageColor,
+                  successfulAccess ? Icons.check_circle : Icons.error,
+                  color: successfulAccess ? kThemeColor : kErrorMessageColor,
                   size: size.width > 600 ? 90 : 70,
                 ),
                 SizedBox(height: size.width > 600 ? 35 : 15),
@@ -95,27 +108,28 @@ class LoginService {
                 ),
                 SizedBox(height: size.width > 600 ? 35 : 15),
                 ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                        minimumSize: Size(size.width > 600 ? 168.0 : 48.0,
-                            size.width > 600 ? 68.0 : 48.0),
-                        backgroundColor: kThemeColor),
-                    child: Text('GOT IT',
-                        style:
-                            TextStyle(fontSize: size.width > 600 ? 22 : 14.0)),
-                    onPressed: () {
-                      if (isSuccessfulAccess) {
-                        Navigator.pop(context);
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => TaxDataScreen(
-                                      accessToken: body['accessToken'],
-                                      customerID: body['userId'],
-                                    )));
-                      } else {
-                        Navigator.pop(context);
-                      }
-                    }),
+                  style: ElevatedButton.styleFrom(
+                    minimumSize: Size(size.width > 600 ? 168.0 : 48.0,
+                        size.width > 600 ? 68.0 : 48.0),
+                    backgroundColor: kThemeColor,
+                  ),
+                  child: Text('GOT IT',
+                      style: TextStyle(fontSize: size.width > 600 ? 22 : 14.0)),
+                  onPressed: () {
+                    if (successfulAccess) {
+                      Navigator.pop(context);
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => TaxDataScreen(
+                                accessToken: responseBody!['accessToken'],
+                                customerID: responseBody['userId'],
+                              )));
+                    } else {
+                      Navigator.pop(context);
+                    }
+                  },
+                ),
                 const SizedBox(height: 15),
               ],
             ),
