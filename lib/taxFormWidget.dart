@@ -66,25 +66,9 @@ class _TaxFormWidgetState extends State<TaxFormWidget> {
               ),
             ),
             const SizedBox(height: 20),
-            for (int i = 0; i < widget.taxResidences.length; i++)
+            buildTaxResidenceFields(0),
+            for (int i = 1; i < widget.taxResidences.length; i++)
               buildTaxResidenceFields(i),
-            const SizedBox(height: 10),
-            Align(
-              alignment: Alignment.centerRight,
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: GestureDetector(
-                  onTap: () {},
-                  child: const Text("- REMOVE",
-                      textAlign: TextAlign.right,
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.red,
-                      )),
-                ),
-              ),
-            ),
             const SizedBox(height: 10),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -187,8 +171,8 @@ class _TaxFormWidgetState extends State<TaxFormWidget> {
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 30),
           child: Text(
-            "Which country serves as your primary tax residence?*"
-                .toUpperCase(),
+            index== 0 ? "Which country serves as your primary tax residence?*"
+                .toUpperCase() : "Do you have other tax residences?".toUpperCase(),
             style: const TextStyle(fontSize: 10),
           ),
         ),
@@ -336,6 +320,29 @@ class _TaxFormWidgetState extends State<TaxFormWidget> {
                   color: themeColor,
                 ),
               ),
+            ),
+          ),
+        ),
+        const SizedBox(height: 10),
+        if(index!=0)
+          Align(
+          alignment: Alignment.centerRight,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: GestureDetector(
+              onTap: () {
+                  setState(() {
+                    // Remove the last tax residence field
+                    widget.taxResidences.removeLast();
+                  });
+              },
+              child: const Text("- REMOVE",
+                  textAlign: TextAlign.right,
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.red,
+                  )),
             ),
           ),
         ),
