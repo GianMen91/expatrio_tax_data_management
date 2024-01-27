@@ -67,7 +67,7 @@ class LoginService {
       builder: (BuildContext context) {
         final Size size = MediaQuery.of(context).size;
         return SizedBox(
-          height: size.height / 2,
+          height: size.width > 600 ?  size.height / 2 : 300,
           child: Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,

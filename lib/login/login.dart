@@ -194,11 +194,11 @@ class _LoginState extends State<Login> {
                         child:  Row(
                           children: [
                             Icon(CupertinoIcons.question_circle,
-                                color: themeColor,size: size.width > 600 ? 28 : 25),
+                                color: themeColor,size: size.width > 600 ? 28 : 20),
                             Text(
                               'Help',
                               style: TextStyle(
-                                fontSize:  size.width > 600 ? 22 : 14.0,
+                                fontSize:  size.width > 600 ? 22 : 10.0,
                                 color: themeColor,
                               ),
                             ),

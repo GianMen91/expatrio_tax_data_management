@@ -74,6 +74,8 @@ class _TaxFormWidgetState extends State<TaxFormWidget> {
           (item) => item['code'] == widget.taxResidences[i].country);
     }
 
+    final Size size = MediaQuery.of(context).size;
+
     return SizedBox(
       height: 600,
       child: SingleChildScrollView(
@@ -81,17 +83,19 @@ class _TaxFormWidgetState extends State<TaxFormWidget> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             const SizedBox(height: 40),
-            const Padding(
+            Padding(
               padding: EdgeInsets.symmetric(horizontal: 30),
               child: Text(
                 "Declaration of financial information",
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                style: TextStyle(
+                    fontSize: size.width > 600 ? 25.0 : 18.0,
+                    fontWeight: FontWeight.bold),
               ),
             ),
             const SizedBox(height: 20),
-            buildTaxResidenceFields(0),
+            buildTaxResidenceFields(0,size),
             for (int i = 1; i < widget.taxResidences.length; i++)
-              buildTaxResidenceFields(i),
+              buildTaxResidenceFields(i,size),
             const SizedBox(height: 10),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -113,10 +117,10 @@ class _TaxFormWidgetState extends State<TaxFormWidget> {
                     _validateCountry.add(false);
                   });
                 },
-                child: const Text("+ ADD ANOTHER",
+                child:  Text("+ ADD ANOTHER",
                     textAlign: TextAlign.left,
                     style: TextStyle(
-                      fontSize: 14,
+                      fontSize: size.width > 600 ? 18 : 14.0,
                       fontWeight: FontWeight.bold,
                       color: themeColor,
                     )),
@@ -152,9 +156,10 @@ class _TaxFormWidgetState extends State<TaxFormWidget> {
                         });
                       },
                     ),
-                    const Expanded(
+                     Expanded(
                       child: Text(
                         "I confirm above tax residency and US self-declaration is true and accurate",
+                        style: TextStyle(fontSize: size.width > 600 ? 20 : 17.0),
                       ),
                     ),
                   ],
@@ -164,14 +169,13 @@ class _TaxFormWidgetState extends State<TaxFormWidget> {
             const SizedBox(height: 20),
             Center(
               child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(backgroundColor: themeColor),
-                  child: const Text(
-                    'SAVE',
-                    key: Key('save'),
-                    style: TextStyle(
-                      fontSize: 17,
-                    ),
-                  ),
+                  style: ElevatedButton.styleFrom(
+                      backgroundColor: themeColor,
+                      minimumSize: Size(size.width > 600 ? 168.0 : 48.0,
+                          size.width > 600 ? 68.0 : 48.0)),
+                  child: Text('SAVE',
+                      key: Key('save'),
+                      style: TextStyle(fontSize: size.width > 600 ? 22 : 17.0)),
                   onPressed: () async {
                     if (!_checked) {
                       shakeKey.currentState?.shake();
@@ -212,21 +216,21 @@ class _TaxFormWidgetState extends State<TaxFormWidget> {
                       }
 
                       var bodyContent = {
-                          "primaryTaxResidence": {
-                            "country": widget.taxResidences.isNotEmpty
-                                ? widget.taxResidences[0].country
-                                : "",
-                            // Handle the case when taxResidences is empty
-                            "id": widget.taxResidences.isNotEmpty
-                                ? widget.taxResidences[0].id
-                                : "",
-                            // Handle the case when taxResidences is empty
-                          },
-                          "usPerson": false,
-                          "usTaxId": null,
-                          "secondaryTaxResidence": secondaryTaxResidences,
-                          "w9FileId": null,
-                        };
+                        "primaryTaxResidence": {
+                          "country": widget.taxResidences.isNotEmpty
+                              ? widget.taxResidences[0].country
+                              : "",
+                          // Handle the case when taxResidences is empty
+                          "id": widget.taxResidences.isNotEmpty
+                              ? widget.taxResidences[0].id
+                              : "",
+                          // Handle the case when taxResidences is empty
+                        },
+                        "usPerson": false,
+                        "usTaxId": null,
+                        "secondaryTaxResidence": secondaryTaxResidences,
+                        "w9FileId": null,
+                      };
                       final response = await http.put(
                         Uri.parse("$baseUrl/v3/customers/$id/tax-data"),
                         headers: {
@@ -241,10 +245,12 @@ class _TaxFormWidgetState extends State<TaxFormWidget> {
                         "primaryTaxResidence": {
                           "country": widget.taxResidences.isNotEmpty
                               ? widget.taxResidences[0].country
-                              : "", // Handle the case when taxResidences is empty
+                              : "",
+                          // Handle the case when taxResidences is empty
                           "id": widget.taxResidences.isNotEmpty
                               ? widget.taxResidences[0].id
-                              : "", // Handle the case when taxResidences is empty
+                              : "",
+                          // Handle the case when taxResidences is empty
                         },
                         "secondaryTaxResidence": secondaryTaxResidences,
                       });
@@ -271,7 +277,7 @@ class _TaxFormWidgetState extends State<TaxFormWidget> {
     );
   }
 
-  Widget buildTaxResidenceFields(int index) {
+  Widget buildTaxResidenceFields(int index, Size size) {
     String? selectedCountryCode = countryControllers[index].text;
 
     String? selectedCountryLabel = CountriesConstants.nationality.firstWhere(
@@ -297,7 +303,7 @@ class _TaxFormWidgetState extends State<TaxFormWidget> {
                 ? "Which country serves as your primary tax residence?*"
                     .toUpperCase()
                 : "Do you have other tax residences?".toUpperCase(),
-            style: const TextStyle(fontSize: 10),
+            style:  TextStyle(fontSize: size.width > 600 ? 13 : 10.0),
           ),
         ),
         const SizedBox(height: 10),
@@ -311,6 +317,9 @@ class _TaxFormWidgetState extends State<TaxFormWidget> {
               });
               showModalBottomSheet(
                 context: context,
+                constraints: const BoxConstraints(
+                  minWidth: double.infinity,
+                ),
                 isScrollControlled: false,
                 backgroundColor: Colors.transparent,
                 builder: (BuildContext context) => StatefulBuilder(
@@ -337,7 +346,7 @@ class _TaxFormWidgetState extends State<TaxFormWidget> {
                               topRight: Radius.circular(30.0),
                             ),
                           ),
-                          child: const Padding(
+                          child:  Padding(
                             padding: EdgeInsets.all(15.0),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
@@ -346,7 +355,7 @@ class _TaxFormWidgetState extends State<TaxFormWidget> {
                                 Text(
                                   "Country",
                                   style: TextStyle(
-                                    fontSize: 17,
+                                    fontSize: size.width > 600 ? 22 : 17.0,
                                     color: Colors.white,
                                     // Text color on blue background
                                     fontWeight: FontWeight.w600,
@@ -428,7 +437,7 @@ class _TaxFormWidgetState extends State<TaxFormWidget> {
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 30),
           child: Text("Tax identification number*".toUpperCase(),
-              style: const TextStyle(fontSize: 10)),
+              style: TextStyle(fontSize: size.width > 600 ? 13 : 10.0)),
         ),
         const SizedBox(height: 10),
         Padding(
@@ -476,10 +485,10 @@ class _TaxFormWidgetState extends State<TaxFormWidget> {
                     _validateTaxIdentificationNumber.removeAt(index);
                   });
                 },
-                child: const Text("- REMOVE",
+                child:  Text("- REMOVE",
                     textAlign: TextAlign.right,
                     style: TextStyle(
-                      fontSize: 14,
+                      fontSize: size.width > 600 ? 18 : 14.0,
                       fontWeight: FontWeight.bold,
                       color: Colors.red,
                     )),
@@ -513,5 +522,4 @@ class _TaxFormWidgetState extends State<TaxFormWidget> {
       value: jsonEncode(taxData),
     );
   }
-
 }

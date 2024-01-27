@@ -63,7 +63,7 @@ class _TaxDataScreenState extends State<TaxDataScreen> {
                       "We need your tax data in order for you to access your account ",
                       textAlign: TextAlign.center,
                       style: TextStyle(
-                        fontSize: size.width > 600 ? 20.0 : 18.0,
+                        fontSize: size.width > 600 ? 20.0 : 16.0,
                       ),
                     ),
                   ),
