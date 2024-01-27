@@ -37,7 +37,7 @@ class SearchBox extends StatelessWidget {
         onChanged: onChanged,
         style: TextStyle(
           color: Colors.black,
-          fontSize: size.width > 600 ? 25.0 : 14.0,
+          fontSize: size.width > 600 ? 20.0 : 14.0,
         ),
         decoration: InputDecoration(
           enabledBorder: InputBorder.none,
@@ -46,7 +46,7 @@ class SearchBox extends StatelessWidget {
             Icons.search,
             key: const Key('search_icon'),
             color: Colors.black54,
-            size: size.width > 600 ? 38 : 25,
+            size: size.width > 600 ? 28 : 25,
           ),
           hintText: 'Search for country',
           hintStyle: const TextStyle(color: Colors.black54),

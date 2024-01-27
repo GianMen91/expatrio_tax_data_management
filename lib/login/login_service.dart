@@ -11,13 +11,13 @@ class LoginService {
 
   Future<bool> login(
       String email, String password, BuildContext context) async {
-
     final Size size = MediaQuery.of(context).size;
 
-    ScaffoldMessenger.of(context)
-        .showSnackBar(SnackBar(content: Text("Trying to login...", style: TextStyle(
-      fontSize: size.width > 600 ? 20.0 : 14.0,
-    ))));
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text("Trying to login...",
+            style: TextStyle(
+              fontSize: size.width > 600 ? 20.0 : 14.0,
+            ))));
 
     try {
       final data = {"email": email, "password": password};
@@ -62,12 +62,12 @@ class LoginService {
     showModalBottomSheet<void>(
       context: context,
       constraints: const BoxConstraints(
-          minWidth: double.infinity,
+        minWidth: double.infinity,
       ),
       builder: (BuildContext context) {
         final Size size = MediaQuery.of(context).size;
         return SizedBox(
-          height: size.height/2,
+          height: size.height / 2,
           child: Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -81,7 +81,7 @@ class LoginService {
                 SizedBox(height: size.width > 600 ? 35 : 15),
                 Text(
                   title,
-                  style:  TextStyle(
+                  style: TextStyle(
                     fontSize: size.width > 600 ? 30 : 22.0,
                     fontWeight: FontWeight.bold,
                   ),
@@ -89,16 +89,19 @@ class LoginService {
                 SizedBox(height: size.width > 600 ? 30 : 10),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
-                  child: Text(message, textAlign: TextAlign.center, style: TextStyle(fontSize: size.width > 600 ? 22 : 14.0)),
+                  child: Text(message,
+                      textAlign: TextAlign.center,
+                      style: TextStyle(fontSize: size.width > 600 ? 22 : 14.0)),
                 ),
-                 SizedBox(height: size.width > 600 ? 35 : 15),
+                SizedBox(height: size.width > 600 ? 35 : 15),
                 ElevatedButton(
-                    style:
-                        ElevatedButton.styleFrom(
-                            minimumSize:
-                            Size(size.width > 600 ? 168.0 : 48.0, size.width > 600 ? 68.0 : 48.0),
-                            backgroundColor: themeColor),
-                    child:  Text('GOT IT',style: TextStyle(fontSize: size.width > 600 ? 22 : 14.0)),
+                    style: ElevatedButton.styleFrom(
+                        minimumSize: Size(size.width > 600 ? 168.0 : 48.0,
+                            size.width > 600 ? 68.0 : 48.0),
+                        backgroundColor: themeColor),
+                    child: Text('GOT IT',
+                        style:
+                            TextStyle(fontSize: size.width > 600 ? 22 : 14.0)),
                     onPressed: () {
                       if (isSuccessfulAccess) {
                         Navigator.pop(context);

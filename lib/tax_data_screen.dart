@@ -46,33 +46,44 @@ class _TaxDataScreenState extends State<TaxDataScreen> {
                 children: [
                   SvgPicture.asset(
                     "assets/CryingGirl.svg",
-                    width: size.width > 600 ? 600.0 : 150.0,
+                    width: size.width > 600 ? 300.0 : 150.0,
                   ),
-                  const SizedBox(height: 15),
-                  const Text(
+                  SizedBox(height: size.width > 600 ? 35 : 15),
+                  Text(
                     "Uh-Oh!",
                     style: TextStyle(
-                      fontSize: 22.0,
+                      fontSize: size.width > 600 ? 40.0 : 22.0,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  const SizedBox(height: 10),
-                  const Padding(
+                  SizedBox(height: size.width > 600 ? 30 : 10),
+                  Padding(
                     padding: EdgeInsets.symmetric(horizontal: 20),
                     child: Text(
                       "We need your tax data in order for you to access your account ",
                       textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: size.width > 600 ? 20.0 : 18.0,
+                      ),
                     ),
                   ),
-                  const SizedBox(height: 15),
+                  SizedBox(height: size.width > 600 ? 35 : 15),
                   ElevatedButton(
-                    style:
-                        ElevatedButton.styleFrom(backgroundColor: themeColor),
-                    child: const Text('UPDATE YOUR TAX DATA'),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: themeColor,
+                      minimumSize: Size(size.width > 600 ? 168.0 : 48.0,
+                          size.width > 600 ? 68.0 : 48.0),
+                    ),
+                    child: Text('UPDATE YOUR TAX DATA',
+                        style:
+                            TextStyle(fontSize: size.width > 600 ? 22 : 14.0)),
                     onPressed: () async {
                       if (context.mounted) {
                         showModalBottomSheet<void>(
                           context: context,
+                          constraints: const BoxConstraints(
+                            minWidth: double.infinity,
+                          ),
                           builder: (BuildContext context) {
                             return FutureBuilder(
                               future: getTaxData(context),
@@ -81,8 +92,8 @@ class _TaxDataScreenState extends State<TaxDataScreen> {
                                 if (snapshot.connectionState ==
                                     ConnectionState.waiting) {
                                   // While waiting for the response, show CircularProgressIndicator
-                                  return const SizedBox(
-                                    height: 600,
+                                  return SizedBox(
+                                    height: size.height / 2,
                                     child: Center(
                                       child: CircularProgressIndicator(
                                           color: themeColor),
@@ -95,8 +106,8 @@ class _TaxDataScreenState extends State<TaxDataScreen> {
                                   // Once you have the response, show TaxFormWidget
                                   return SizedBox(
                                     height: 600,
-                                    child: TaxFormWidget(snapshot
-                                        .data, widget.accessToken, widget.customerID),
+                                    child: TaxFormWidget(snapshot.data,
+                                        widget.accessToken, widget.customerID),
                                   );
                                 }
                               },
@@ -157,7 +168,7 @@ class _TaxDataScreenState extends State<TaxDataScreen> {
       } else {
         return taxResidences;
       }
-    }  on Exception {
+    } on Exception {
       return taxResidences;
     }
   }
