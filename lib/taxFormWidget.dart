@@ -77,7 +77,20 @@ class _TaxFormWidgetState extends State<TaxFormWidget> {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
               child: GestureDetector(
-                onTap: () {},
+                onTap: () {
+                  setState(() {
+                    // Add a new tax residence field
+                    TaxResidence newTaxResidence = TaxResidence(country: "", id: "");
+                    widget.taxResidences.add(newTaxResidence);
+
+                    // Initialize controllers for the new element
+                    countryControllers.add(TextEditingController(text: newTaxResidence.country));
+                    taxIdControllers.add(TextEditingController(text: newTaxResidence.id));
+
+                    _validateTaxIdentificationNumber.add(false);
+                  });
+                },
+
                 child: const Text("+ ADD ANOTHER",
                     textAlign: TextAlign.left,
                     style: TextStyle(
