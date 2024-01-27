@@ -19,6 +19,7 @@ class _TaxFormWidgetState extends State<TaxFormWidget> {
   List<TextEditingController> countryControllers = [];
   List<TextEditingController> taxIdControllers = [];
   var _checked = false;
+  var savingAttemptedFailed = false;
   final shakeKey = GlobalKey<ShakeWidgetState>();
 
   List<Map<String, dynamic>> filteredCountries = [];
@@ -119,7 +120,7 @@ class _TaxFormWidgetState extends State<TaxFormWidget> {
                         }
                         return themeColor;
                       }),
-                      side: const BorderSide(color: themeColor, width: 2),
+                      side:  BorderSide(color: !savingAttemptedFailed ? themeColor : Colors.red, width: 2),
                       value: _checked,
                       onChanged: (bool? value) {
                         setState(() {
@@ -148,7 +149,13 @@ class _TaxFormWidgetState extends State<TaxFormWidget> {
                   ),
                 ),
                 onPressed: () {
-                  shakeKey.currentState?.shake();
+                  if(!_checked){
+                    shakeKey.currentState?.shake();
+                    setState(() {
+                      savingAttemptedFailed = true;
+                    });
+                  }
+
                 }
               ),
             ),
