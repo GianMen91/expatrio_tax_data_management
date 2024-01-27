@@ -139,7 +139,8 @@ class _LoginState extends State<Login> {
                         height: 50,
                         margin: const EdgeInsets.all(15),
                         child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(backgroundColor: themeColor),
+                          style: ElevatedButton.styleFrom(
+                              backgroundColor: themeColor),
                           child: const Text(
                             'LOGIN',
                             key: Key('login'),
@@ -184,20 +185,20 @@ class _LoginState extends State<Login> {
                       ElevatedButton(
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.white,
-                          maximumSize: const Size(100, 130),
+                          maximumSize: Size(size.width > 600 ? 130 : 100, size.width > 600 ? 530 : 130),
                         ),
                         onPressed: () {
                           // Open the link in the browser
                           launchUrl(Uri.parse('https://help.expatrio.com/hc/en-us'));
                         },
-                        child: const Row(
+                        child:  Row(
                           children: [
                             Icon(CupertinoIcons.question_circle,
-                                color: themeColor),
+                                color: themeColor,size: size.width > 600 ? 28 : 25),
                             Text(
                               'Help',
                               style: TextStyle(
-                                fontSize: 12,
+                                fontSize:  size.width > 600 ? 22 : 14.0,
                                 color: themeColor,
                               ),
                             ),
