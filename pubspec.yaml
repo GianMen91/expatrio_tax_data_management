@@ -42,6 +42,7 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
   number_to_words_english: ^2.0.2
+  flutter_shakemywidget: ^1.0.5+1
 
 dev_dependencies:
   flutter_test:
