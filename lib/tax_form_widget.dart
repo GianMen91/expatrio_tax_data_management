@@ -84,7 +84,7 @@ class _TaxFormWidgetState extends State<TaxFormWidget> {
           children: <Widget>[
             const SizedBox(height: 40),
             Padding(
-              padding: EdgeInsets.symmetric(horizontal: 30),
+              padding: const EdgeInsets.symmetric(horizontal: 30),
               child: Text(
                 "Declaration of financial information",
                 style: TextStyle(
@@ -174,7 +174,7 @@ class _TaxFormWidgetState extends State<TaxFormWidget> {
                       minimumSize: Size(size.width > 600 ? 168.0 : 48.0,
                           size.width > 600 ? 68.0 : 48.0)),
                   child: Text('SAVE',
-                      key: Key('save'),
+                      key: const Key('save'),
                       style: TextStyle(fontSize: size.width > 600 ? 22 : 17.0)),
                   onPressed: () async {
                     if (!_checked) {
@@ -240,34 +240,30 @@ class _TaxFormWidgetState extends State<TaxFormWidget> {
                         body: jsonEncode(bodyContent),
                       );
 
-                      // Save tax data locally
-                      await saveTaxDataLocally({
-                        "primaryTaxResidence": {
-                          "country": widget.taxResidences.isNotEmpty
-                              ? widget.taxResidences[0].country
-                              : "",
-                          // Handle the case when taxResidences is empty
-                          "id": widget.taxResidences.isNotEmpty
-                              ? widget.taxResidences[0].id
-                              : "",
-                          // Handle the case when taxResidences is empty
-                        },
-                        "secondaryTaxResidence": secondaryTaxResidences,
-                      });
-
                       if (response.statusCode == 200) {
-                        // Handle success
-                        print('Success');
+                        // Save tax data locally
+                        await saveTaxDataLocally({
+                          "primaryTaxResidence": {
+                            "country": widget.taxResidences.isNotEmpty
+                                ? widget.taxResidences[0].country
+                                : "",
+                            // Handle the case when taxResidences is empty
+                            "id": widget.taxResidences.isNotEmpty
+                                ? widget.taxResidences[0].id
+                                : "",
+                            // Handle the case when taxResidences is empty
+                          },
+                          "secondaryTaxResidence": secondaryTaxResidences,
+                        });
                       } else {
                         // Handle other status codes
-                        print('Error: ${response.statusCode}');
                       }
                     } on SocketException {
                       // Handle SocketException
-                      print('SocketException occurred');
                     }
-
-                    Navigator.pop(context);
+                    if (context.mounted){
+                      Navigator.pop(context);
+                    }
                   }),
             ),
             const SizedBox(height: 40),
@@ -347,7 +343,7 @@ class _TaxFormWidgetState extends State<TaxFormWidget> {
                             ),
                           ),
                           child:  Padding(
-                            padding: EdgeInsets.all(15.0),
+                            padding: const EdgeInsets.all(15.0),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               // Center alignment

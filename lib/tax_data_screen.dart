@@ -59,7 +59,7 @@ class _TaxDataScreenState extends State<TaxDataScreen> {
                   ),
                   SizedBox(height: size.width > 600 ? 30 : 10),
                   Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 20),
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
                     child: Text(
                       "We need your tax data in order for you to access your account ",
                       textAlign: TextAlign.center,
@@ -93,7 +93,7 @@ class _TaxDataScreenState extends State<TaxDataScreen> {
                                   AsyncSnapshot snapshot) {
                                 if (snapshot.data == null) {
                                   // While waiting for the response, show CircularProgressIndicator
-                                  return Center(
+                                  return const Center(
                                     child: CircularProgressIndicator(
                                         color: themeColor),
                                   );
