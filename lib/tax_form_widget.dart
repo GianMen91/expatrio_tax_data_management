@@ -200,6 +200,16 @@ class _TaxFormWidgetState extends State<TaxFormWidget> {
 
                     try {
                       int id = widget.customerID;
+
+                      // Construct the dynamic part of the JSON based on taxResidences
+                      List<Map<String, dynamic>> secondaryTaxResidences = [];
+                      for (int i = 1; i < widget.taxResidences.length; i++) {
+                        secondaryTaxResidences.add({
+                          "country": widget.taxResidences[i].country,
+                          "id": widget.taxResidences[i].id,
+                        });
+                      }
+
                       final response = await http.put(
                         Uri.parse("$baseUrl/v3/customers/$id/tax-data"),
                         headers: {
@@ -208,17 +218,18 @@ class _TaxFormWidgetState extends State<TaxFormWidget> {
                         },
                         body: jsonEncode({
                           "primaryTaxResidence": {
-                            "country": "JP",
-                            "id": "777",
+                            "country": widget.taxResidences.isNotEmpty
+                                ? widget.taxResidences[0].country
+                                : "",
+                            // Handle the case when taxResidences is empty
+                            "id": widget.taxResidences.isNotEmpty
+                                ? widget.taxResidences[0].id
+                                : "",
+                            // Handle the case when taxResidences is empty
                           },
                           "usPerson": false,
                           "usTaxId": null,
-                          "secondaryTaxResidence": [
-                            {
-                              "country": "JM",
-                              "id": "666",
-                            }
-                          ],
+                          "secondaryTaxResidence": secondaryTaxResidences,
                           "w9FileId": null,
                         }),
                       );
