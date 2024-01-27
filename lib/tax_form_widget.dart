@@ -5,6 +5,7 @@ import 'package:coding_challenge/search_box.dart';
 import 'package:coding_challenge/shared/countries_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_shakemywidget/flutter_shakemywidget.dart';
 import '../shared/constants.dart';
 import 'package:coding_challenge/models/tax_residence.dart';
@@ -210,13 +211,7 @@ class _TaxFormWidgetState extends State<TaxFormWidget> {
                         });
                       }
 
-                      final response = await http.put(
-                        Uri.parse("$baseUrl/v3/customers/$id/tax-data"),
-                        headers: {
-                          'Content-Type': 'application/json',
-                          'Authorization': widget.accessToken,
-                        },
-                        body: jsonEncode({
+                      var bodyContent = {
                           "primaryTaxResidence": {
                             "country": widget.taxResidences.isNotEmpty
                                 ? widget.taxResidences[0].country
@@ -231,8 +226,28 @@ class _TaxFormWidgetState extends State<TaxFormWidget> {
                           "usTaxId": null,
                           "secondaryTaxResidence": secondaryTaxResidences,
                           "w9FileId": null,
-                        }),
+                        };
+                      final response = await http.put(
+                        Uri.parse("$baseUrl/v3/customers/$id/tax-data"),
+                        headers: {
+                          'Content-Type': 'application/json',
+                          'Authorization': widget.accessToken,
+                        },
+                        body: jsonEncode(bodyContent),
                       );
+
+                      // Save tax data locally
+                      await saveTaxDataLocally({
+                        "primaryTaxResidence": {
+                          "country": widget.taxResidences.isNotEmpty
+                              ? widget.taxResidences[0].country
+                              : "", // Handle the case when taxResidences is empty
+                          "id": widget.taxResidences.isNotEmpty
+                              ? widget.taxResidences[0].id
+                              : "", // Handle the case when taxResidences is empty
+                        },
+                        "secondaryTaxResidence": secondaryTaxResidences,
+                      });
 
                       if (response.statusCode == 200) {
                         // Handle success
@@ -490,4 +505,13 @@ class _TaxFormWidgetState extends State<TaxFormWidget> {
     }
     return listOfCountries;
   }
+
+  Future<void> saveTaxDataLocally(Map<String, dynamic> taxData) async {
+    const storage = FlutterSecureStorage();
+    await storage.write(
+      key: "user_${widget.customerID}_tax_data",
+      value: jsonEncode(taxData),
+    );
+  }
+
 }
