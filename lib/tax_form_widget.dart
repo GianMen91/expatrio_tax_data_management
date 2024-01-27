@@ -191,6 +191,11 @@ class _TaxFormWidgetState extends State<TaxFormWidget> {
                     });
 
 
+                    // Check if any validation failed
+                    if (_validateTaxIdentificationNumber.contains(true) ||
+                        _validateCountry.contains(true) || !_checked) {
+                      return; // Stop execution if validation fails
+                    }
 
                     try {
                       int id = widget.customerID;
@@ -228,9 +233,11 @@ class _TaxFormWidgetState extends State<TaxFormWidget> {
                       // Handle SocketException
                       print('SocketException occurred');
                     }
-                    Navigator.pop(context);
 
-                  }),
+                    Navigator.pop(context);
+                  }
+
+              ),
             ),
             const SizedBox(height: 40),
           ],
