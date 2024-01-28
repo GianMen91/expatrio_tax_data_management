@@ -55,6 +55,7 @@ class _TaxFormWidgetState extends State<TaxFormWidget> {
     final Size size = MediaQuery.of(context).size;
 
     return SizedBox(
+      key: const Key('taxFormWidget'), // Unique key for the entire widget
       height: 600,
       child: SingleChildScrollView(
         child: Column(
@@ -65,6 +66,7 @@ class _TaxFormWidgetState extends State<TaxFormWidget> {
               padding: const EdgeInsets.symmetric(horizontal: 30),
               child: Text(
                 "Declaration of financial information",
+                key: const Key('declarationTitle'), // Key for the title
                 style: TextStyle(
                   fontSize: size.width > 600 ? 25.0 : 18.0,
                   fontWeight: FontWeight.bold,
@@ -116,10 +118,12 @@ class _TaxFormWidgetState extends State<TaxFormWidget> {
                     .toUpperCase()
                 : "Do you have other tax residences?".toUpperCase(),
             style: TextStyle(fontSize: size.width > 600 ? 13 : 10.0),
+            key: Key('taxResidenceTitle$index'), // Key for the title
           ),
         ),
         const SizedBox(height: 10),
         CountryDropdown(
+          key: Key('countryDropdown$index'), // Key for the country dropdown
           updateSelectedCountry: updateSelectedCountry,
           index: index,
           selectedCountryLabel: selectedCountryLabel,
@@ -127,11 +131,12 @@ class _TaxFormWidgetState extends State<TaxFormWidget> {
           taxResidences: widget.taxResidences,
         ),
         if (_validateCountry[index])
-          const Padding(
-            padding: EdgeInsets.only(left: 30, top: 8),
+           Padding(
+            padding: const EdgeInsets.only(left: 30, top: 8),
             child: Text(
               "Please choose a country",
-              style: TextStyle(fontSize: 12, color: Colors.red),
+              style: const TextStyle(fontSize: 12, color: Colors.red),
+              key: Key('validationErrorText$index'), // Key for validation error text
             ),
           ),
         const SizedBox(height: 20),
@@ -140,6 +145,7 @@ class _TaxFormWidgetState extends State<TaxFormWidget> {
           child: Text(
             "Tax identification number*".toUpperCase(),
             style: TextStyle(fontSize: size.width > 600 ? 13 : 10.0),
+            key: Key('taxIdTitle$index'), // Key for the title
           ),
         ),
         const SizedBox(height: 10),
@@ -178,6 +184,7 @@ class _TaxFormWidgetState extends State<TaxFormWidget> {
             fontWeight: FontWeight.bold,
             color: kThemeColor,
           ),
+          key: const Key('addAnotherButton'), // Key for the button
         ),
       ),
     );
@@ -211,11 +218,13 @@ class _TaxFormWidgetState extends State<TaxFormWidget> {
                   _isChecked = value!;
                 });
               },
+              key: const Key('confirmationCheckbox'), // Key for the checkbox
             ),
             Expanded(
               child: Text(
                 "I confirm above tax residency and US self-declaration is true and accurate",
                 style: TextStyle(fontSize: size.width > 600 ? 20 : 14.0),
+                key: const Key('confirmationText'), // Key for the text
               ),
             ),
           ],
@@ -228,6 +237,7 @@ class _TaxFormWidgetState extends State<TaxFormWidget> {
   Widget _buildSaveButton(Size size) {
     return Center(
       child: ElevatedButton(
+        key: const Key('saveButton'), // Key for the button
         style: ElevatedButton.styleFrom(
           backgroundColor: kThemeColor,
           minimumSize: Size(
@@ -237,7 +247,6 @@ class _TaxFormWidgetState extends State<TaxFormWidget> {
         ),
         child: Text(
           'SAVE',
-          key: const Key('save'),
           style: TextStyle(fontSize: size.width > 600 ? 22 : 17.0),
         ),
         onPressed: () async {
@@ -301,6 +310,7 @@ class _TaxFormWidgetState extends State<TaxFormWidget> {
               fontWeight: FontWeight.bold,
               color: Colors.red,
             ),
+            key: Key('removeButton$index'), // Key for the button
           ),
         ),
       ),
@@ -312,7 +322,7 @@ class _TaxFormWidgetState extends State<TaxFormWidget> {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20),
       child: TextField(
-        key: Key('taxIdentificationNumber$index'),
+        key: Key('taxIdentificationNumberTextField$index'), // Key for the text field
         controller: _taxIdControllers[index],
         keyboardType: TextInputType.number,
         inputFormatters: <TextInputFormatter>[
