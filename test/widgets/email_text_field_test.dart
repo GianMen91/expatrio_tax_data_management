@@ -1,40 +1,46 @@
 import 'package:coding_challenge/widgets/email_text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-
 void main() {
   group('EmailTextField tests', () {
-    late EmailTextField emailTextField;
-    late TextEditingController emailController;
+    testWidgets('UI components are rendered correctly',
+            (WidgetTester tester) async {
+          TextEditingController emailController = TextEditingController();
+          bool validateEmail = false;
 
-    setUp(() {
-      emailController = TextEditingController();
-      emailTextField = EmailTextField(
-        emailController: emailController,
-        validateEmail: false,
-      );
-    });
+          await tester.pumpWidget(
+            MaterialApp(
+              home: Scaffold(
+                body: EmailTextField(
+                  emailController: emailController,
+                  validateEmail: validateEmail,
+                ),
+              ),
+            ),
+          );
 
-    testWidgets('UI components are rendered correctly', (WidgetTester tester) async {
-      await tester.pumpWidget(MaterialApp(home: emailTextField));
+          // Check for the existence of the TextField
+          expect(find.byKey(const Key('email')), findsOneWidget);
+        });
 
-      expect(find.byType(TextField), findsOneWidget);
-    });
+    testWidgets('Email validation error message is displayed',
+            (WidgetTester tester) async {
+          TextEditingController emailController = TextEditingController();
+          bool validateEmail = true; // Set to true to simulate a validation error
 
-    testWidgets('Email validation error message is displayed', (WidgetTester tester) async {
-      await tester.pumpWidget(MaterialApp(home: emailTextField));
+          await tester.pumpWidget(
+            MaterialApp(
+              home: Scaffold(
+                body: EmailTextField(
+                  emailController: emailController,
+                  validateEmail: validateEmail,
+                ),
+              ),
+            ),
+          );
 
-      // Trigger validation error
-      emailTextField = EmailTextField(
-        emailController: emailController,
-        validateEmail: true,
-      );
-
-      await tester.pumpWidget(MaterialApp(home: emailTextField));
-
-      // Verify that the error message is displayed
-      expect(find.text('Email Can\'t Be Empty'), findsOneWidget);
-    });
-
+          // Check if the error message is displayed
+          expect(find.text('Email Can\'t Be Empty'), findsOneWidget);
+        });
   });
 }
