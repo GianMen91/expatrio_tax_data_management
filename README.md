@@ -83,6 +83,6 @@ Follow these steps to run the application locally:
 ### Potential Improvements
 
 1. **Localization**: Implement localization to support multiple languages, catering to a diverse user base.
-3. **Testing**: Expand test coverage with unit and widget tests for robust and reliable code.
-4. **Error Handling**: Strengthen error handling mechanisms to provide users with meaningful feedback in case of unexpected scenarios.
+2 **Testing**: Expand test coverage with unit and widget tests for robust and reliable code.
+3 **Error Handling**: Strengthen error handling mechanisms to provide users with meaningful feedback in case of unexpected scenarios.
 
