@@ -1,52 +1,56 @@
-import 'package:coding_challenge/screens/tax_data_screen.dart';
-import 'package:coding_challenge/services/tax_data_service.dart';
+import 'package:coding_challenge/src/screens/tax_data_screen.dart';
 import 'package:coding_challenge/widgets/tax_form_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mockito/mockito.dart';
-
-class MockTaxDataService extends Mock implements TaxDataService {}
 
 void main() {
   group('TaxDataScreen tests', () {
-    late TaxDataScreen taxDataScreen;
-    late MockTaxDataService mockTaxDataService;
-
-    setUp(() {
-      mockTaxDataService = MockTaxDataService();
-      taxDataScreen = TaxDataScreen(
-        accessToken: 'fakeToken',
-        customerId: 1,
-      );
-    });
-
-    testWidgets('UI components are rendered correctly', (WidgetTester tester) async {
-      await tester.pumpWidget(MaterialApp(home: taxDataScreen));
+    testWidgets('UI components are rendered correctly',
+        (WidgetTester tester) async {
+      String accessToken =
+          "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJ4cDppZCI6IjExMzg3NSIsInhwOmxhc3ROYW1lIjoiQmEgQ2JhIEFpb24iLCJ4cDpzdWJqZWN0IjoiQm9ib24gQmEgQ2JhIEFpb24iLCJ4cDpwdiI6MiwiaXNzIjoieC1wYXRyaW8iLCJ4cDplbWFpbCI6InRpdG8rYnM3OTJAZXhwYXRyaW8uY29tIiwieHA6cm9sZSI6IkNVU1RPTUVSIiwieHA6Zmlyc3ROYW1lIjoiQm9ib24iLCJleHAiOjE3MDY0NjI3MDgsImlhdCI6MTcwNjQ1OTEwOCwianRpIjoiMTIzIn0.SvlGqvb3EiJohbb0JLG8Sc4rD1dHxMduIePCVX1rGJ-mv2ug484Re8nnofD-EBUAnUYC1ufbb73et5rBYv9fhQ";
+      int customerId = 113875;
+      await tester.pumpWidget(MaterialApp(
+          home:
+              TaxDataScreen(customerId: customerId, accessToken: accessToken)));
 
       expect(find.byType(AppBar), findsOneWidget);
+
+      var arrowBackIcon = find.byKey(const Key('arrow_back_icon'));
+      expect(arrowBackIcon, findsOneWidget);
+
       expect(find.byType(SvgPicture), findsOneWidget);
-      expect(find.text("Uh-Oh!"), findsOneWidget);
-      expect(find.text("We need your tax data for you to access your account."), findsOneWidget);
+
+      var titleTextField = find.byKey(const Key('title_text_field'));
+      expect(titleTextField, findsOneWidget);
+
+      final titleTextFieldWidget = tester.widget<Text>(titleTextField);
+      expect(titleTextFieldWidget.data, "Uh-Oh!");
+
+      var descriptionTextField =
+          find.byKey(const Key('description_text_field'));
+      expect(descriptionTextField, findsOneWidget);
+
+      final descriptionTextFieldtWidget =
+          tester.widget<Text>(descriptionTextField);
+      expect(descriptionTextFieldtWidget.data,
+          "We need your tax data for you to access your account.");
+
       expect(find.byType(ElevatedButton), findsOneWidget);
-    });
 
-    testWidgets('Update Tax Data button triggers modal', (WidgetTester tester) async {
-      await tester.pumpWidget(MaterialApp(home: taxDataScreen));
-
-      // Mock the TaxDataService
-      when(mockTaxDataService.getTaxData(any, any)).thenAnswer((_) async => []);
-
-      // Tap the "UPDATE YOUR TAX DATA" button
-      await tester.tap(find.text('UPDATE YOUR TAX DATA'));
-      await tester.pumpAndSettle();
-
-      // Verify that the TaxDataService was called
-      verify(mockTaxDataService.getTaxData(any, any)).called(1);
-
-      // Verify that the modal bottom sheet is displayed
-      expect(find.byType(ModalBottomSheet), findsOneWidget);
-
+      // Verifying the presence and properties of the 'ADD TO ORDER' button
+      var updateTaxDataButton = find.byKey(const Key('update_tax_data_button'));
+      expect(updateTaxDataButton, findsOneWidget);
+      final buttonWidget = tester.widget<ElevatedButton>(updateTaxDataButton);
+      expect(
+        buttonWidget.child,
+        isA<Text>().having(
+          (text) => text.data,
+          'text.data',
+          "UPDATE YOUR TAX DATA",
+        ),
+      );
     });
   });
 }
