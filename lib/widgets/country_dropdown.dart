@@ -106,6 +106,7 @@ class _CountryDropdownState extends State<CountryDropdown> {
             Expanded(
               child: _filteredCountries.isNotEmpty
                   ? ListView.builder(
+                key: const Key('country_list_view'),
                 itemCount: _filteredCountries.length,
                 itemBuilder: (context, index) {
                   Map<String, dynamic> country = _filteredCountries[index];
@@ -130,7 +131,7 @@ class _CountryDropdownState extends State<CountryDropdown> {
   }
 
   // Container at the top of the bottom sheet
-  Container _buildTopContainer(Size size) {
+  Widget _buildTopContainer(Size size) {
     return Container(
       decoration: const BoxDecoration(
         color: kThemeColor,
@@ -146,6 +147,7 @@ class _CountryDropdownState extends State<CountryDropdown> {
           children: [
             Text(
               "Country",
+              key: const Key("country_dropdown_title"),
               style: TextStyle(
                 fontSize: size.width > 600 ? 22 : 17.0,
                 color: Colors.white,
