@@ -83,7 +83,7 @@ Follow these steps to run the application locally:
 ### Potential Improvements
 
 1. **Localization**: Implement localization to support multiple languages, catering to a diverse user base.
-2. **Testing**: Expand test coverage with unit and widget tests for robust and reliable code.
+2. **Testing**: Add more tests for robust and reliable code.
 3. **Error Handling**: Strengthen error handling mechanisms to provide users with meaningful feedback in case of unexpected scenarios.
 4. **Firebase Integration**: Explore integrating tools like Crashlytics for proactive crash reporting and real-time monitoring, enhancing overall app stability and user experience.
 
