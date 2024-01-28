@@ -41,44 +41,40 @@ class _TaxDataScreenState extends State<TaxDataScreen> {
         ),
       ),
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Expanded(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  // SVG image depicting a crying girl
-                  SvgPicture.asset(
-                    "assets/CryingGirl.svg",
-                    width: size.width > 600 ? 300.0 : 150.0,
-                  ),
-                  SizedBox(height: size.width > 600 ? 35 : 15),
-                  Text(
-                    "Uh-Oh!",
-                    style: TextStyle(
-                      fontSize: size.width > 600 ? 40.0 : 22.0,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  SizedBox(height: size.width > 600 ? 30 : 10),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20),
-                    child: Text(
-                      "We need your tax data for you to access your account.",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontSize: size.width > 600 ? 20.0 : 16.0,
-                      ),
-                    ),
-                  ),
-                  SizedBox(height: size.width > 600 ? 35 : 15),
-                  _buildUpdateTaxDataButton(size, context),
-                ],
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              SvgPicture.asset(
+                "assets/CryingGirl.svg",
+                width: size.width > 600 ? 300.0 : 150.0,
               ),
-            ),
-            // Align section for displaying developer information
-          ],
+              SizedBox(height: size.width > 600 ? 35 : 15),
+              Text(
+                "Uh-Oh!",
+                key: const Key('title_text_field'),
+                style: TextStyle(
+                  fontSize: size.width > 600 ? 40.0 : 22.0,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              SizedBox(height: size.width > 600 ? 30 : 10),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: Text(
+                  "We need your tax data for you to access your account.",
+                  key: const Key('description_text_field'),
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: size.width > 600 ? 20.0 : 16.0,
+                  ),
+                ),
+              ),
+              SizedBox(height: size.width > 600 ? 35 : 15),
+              _buildUpdateTaxDataButton(size, context),
+              // Align section for displaying developer information
+            ],
+          ),
         ),
       ),
     );
@@ -93,6 +89,7 @@ class _TaxDataScreenState extends State<TaxDataScreen> {
             size.width > 600 ? 168.0 : 48.0, size.width > 600 ? 68.0 : 48.0),
       ),
       child: Text('UPDATE YOUR TAX DATA',
+          key: const Key('update_tax_data_button'),
           style: TextStyle(fontSize: size.width > 600 ? 22 : 14.0)),
       onPressed: () async {
         if (context.mounted) {
