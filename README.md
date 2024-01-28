@@ -7,6 +7,9 @@ Welcome to the Expatrio Tax Data Management App! This Flutter application is des
 ## Screenshots
 
 <img src="img/img-1.png" width=300 /> <img src="img/img-2.png" width=300 /> 
+<img src="img/img-3.png" width=300 /> <img src="img/img-4.png" width=300 /> 
+<img src="img/img-5.png" width=300 /> <img src="img/img-6.png" width=300 /> 
+<img src="img/img-7.png" width=300 /> <img src="img/img-8.png" width=300 /> 
 
 ## Features
 
@@ -49,7 +52,7 @@ The project is organized following best practices to enhance maintainability and
 
 The app is designed to work seamlessly across various screen sizes, providing a consistent and enjoyable experience on both small and large devices.
 
-### Getting Started
+## Getting Started
 
 Follow these steps to run the application locally:
 
