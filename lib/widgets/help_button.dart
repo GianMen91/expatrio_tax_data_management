@@ -24,14 +24,12 @@ class HelpButton extends StatelessWidget {
     return Align(
       alignment: Alignment.bottomCenter,
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 15),
+        padding: const EdgeInsets.only(left:20.0),
         child: Row(
           children: [
             ElevatedButton(
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.white, // Button background color
-                maximumSize: Size(size.width > 600 ? 130 : 100,
-                    size.width > 600 ? 530 : 130), // Maximum button size
               ),
               onPressed: () {
                 // Open the link in the browser when the button is pressed
@@ -44,6 +42,7 @@ class HelpButton extends StatelessWidget {
                     color: kThemeColor, // Icon color
                     size: size.width > 600 ? 28 : 20, // Icon size
                   ),
+                  const SizedBox(width: 10),
                   Text(
                     'Help', // Button text
                     style: TextStyle(
@@ -53,8 +52,7 @@ class HelpButton extends StatelessWidget {
                   ),
                 ],
               ),
-            ),
-            const Spacer(), // Empty space to push the button to the right
+            ),// Empty space to push the button to the right
           ],
         ),
       ),
