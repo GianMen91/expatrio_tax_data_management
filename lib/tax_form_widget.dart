@@ -4,8 +4,9 @@ import 'package:coding_challenge/tax_data_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_shakemywidget/flutter_shakemywidget.dart';
+
 import '../shared/constants.dart';
-import 'package:coding_challenge/models/tax_residence.dart';
+import 'models/tax_residence.dart';
 
 class TaxFormWidget extends StatefulWidget {
   final List<TaxResidence> taxResidences;
@@ -65,8 +66,9 @@ class _TaxFormWidgetState extends State<TaxFormWidget> {
               child: Text(
                 "Declaration of financial information",
                 style: TextStyle(
-                    fontSize: size.width > 600 ? 25.0 : 18.0,
-                    fontWeight: FontWeight.bold),
+                  fontSize: size.width > 600 ? 25.0 : 18.0,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ),
             const SizedBox(height: 20),
@@ -117,11 +119,12 @@ class _TaxFormWidgetState extends State<TaxFormWidget> {
         ),
         const SizedBox(height: 10),
         CountryDropdown(
-            updateSelectedCountry: updateSelectedCountry,
-            index: index,
-            selectedCountryLabel: selectedCountryLabel,
-            validateCountry:_validateCountry,
-            taxResidences: widget.taxResidences),
+          updateSelectedCountry: updateSelectedCountry,
+          index: index,
+          selectedCountryLabel: selectedCountryLabel,
+          validateCountry: _validateCountry,
+          taxResidences: widget.taxResidences,
+        ),
         if (_validateCountry[index])
           const Padding(
             padding: EdgeInsets.only(left: 30, top: 8),
@@ -133,8 +136,10 @@ class _TaxFormWidgetState extends State<TaxFormWidget> {
         const SizedBox(height: 20),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 30),
-          child: Text("Tax identification number*".toUpperCase(),
-              style: TextStyle(fontSize: size.width > 600 ? 13 : 10.0)),
+          child: Text(
+            "Tax identification number*".toUpperCase(),
+            style: TextStyle(fontSize: size.width > 600 ? 13 : 10.0),
+          ),
         ),
         const SizedBox(height: 10),
         _buildTaxIdTextField(index),
@@ -163,13 +168,15 @@ class _TaxFormWidgetState extends State<TaxFormWidget> {
             _validateCountry.add(false);
           });
         },
-        child: Text("+ ADD ANOTHER",
-            textAlign: TextAlign.left,
-            style: TextStyle(
-              fontSize: size.width > 600 ? 18 : 14.0,
-              fontWeight: FontWeight.bold,
-              color: kThemeColor,
-            )),
+        child: Text(
+          "+ ADD ANOTHER",
+          textAlign: TextAlign.left,
+          style: TextStyle(
+            fontSize: size.width > 600 ? 18 : 14.0,
+            fontWeight: FontWeight.bold,
+            color: kThemeColor,
+          ),
+        ),
       ),
     );
   }
@@ -192,8 +199,9 @@ class _TaxFormWidgetState extends State<TaxFormWidget> {
                 return kThemeColor;
               }),
               side: BorderSide(
-                  color: !_savingAttemptedFailed ? kThemeColor : Colors.red,
-                  width: 2),
+                color: !_savingAttemptedFailed ? kThemeColor : Colors.red,
+                width: 2,
+              ),
               value: _isChecked,
               onChanged: (bool? value) {
                 setState(() {
@@ -216,44 +224,53 @@ class _TaxFormWidgetState extends State<TaxFormWidget> {
   Widget _buildSaveButton(Size size) {
     return Center(
       child: ElevatedButton(
-          style: ElevatedButton.styleFrom(
-              backgroundColor: kThemeColor,
-              minimumSize: Size(size.width > 600 ? 168.0 : 48.0,
-                  size.width > 600 ? 68.0 : 48.0)),
-          child: Text('SAVE',
-              key: const Key('save'),
-              style: TextStyle(fontSize: size.width > 600 ? 22 : 17.0)),
-          onPressed: () async {
-            if (!_isChecked) {
-              _shakeKey.currentState?.shake();
-              setState(() {
-                _savingAttemptedFailed = true;
-              });
-            }
+        style: ElevatedButton.styleFrom(
+          backgroundColor: kThemeColor,
+          minimumSize: Size(
+            size.width > 600 ? 168.0 : 48.0,
+            size.width > 600 ? 68.0 : 48.0,
+          ),
+        ),
+        child: Text(
+          'SAVE',
+          key: const Key('save'),
+          style: TextStyle(fontSize: size.width > 600 ? 22 : 17.0),
+        ),
+        onPressed: () async {
+          if (!_isChecked) {
+            _shakeKey.currentState?.shake();
             setState(() {
-              for (int i = 0; i < _taxIdControllers.length; i++) {
-                _taxIdControllers[i].text.isEmpty
-                    ? _validateTaxIdentificationNumber[i] = true
-                    : _validateTaxIdentificationNumber[i] = false;
-              }
-              for (int i = 0; i < _countryControllers.length; i++) {
-                _countryControllers[i].text.isEmpty
-                    ? _validateCountry[i] = true
-                    : _validateCountry[i] = false;
-              }
+              _savingAttemptedFailed = true;
             });
-
-            if (_validateTaxIdentificationNumber.contains(true) ||
-                _validateCountry.contains(true) ||
-                !_isChecked) {
-              return;
+          }
+          setState(() {
+            for (int i = 0; i < _taxIdControllers.length; i++) {
+              _taxIdControllers[i].text.isEmpty
+                  ? _validateTaxIdentificationNumber[i] = true
+                  : _validateTaxIdentificationNumber[i] = false;
             }
+            for (int i = 0; i < _countryControllers.length; i++) {
+              _countryControllers[i].text.isEmpty
+                  ? _validateCountry[i] = true
+                  : _validateCountry[i] = false;
+            }
+          });
 
-            await TaxDataService.handleSaving(
-                widget.customerID, widget.accessToken, widget.taxResidences);
+          if (_validateTaxIdentificationNumber.contains(true) ||
+              _validateCountry.contains(true) ||
+              !_isChecked) {
+            return;
+          }
 
-            Navigator.pop(context);
-          }),
+          await TaxDataService.handleSaving(
+            widget.customerID,
+            widget.accessToken,
+            widget.taxResidences,
+          );
+
+          Navigator.pop(context);
+        },
+      ),
     );
   }
 
@@ -271,13 +288,15 @@ class _TaxFormWidgetState extends State<TaxFormWidget> {
               _validateTaxIdentificationNumber.removeAt(index);
             });
           },
-          child: Text("- REMOVE",
-              textAlign: TextAlign.right,
-              style: TextStyle(
-                fontSize: size.width > 600 ? 18 : 14.0,
-                fontWeight: FontWeight.bold,
-                color: Colors.red,
-              )),
+          child: Text(
+            "- REMOVE",
+            textAlign: TextAlign.right,
+            style: TextStyle(
+              fontSize: size.width > 600 ? 18 : 14.0,
+              fontWeight: FontWeight.bold,
+              color: Colors.red,
+            ),
+          ),
         ),
       ),
     );
