@@ -7,8 +7,10 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 
 class TaxDataService {
+  // Base URL for the API
   static const String _baseUrl = 'https://dev-api.expatrio.com';
 
+  // Fetch tax data for a customer
   static Future<List<TaxResidence>> getTaxData(
     int customerId,
     String accessToken,
@@ -56,7 +58,7 @@ class TaxDataService {
         return taxResidences;
       }
     } on Exception catch (e) {
-      // Handle exceptions
+      // Handle exceptions, print in debug mode
       if (kDebugMode) {
         print(e);
       }
@@ -64,6 +66,7 @@ class TaxDataService {
     }
   }
 
+  // Save tax data to the server
   static Future<void> handleSaving(
     int customerId,
     String accessToken,
@@ -90,6 +93,8 @@ class TaxDataService {
         "secondaryTaxResidence": secondaryTaxResidences,
         "w9FileId": null,
       };
+
+      // Make a PUT request to save tax data
       final response = await http.put(
         Uri.parse("$_baseUrl/v3/customers/$id/tax-data"),
         headers: {
@@ -100,6 +105,7 @@ class TaxDataService {
       );
 
       if (response.statusCode == 200) {
+        // Save tax data locally after successful server save
         await saveTaxDataLocally(
           {
             "primaryTaxResidence": {
@@ -119,6 +125,7 @@ class TaxDataService {
     }
   }
 
+  // Save tax data locally using Flutter Secure Storage
   static Future<void> saveTaxDataLocally(
     Map<String, dynamic> taxData,
     customerId,
