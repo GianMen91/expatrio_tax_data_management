@@ -1,63 +1,43 @@
-// Import necessary packages and libraries
+import 'package:coding_challenge/widgets/help_button.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:mockito/mockito.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-// Import local dependencies
-import '../shared/constants_test.dart';
+class MockBuildContext extends Mock implements BuildContext {}
 
-// A custom widget representing a help button with a link to an external URL
-class HelpButton extends StatelessWidget {
-  // Constructor for the HelpButton widget
-  const HelpButton({
-    super.key,
-    required this.size,
+void main() {
+  group('HelpButton tests', () {
+    late HelpButton helpButton;
+    late MockBuildContext mockBuildContext;
+
+    setUp(() {
+      mockBuildContext = MockBuildContext();
+      helpButton = HelpButton(size: Size(800, 600));
+    });
+
+    testWidgets('UI components are rendered correctly', (WidgetTester tester) async {
+      await tester.pumpWidget(MaterialApp(home: helpButton));
+
+      expect(find.byType(ElevatedButton), findsOneWidget);
+      expect(find.byIcon(CupertinoIcons.question_circle), findsOneWidget);
+      expect(find.text('Help'), findsOneWidget);
+    });
+
+    testWidgets('Button press opens external URL', (WidgetTester tester) async {
+      await tester.pumpWidget(MaterialApp(home: helpButton));
+
+      // Mock the launchUrl function from url_launcher package
+      launchUrl = (Uri uri) async => true;
+
+      // Tap the help button
+      await tester.tap(find.byType(ElevatedButton));
+      await tester.pumpAndSettle();
+
+      // Verify that the launchUrl function is called with the correct URL
+      verify(launchUrl(Uri.parse('https://help.expatrio.com/hc/en-us'))).called(1);
+    });
+
   });
-
-  // Size parameter to determine the layout of the button
-  final Size size;
-
-  // Build method for the widget
-  @override
-  Widget build(BuildContext context) {
-    // Return an aligned help button at the bottom center of the screen
-    return Align(
-      alignment: Alignment.bottomCenter,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 15),
-        child: Row(
-          children: [
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.white, // Button background color
-                maximumSize: Size(size.width > 600 ? 130 : 100,
-                    size.width > 600 ? 530 : 130), // Maximum button size
-              ),
-              onPressed: () {
-                // Open the link in the browser when the button is pressed
-                launchUrl(Uri.parse('https://help.expatrio.com/hc/en-us'));
-              },
-              child: Row(
-                children: [
-                  Icon(
-                    CupertinoIcons.question_circle, // Question mark icon
-                    color: kThemeColor, // Icon color
-                    size: size.width > 600 ? 28 : 20, // Icon size
-                  ),
-                  Text(
-                    'Help', // Button text
-                    style: TextStyle(
-                      fontSize: size.width > 600 ? 22 : 10.0, // Text font size
-                      color: kThemeColor, // Text color
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            const Spacer(), // Empty space to push the button to the right
-          ],
-        ),
-      ),
-    );
-  }
 }

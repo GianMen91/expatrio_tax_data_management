@@ -1,61 +1,34 @@
+import 'package:coding_challenge/main.dart';
+import 'package:coding_challenge/src/screens/login_screen.dart';
 import 'package:flutter/material.dart';
-import 'src/screens/login_screen_test.dart';
-
+import 'package:flutter_test/flutter_test.dart';
 void main() {
-  runApp(const MyApp());
+  testWidgets('MyApp widget renders correctly', (WidgetTester tester) async {
+    // Build our app and trigger a frame.
+    await tester.pumpWidget(const MyApp());
+
+    // Verify that the app title is present on the screen.
+    expect(find.text('Expatrio Code Challenge'), findsOneWidget);
+
+    // Verify that the LoginScreen is the initial screen.
+    expect(find.byType(LoginScreen), findsOneWidget);
+  });
+
+  test('createMaterialColor creates MaterialColor with swatch', () {
+    const testColor = Color(0xFF123456);
+    final materialColor = createMaterialColor(testColor);
+
+    // Verify that the MaterialColor has the correct values.
+    expect(materialColor, isA<MaterialColor>());
+    expect(materialColor.shade50, const Color(0xFFA3BAD1));
+    expect(materialColor.shade100, const Color(0xFF8AA7C4));
+    expect(materialColor.shade200, const Color(0xFF7194B7));
+    expect(materialColor.shade300, const Color(0xFF5881AA));
+    expect(materialColor.shade400, const Color(0xFF3F6E9D));
+    expect(materialColor.shade500, const Color(0xFF265B90));
+    expect(materialColor.shade600, const Color(0xFF1E4E80));
+    expect(materialColor.shade700, const Color(0xFF174172));
+    expect(materialColor.shade800, const Color(0xFF0F345F));
+    expect(materialColor.shade900, const Color(0xFF08274C));
+  });
 }
-
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-  
-  // This widget is the root of your application.
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Expatrio Code Challenge',
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        pageTransitionsTheme: const PageTransitionsTheme(
-          builders: {
-            TargetPlatform.android:  CupertinoPageTransitionsBuilder(),
-            TargetPlatform.iOS:  CupertinoPageTransitionsBuilder(),
-          },
-        ),
-        canvasColor: Colors.transparent,
-        textSelectionTheme: const TextSelectionThemeData(
-          cursorColor:  Color.fromRGBO(65, 171, 158, 1),
-          selectionColor:  Color.fromRGBO(65, 171, 158, 1),
-          selectionHandleColor:  Color.fromRGBO(65, 171, 158, 1),
-        ),
-        visualDensity: VisualDensity.adaptivePlatformDensity,
-        colorScheme: ColorScheme.fromSwatch(
-            primarySwatch: createMaterialColor(Colors.white)).copyWith(
-          secondary: createMaterialColor(const Color.fromRGBO(65, 171, 158, 1)),
-        ),
-        primaryColorDark: Colors.white,
-      ),
-      home: const LoginScreen()
-    );
-  }
-}
-
-MaterialColor createMaterialColor(Color color) {
-  List strengths = <double>[.05];
-  Map<int, Color> swatch = <int, Color>{};
-  final int r = color.red, g = color.green, b = color.blue;
-
-  for (int i = 1; i < 10; i++) {
-    strengths.add(0.1 * i);
-  }
-  for (var strength in strengths) {
-    final double ds = 0.5 - strength;
-    swatch[(strength * 1000).round()] = Color.fromRGBO(
-      r + ((ds < 0 ? r : (255 - r)) * ds).round(),
-      g + ((ds < 0 ? g : (255 - g)) * ds).round(),
-      b + ((ds < 0 ? b : (255 - b)) * ds).round(),
-      1,
-    );
-  }
-  return MaterialColor(color.value, swatch);
-}
-

@@ -1,74 +1,47 @@
-// Import necessary Flutter packages and local dependencies
+import 'package:coding_challenge/widgets/password_text_field.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_test/flutter_test.dart';
 
-import '../shared/constants_test.dart';
+void main() {
+  group('PasswordTextField tests', () {
+    late PasswordTextField passwordTextField;
+    late TextEditingController mockPasswordController;
 
-// Custom widget for the Password Text Field
-class PasswordTextField extends StatefulWidget {
-  // Constructor to initialize the PasswordTextField
-  const PasswordTextField({
-    super.key,
-    required TextEditingController passwordController,
-    required bool validatePassword,
-  })  : _passwordController = passwordController,
-        _validatePassword = validatePassword;
+    setUp(() {
+      mockPasswordController = TextEditingController();
+      passwordTextField = PasswordTextField(
+        passwordController: mockPasswordController,
+        validatePassword: false,
+      );
+    });
 
-  // Instance variables
-  final TextEditingController _passwordController;
-  final bool _validatePassword;
+    testWidgets('UI components are rendered correctly', (WidgetTester tester) async {
+      await tester.pumpWidget(MaterialApp(home: passwordTextField));
 
-  // Override createState() to create the state for the PasswordTextField
-  @override
-  State<PasswordTextField> createState() => _PasswordTextFieldState();
-}
+      expect(find.byType(TextField), findsOneWidget);
+      expect(find.byIcon(Icons.visibility_off), findsOneWidget);
+    });
 
-// State class for the PasswordTextField
-class _PasswordTextFieldState extends State<PasswordTextField> {
-  // Variable to track whether the password is visible or not
-  late bool _isPasswordVisible;
+    testWidgets('Toggling password visibility works', (WidgetTester tester) async {
+      await tester.pumpWidget(MaterialApp(home: passwordTextField));
 
-  // Initialize the state
-  @override
-  void initState() {
-    _isPasswordVisible = false; // Password is initially not visible
-    super.initState();
-  }
+      // Initial state - password is not visible
+      expect(find.byIcon(Icons.visibility_off), findsOneWidget);
 
-  // Build method to construct the UI for the PasswordTextField
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20),
-      child: TextField(
-        key: const Key('password'),
-        // Key for testing purposes
-        obscureText: !_isPasswordVisible,
-        // Show/hide password based on visibility
-        controller: widget._passwordController,
-        // Controller for password input
-        decoration: InputDecoration(
-          focusedBorder: const OutlineInputBorder(
-            borderSide: BorderSide(color: kThemeColor),
-          ),
-          border: const OutlineInputBorder(),
-          labelStyle: const TextStyle(color: kThemeColor),
-          errorText:
-              widget._validatePassword ? 'Password Can\'t Be Empty' : null,
-          // Display error message if password is empty
-          suffixIcon: IconButton(
-            icon: Icon(
-              _isPasswordVisible ? Icons.visibility_off : Icons.visibility,
-              color: kThemeColor,
-            ),
-            onPressed: () {
-              // Toggle the visibility of the password
-              setState(() {
-                _isPasswordVisible = !_isPasswordVisible;
-              });
-            },
-          ),
-        ),
-      ),
-    );
-  }
+      // Tap the visibility icon
+      await tester.tap(find.byIcon(Icons.visibility_off));
+      await tester.pumpAndSettle();
+
+      // Password is now visible
+      expect(find.byIcon(Icons.visibility), findsOneWidget);
+
+      // Tap the visibility icon again
+      await tester.tap(find.byIcon(Icons.visibility));
+      await tester.pumpAndSettle();
+
+      // Password is not visible again
+      expect(find.byIcon(Icons.visibility_off), findsOneWidget);
+    });
+
+  });
 }

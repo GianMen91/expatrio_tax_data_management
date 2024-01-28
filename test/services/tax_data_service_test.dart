@@ -1,139 +1,70 @@
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:coding_challenge/models/tax_residence.dart';
-import 'package:flutter/foundation.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:coding_challenge/services/tax_data_service.dart';
+import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 
-class TaxDataService {
-  // Base URL for the API
-  static const String _baseUrl = 'https://dev-api.expatrio.com';
+class MockHttpClient extends Mock implements http.Client {}
 
-  // Fetch tax data for a customer
-  static Future<List<TaxResidence>> getTaxData(
-    int customerId,
-    String accessToken,
-  ) async {
-    List<TaxResidence> taxResidences = [];
+void main() {
+  group('TaxDataService tests', () {
+    late TaxDataService taxDataService;
+    late MockHttpClient mockHttpClient;
 
-    try {
-      final response = await http.get(
-        Uri.parse("$_baseUrl/v3/customers/$customerId/tax-data"),
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': accessToken,
-        },
-      );
+    setUp(() {
+      taxDataService = TaxDataService();
+      mockHttpClient = MockHttpClient();
+    });
 
-      if (response.statusCode == 200) {
-        Map<String, dynamic> jsonData = json.decode(response.body);
+    test('getTaxData returns List<TaxResidence> on success', () async {
+      // Mock successful response
+      when(mockHttpClient.get(any, headers: anyNamed('headers')))
+          .thenAnswer((_) async => http.Response(
+        json.encode({
+          "primaryTaxResidence": {"country": "USA", "id": "1"},
+          "SecondaryTaxResidence": [
+            {"country": "Canada", "id": "2"},
+            {"country": "Germany", "id": "3"}
+          ]
+        }),
+        200,
+      ));
 
-        // Handle primary tax residence separately
-        taxResidences.add(
-          TaxResidence(
-            country: jsonData["primaryTaxResidence"]["country"],
-            id: jsonData["primaryTaxResidence"]["id"],
-          ),
-        );
+      final taxResidences = await taxDataService.getTaxData(1, 'fakeAccessToken', http.Client());
 
-        // Handle other tax residences
-        for (String key in jsonData.keys) {
-          if (key.contains("TaxResidence") && jsonData[key] is List<dynamic>) {
-            List<dynamic> innerList = jsonData[key];
-            for (var innerMap in innerList) {
-              taxResidences.add(
-                TaxResidence(
-                  country: innerMap["country"],
-                  id: innerMap["id"],
-                ),
-              );
-            }
-          }
-        }
+      expect(taxResidences.length, 3);
+      expect(taxResidences[0].country, 'USA');
+      expect(taxResidences[1].country, 'Canada');
+      expect(taxResidences[2].country, 'Germany');
+    });
 
-        return taxResidences;
-      } else {
-        // Handle non-200 status codes or other errors
-        return taxResidences;
-      }
-    } on Exception catch (e) {
-      // Handle exceptions, print in debug mode
-      if (kDebugMode) {
-        print(e);
-      }
-      return taxResidences;
-    }
-  }
+    test('getTaxData returns empty list on non-200 status code', () async {
+      // Mock unsuccessful response
+      when(mockHttpClient.get(any, headers: anyNamed('headers')))
+          .thenAnswer((_) async => http.Response(json.encode({}), 404));
 
-  // Save tax data to the server
-  static Future<void> handleSaving(
-    int customerId,
-    String accessToken,
-    List<TaxResidence> taxResidences,
-  ) async {
-    try {
-      int id = customerId;
+      final taxResidences = await taxDataService.getTaxData(1, 'fakeAccessToken', mockHttpClient);
 
-      List<Map<String, dynamic>> secondaryTaxResidences = [];
-      for (int i = 1; i < taxResidences.length; i++) {
-        secondaryTaxResidences.add({
-          "country": taxResidences[i].country,
-          "id": taxResidences[i].id,
-        });
-      }
+      expect(taxResidences.isEmpty, true);
+    });
 
-      var bodyContent = {
-        "primaryTaxResidence": {
-          "country": taxResidences.isNotEmpty ? taxResidences[0].country : "",
-          "id": taxResidences.isNotEmpty ? taxResidences[0].id : "",
-        },
-        "usPerson": false,
-        "usTaxId": null,
-        "secondaryTaxResidence": secondaryTaxResidences,
-        "w9FileId": null,
-      };
+    test('handleSaving saves tax data locally on successful server save', () async {
+      // Mock successful response
+      when(mockHttpClient.put(any, headers: anyNamed('headers'), body: anyNamed('body')))
+          .thenAnswer((_) async => http.Response(json.encode({}), 200));
 
-      // Make a PUT request to save tax data
-      final response = await http.put(
-        Uri.parse("$_baseUrl/v3/customers/$id/tax-data"),
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': accessToken,
-        },
-        body: jsonEncode(bodyContent),
-      );
+      final taxResidences = [
+        TaxResidence(country: 'USA', id: '1'),
+        TaxResidence(country: 'Canada', id: '2'),
+        TaxResidence(country: 'Germany', id: '3'),
+      ];
 
-      if (response.statusCode == 200) {
-        // Save tax data locally after successful server save
-        await saveTaxDataLocally(
-          {
-            "primaryTaxResidence": {
-              "country":
-                  taxResidences.isNotEmpty ? taxResidences[0].country : "",
-              "id": taxResidences.isNotEmpty ? taxResidences[0].id : "",
-            },
-            "secondaryTaxResidence": secondaryTaxResidences,
-          },
-          customerId,
-        );
-      } else {
-        // Handle other status codes
-      }
-    } on SocketException {
-      // Handle SocketException
-    }
-  }
+      await taxDataService.handleSaving(1, 'fakeAccessToken', taxResidences, mockHttpClient);
 
-  // Save tax data locally using Flutter Secure Storage
-  static Future<void> saveTaxDataLocally(
-    Map<String, dynamic> taxData,
-    customerId,
-  ) async {
-    const storage = FlutterSecureStorage();
-    await storage.write(
-      key: "user_${customerId}_tax_data",
-      value: jsonEncode(taxData),
-    );
-  }
+      // Verify that saveTaxDataLocally was called
+      verify(taxDataService.saveTaxDataLocally(any, 1)).called(1);
+    });
+
+  });
 }

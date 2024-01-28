@@ -1,7 +1,7 @@
 // Importing necessary packages and files
+import 'package:coding_challenge/widgets/search_box.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:cinnamon_rolls_shop/src/widgets/search_box.dart';
 
 // The main entry point for the test suite
 void main() {

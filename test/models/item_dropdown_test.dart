@@ -1,30 +1,36 @@
-// A class representing an item in a dropdown list with a key, value, and text.
-class ItemDropDown {
-  // Constructor to initialize the properties.
-  const ItemDropDown(this.key, this.value, this.text);
+import 'package:coding_challenge/models/item_dropdown.dart';
+import 'package:flutter_test/flutter_test.dart';
 
-  // Properties of the class.
-  final String key;
-  final String value;
-  final String text;
+void main() {
+  group('ItemDropDown tests', () {
+    test('Two identical instances should be equal', () {
+      const item1 = ItemDropDown('1', 'value1', 'text1');
+      const item2 = ItemDropDown('1', 'value1', 'text1');
 
-  // Override the equality operator for comparing instances.
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-          other is ItemDropDown &&
-              runtimeType == other.runtimeType &&
-              key == other.key &&
-              value == other.value &&
-              text == other.text;
+      expect(item1, equals(item2));
+    });
 
-  // Override the hashCode to generate a hash based on properties.
-  @override
-  int get hashCode => key.hashCode ^ value.hashCode ^ text.hashCode;
+    test('hashCode should be the same for identical instances', () {
+      const item1 = ItemDropDown('1', 'value1', 'text1');
+      const item2 = ItemDropDown('1', 'value1', 'text1');
 
-  // Override the toString method to provide a string representation of the object.
-  @override
-  String toString() {
-    return 'ItemDropDown{key: $key, value: $value, text: $text}';
-  }
+      expect(item1.hashCode, equals(item2.hashCode));
+    });
+
+    test('toString should return a meaningful representation', () {
+      const item = ItemDropDown('1', 'value1', 'text1');
+
+      expect(
+        item.toString(),
+        equals('ItemDropDown{key: 1, value: value1, text: text1}'),
+      );
+    });
+
+    test('Instances with different properties should not be equal', () {
+      const item1 = ItemDropDown('1', 'value1', 'text1');
+      const item2 = ItemDropDown('2', 'value2', 'text2');
+
+      expect(item1, isNot(equals(item2)));
+    });
+  });
 }

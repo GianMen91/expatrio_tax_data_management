@@ -1,46 +1,40 @@
-// Import necessary packages and libraries
+import 'package:coding_challenge/widgets/email_text_field.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_test/flutter_test.dart';
 
-// Import local dependencies
-import '../shared/constants_test.dart';
+void main() {
+  group('EmailTextField tests', () {
+    late EmailTextField emailTextField;
+    late TextEditingController emailController;
 
-// A custom widget representing an email text field
-class EmailTextField extends StatelessWidget {
-  // Constructor for the EmailTextField widget
-  const EmailTextField({
-    super.key,
-    required TextEditingController emailController,
-    required bool validateEmail,
-  })  : _emailController = emailController,
-        _validateEmail = validateEmail;
+    setUp(() {
+      emailController = TextEditingController();
+      emailTextField = EmailTextField(
+        emailController: emailController,
+        validateEmail: false,
+      );
+    });
 
-  // Controller for the email text field
-  final TextEditingController _emailController;
+    testWidgets('UI components are rendered correctly', (WidgetTester tester) async {
+      await tester.pumpWidget(MaterialApp(home: emailTextField));
 
-  // Flag to validate email
-  final bool _validateEmail;
+      expect(find.byType(TextField), findsOneWidget);
+    });
 
-  // Build method for the widget
-  @override
-  Widget build(BuildContext context) {
-    // Return a padded text field for email input
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20),
-      child: TextField(
-        key: const Key('email'), // Unique key for testing
-        controller: _emailController, // Controller for managing text input
-        decoration: InputDecoration(
-          focusedBorder: const OutlineInputBorder(
-            borderSide:
-                BorderSide(color: kThemeColor), // Border color when focused
-          ),
-          border: const OutlineInputBorder(), // Default border
-          labelStyle: const TextStyle(color: kThemeColor), // Label text color
-          errorText: _validateEmail
-              ? 'Email Can\'t Be Empty'
-              : null, // Error text if email is empty
-        ),
-      ),
-    );
-  }
+    testWidgets('Email validation error message is displayed', (WidgetTester tester) async {
+      await tester.pumpWidget(MaterialApp(home: emailTextField));
+
+      // Trigger validation error
+      emailTextField = EmailTextField(
+        emailController: emailController,
+        validateEmail: true,
+      );
+
+      await tester.pumpWidget(MaterialApp(home: emailTextField));
+
+      // Verify that the error message is displayed
+      expect(find.text('Email Can\'t Be Empty'), findsOneWidget);
+    });
+
+  });
 }
