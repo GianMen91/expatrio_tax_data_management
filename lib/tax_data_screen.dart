@@ -1,15 +1,21 @@
+// Import necessary packages and files
 import 'package:coding_challenge/tax_data_service.dart';
 import 'package:coding_challenge/tax_form_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import '../shared/constants.dart';
 
+// Screen for displaying tax-related data
 class TaxDataScreen extends StatefulWidget {
-  const TaxDataScreen(
-      {super.key, required this.customerId, required this.accessToken});
+  // Constructor for creating a TaxDataScreen instance
+  const TaxDataScreen({
+    super.key,
+    required this.customerId,
+    required this.accessToken,
+  });
 
-  final String accessToken;
-  final int customerId;
+  final String accessToken; // Access token for authentication
+  final int customerId; // Customer ID associated with the user
 
   @override
   State<TaxDataScreen> createState() => _TaxDataScreenState();
@@ -42,6 +48,7 @@ class _TaxDataScreenState extends State<TaxDataScreen> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
+                  // SVG image depicting a crying girl
                   SvgPicture.asset(
                     "assets/CryingGirl.svg",
                     width: size.width > 600 ? 300.0 : 150.0,
@@ -77,6 +84,7 @@ class _TaxDataScreenState extends State<TaxDataScreen> {
     );
   }
 
+  // Widget for the "UPDATE YOUR TAX DATA" button
   ElevatedButton _buildUpdateTaxDataButton(Size size, BuildContext context) {
     return ElevatedButton(
       style: ElevatedButton.styleFrom(
@@ -96,6 +104,7 @@ class _TaxDataScreenState extends State<TaxDataScreen> {
             ),
             builder: (BuildContext context) {
               return FutureBuilder(
+                // Fetch tax data asynchronously
                 future: TaxDataService.getTaxData(
                     widget.customerId, widget.accessToken),
                 builder: (BuildContext context, AsyncSnapshot snapshot) {
@@ -105,14 +114,17 @@ class _TaxDataScreenState extends State<TaxDataScreen> {
                       child: CircularProgressIndicator(color: kThemeColor),
                     );
                   } else if (snapshot.hasError) {
+                    // Show an error message if there's an issue with the data retrieval
                     return Text('Error: ${snapshot.error}');
                   } else if (snapshot.data!.isNotEmpty) {
+                    // Display tax form widget if tax data is available
                     return TaxFormWidget(
                       snapshot.data!,
                       widget.accessToken,
                       widget.customerId,
                     );
                   } else {
+                    // Display a message if no tax data is available
                     return const Text('No tax data available.');
                   }
                 },
