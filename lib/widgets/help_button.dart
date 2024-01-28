@@ -28,6 +28,7 @@ class HelpButton extends StatelessWidget {
         child: Row(
           children: [
             ElevatedButton(
+              key: const Key('help_button'),
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.white, // Button background color
               ),
@@ -38,6 +39,7 @@ class HelpButton extends StatelessWidget {
               child: Row(
                 children: [
                   Icon(
+                    key: const Key('help_icon'),
                     CupertinoIcons.question_circle, // Question mark icon
                     color: kThemeColor, // Icon color
                     size: size.width > 600 ? 28 : 20, // Icon size
@@ -45,6 +47,7 @@ class HelpButton extends StatelessWidget {
                   const SizedBox(width: 10),
                   Text(
                     'Help', // Button text
+                    key: const Key('help_text'),
                     style: TextStyle(
                       fontSize: size.width > 600 ? 22 : 10.0, // Text font size
                       color: kThemeColor, // Text color
@@ -52,7 +55,7 @@ class HelpButton extends StatelessWidget {
                   ),
                 ],
               ),
-            ),// Empty space to push the button to the right
+            ),
           ],
         ),
       ),
