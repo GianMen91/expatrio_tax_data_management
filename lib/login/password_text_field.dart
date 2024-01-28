@@ -1,5 +1,4 @@
 // Import necessary Flutter packages and local dependencies
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../shared/constants.dart';

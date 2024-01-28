@@ -1,6 +1,5 @@
 // Import necessary packages and local dependencies
 import 'package:coding_challenge/login/password_text_field.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import '../shared/constants.dart';
