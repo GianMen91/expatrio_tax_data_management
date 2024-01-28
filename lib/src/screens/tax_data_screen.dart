@@ -81,15 +81,15 @@ class _TaxDataScreenState extends State<TaxDataScreen> {
   }
 
   // Widget for the "UPDATE YOUR TAX DATA" button
-  ElevatedButton _buildUpdateTaxDataButton(Size size, BuildContext context) {
+  Widget _buildUpdateTaxDataButton(Size size, BuildContext context) {
     return ElevatedButton(
+      key: const Key('update_tax_data_button'),
       style: ElevatedButton.styleFrom(
         backgroundColor: kThemeColor,
         minimumSize: Size(
             size.width > 600 ? 168.0 : 48.0, size.width > 600 ? 68.0 : 48.0),
       ),
       child: Text('UPDATE YOUR TAX DATA',
-          key: const Key('update_tax_data_button'),
           style: TextStyle(fontSize: size.width > 600 ? 22 : 14.0)),
       onPressed: () async {
         if (context.mounted) {
