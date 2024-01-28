@@ -88,6 +88,7 @@ class _TaxFormWidgetState extends State<TaxFormWidget> {
     );
   }
 
+  // Builds UI for tax residence fields
   Widget buildTaxResidenceFields(int index, Size size) {
     String? selectedCountryCode = _countryControllers[index].text;
 
@@ -150,6 +151,7 @@ class _TaxFormWidgetState extends State<TaxFormWidget> {
     );
   }
 
+  // Builds "Add Another" button
   Widget _buildAddButton(Size size) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -181,6 +183,7 @@ class _TaxFormWidgetState extends State<TaxFormWidget> {
     );
   }
 
+  // Builds the confirmation checkbox
   Widget _buildConfirmationCheckbox(Size size) {
     return ShakeMe(
       key: _shakeKey,
@@ -221,6 +224,7 @@ class _TaxFormWidgetState extends State<TaxFormWidget> {
     );
   }
 
+  // Builds the "Save" button
   Widget _buildSaveButton(Size size) {
     return Center(
       child: ElevatedButton(
@@ -274,6 +278,7 @@ class _TaxFormWidgetState extends State<TaxFormWidget> {
     );
   }
 
+  // Builds the "Remove" button for secondary tax residences
   Widget _buildRemoveButton(int index, Size size) {
     return Align(
       alignment: Alignment.centerRight,
@@ -302,6 +307,7 @@ class _TaxFormWidgetState extends State<TaxFormWidget> {
     );
   }
 
+  // Builds the Tax Identification Number text field
   Widget _buildTaxIdTextField(int index) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20),
