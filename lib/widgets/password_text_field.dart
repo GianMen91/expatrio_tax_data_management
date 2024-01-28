@@ -40,8 +40,7 @@ class _PasswordTextFieldState extends State<PasswordTextField> {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20),
       child: TextField(
-        key: const Key('password'),
-        // Key for testing purposes
+        key: const Key('password'), // Unique key for testing
         obscureText: !_isPasswordVisible,
         // Show/hide password based on visibility
         controller: widget._passwordController,
@@ -56,6 +55,8 @@ class _PasswordTextFieldState extends State<PasswordTextField> {
               widget._validatePassword ? 'Password Can\'t Be Empty' : null,
           // Display error message if password is empty
           suffixIcon: IconButton(
+            key: const Key('password_visibility_toggle'),
+            // Unique key for testing
             icon: Icon(
               _isPasswordVisible ? Icons.visibility_off : Icons.visibility,
               color: kThemeColor,
