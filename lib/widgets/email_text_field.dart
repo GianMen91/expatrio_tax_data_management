@@ -27,7 +27,7 @@ class EmailTextField extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20),
       child: TextField(
-        key: const Key('email'), // Unique key for testing
+        key: const Key('email'), // Unique key for testing the TextField
         controller: _emailController, // Controller for managing text input
         decoration: InputDecoration(
           focusedBorder: const OutlineInputBorder(
