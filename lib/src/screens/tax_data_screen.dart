@@ -115,10 +115,7 @@ class _TaxDataScreenState extends State<TaxDataScreen> {
                     return Text('Error: ${snapshot.error}');
                   } else if (snapshot.data!.isNotEmpty) {
                     // Display tax form widget if tax data is available
-                    return TaxFormWidget(
-                      snapshot.data!,
-                      widget.accessToken,
-                      widget.customerId,
+                    return TaxFormWidget(customerId: widget.customerId, taxResidences: snapshot.data!, accessToken: widget.accessToken,
                     );
                   } else {
                     // Display a message if no tax data is available

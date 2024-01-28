@@ -11,10 +11,13 @@ import '../models/tax_residence.dart';
 class TaxFormWidget extends StatefulWidget {
   final List<TaxResidence> taxResidences;
   final String accessToken;
-  final int customerID;
+  final int customerId;
 
-  const TaxFormWidget(this.taxResidences, this.accessToken, this.customerID,
-      {Key? key})
+  const TaxFormWidget(
+      {Key? key,
+      required this.customerId,
+      required this.taxResidences,
+      required this.accessToken})
       : super(key: key);
 
   @override
@@ -123,7 +126,8 @@ class _TaxFormWidgetState extends State<TaxFormWidget> {
         ),
         const SizedBox(height: 10),
         CountryDropdown(
-          key: Key('countryDropdown$index'), // Key for the country dropdown
+          key: Key('countryDropdown$index'),
+          // Key for the country dropdown
           updateSelectedCountry: updateSelectedCountry,
           index: index,
           selectedCountryLabel: selectedCountryLabel,
@@ -131,12 +135,13 @@ class _TaxFormWidgetState extends State<TaxFormWidget> {
           taxResidences: widget.taxResidences,
         ),
         if (_validateCountry[index])
-           Padding(
+          Padding(
             padding: const EdgeInsets.only(left: 30, top: 8),
             child: Text(
               "Please choose a country",
               style: const TextStyle(fontSize: 12, color: Colors.red),
-              key: Key('validationErrorText$index'), // Key for validation error text
+              key: Key(
+                  'validationErrorText$index'), // Key for validation error text
             ),
           ),
         const SizedBox(height: 20),
@@ -276,7 +281,7 @@ class _TaxFormWidgetState extends State<TaxFormWidget> {
           }
 
           await TaxDataService.handleSaving(
-            widget.customerID,
+            widget.customerId,
             widget.accessToken,
             widget.taxResidences,
           );
@@ -322,7 +327,8 @@ class _TaxFormWidgetState extends State<TaxFormWidget> {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20),
       child: TextField(
-        key: Key('taxIdentificationNumberTextField$index'), // Key for the text field
+        key: Key('taxIdentificationNumberTextField$index'),
+        // Key for the text field
         controller: _taxIdControllers[index],
         keyboardType: TextInputType.number,
         inputFormatters: <TextInputFormatter>[
