@@ -14,11 +14,11 @@ Welcome to the Expatrio Tax Data Management App! This Flutter application is des
 ## Features
 
 1. **Login Screen**: A secure login page  (with Expatrio authentication) that ensures users can access their tax-related information with confidence.
-2. **Tax Data Screen**: After a successful login, the user is redirect in the Tax Data Screen, a screen with a prominent CTA to update his TAX DATA.  When the user clicks on the "Update Tax Data" button, a bottom sheet open, prompting the user to input their tax data.
+2. **Tax Data Screen**: After a successful login, the user is redirect in the Tax Data Screen, a screen with a prominent CTA to update his TAX DATA.  When the user clicks on the "UPDATE YOUR TAX DATA" button, a bottom sheet open, prompting the user to input their tax data.
 3. **Tax Form Widget**: A flexible widget that facilitates the input of tax residency information, allowing users to efficiently manage their primary and secondary tax residences. 
-   - Via API call  data is received  and to pre-populate existing fields. Here the user can select a country from a list and also allow the user to input a TAX ID number for the field. A user can select multiple taxation countries by clicking the ADD ANOTHER button. 
+   - Via API call  data is received  and to pre-populate existing fields. Here the user can select a country from a list and also allow the user to input a TAX ID number for the field. A user can select multiple taxation countries by clicking the "ADD ANOTHER" button. 
    - A verification is applied so that the user is not able to choose a previously selected country.
-   - The user can also remove any additional countries by clicking on the  REMOVE button. A verification is made so that by default, the user must have at least one country/tax pair available.
+   - The user can also remove any additional countries by clicking on the "REMOVE" button. A verification is made so that by default, the user must have at least one country/tax pair available.
    - The user is forced to check a checkbox verifying the accuracy of their information before being able to submit their tax data.
    - The tax data is stored locally for the user’s ID and pushed to the backend via API call.
    - On clicking on the "Update Tax Data" button again, the bottom sheet open with the user's populated data, allowing them to edit and update the information again.
