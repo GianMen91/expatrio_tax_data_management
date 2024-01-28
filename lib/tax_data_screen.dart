@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:coding_challenge/models/tax_residence.dart';
 import 'package:coding_challenge/tax_form_widget.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import '../shared/constants.dart';
@@ -61,7 +62,7 @@ class _TaxDataScreenState extends State<TaxDataScreen> {
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 20),
                     child: Text(
-                      "We need your tax data in order for you to access your account ",
+                      "We need your tax data for you to access your account.",
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         fontSize: size.width > 600 ? 20.0 : 16.0,
@@ -98,12 +99,15 @@ class _TaxDataScreenState extends State<TaxDataScreen> {
                                         color: kThemeColor),
                                   );
                                 } else if (snapshot.hasError) {
-                                  // Handle error case
                                   return Text('Error: ${snapshot.error}');
+                                } else if (snapshot.data!.isNotEmpty) {
+                                  return TaxFormWidget(
+                                    snapshot.data!,
+                                    widget.accessToken,
+                                    widget.customerID,
+                                  );
                                 } else {
-                                  // Once you have the response, show TaxFormWidget
-                                  return TaxFormWidget(snapshot.data,
-                                      widget.accessToken, widget.customerID);
+                                  return const Text('No tax data available.');
                                 }
                               },
                             );
@@ -160,9 +164,14 @@ class _TaxDataScreenState extends State<TaxDataScreen> {
 
         return taxResidences;
       } else {
+        // Handle non-200 status codes or other errors
         return taxResidences;
       }
-    } on Exception {
+    } on Exception catch (e) {
+      // Handle exceptions
+      if (kDebugMode) {
+        print(e);
+      }
       return taxResidences;
     }
   }
