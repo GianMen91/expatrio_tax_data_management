@@ -76,6 +76,7 @@ class _CountryDropdownState extends State<CountryDropdown> {
     );
   }
 
+  // Builds the bottom sheet for country selection
   Widget _buildCountrySelectionSheet(Size size) {
     return StatefulBuilder(
       builder: (context, state) => Container(
@@ -92,13 +93,16 @@ class _CountryDropdownState extends State<CountryDropdown> {
         ),
         child: Column(
           children: [
+            // Container at the top with "Country" text
             _buildTopContainer(size),
+            // Search box to filter countries
             SearchBox(onChanged: (value) {
               state(() {
                 _searchedValue = value;
                 _filteredCountries = _filterCountries(_searchedValue);
               });
             }),
+            // List of countries to choose from
             Expanded(
               child: _filteredCountries.isNotEmpty
                   ? ListView.builder(
@@ -125,6 +129,7 @@ class _CountryDropdownState extends State<CountryDropdown> {
     );
   }
 
+  // Container at the top of the bottom sheet
   Container _buildTopContainer(Size size) {
     return Container(
       decoration: const BoxDecoration(
@@ -153,6 +158,7 @@ class _CountryDropdownState extends State<CountryDropdown> {
     );
   }
 
+  // Filters the list of countries based on the search value
   List<Map<String, dynamic>> _filterCountries(String searchValue) {
     var listOfCountries = CountriesConstants.nationality
         .where((country) => country['label']
@@ -161,6 +167,7 @@ class _CountryDropdownState extends State<CountryDropdown> {
         .contains(searchValue.toLowerCase()))
         .toList();
 
+    // Remove countries that are already selected as tax residences
     for (int i = 0; i < widget.taxResidences.length; i++) {
       listOfCountries.removeWhere(
             (item) => item['code'] == widget.taxResidences[i].country,
