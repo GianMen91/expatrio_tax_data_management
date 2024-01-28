@@ -1,4 +1,4 @@
-import 'package:coding_challenge/search_box.dart';
+import 'package:coding_challenge/country_dropdown.dart';
 import 'package:coding_challenge/shared/countries_constants.dart';
 import 'package:coding_challenge/tax_data_service.dart';
 import 'package:flutter/material.dart';
@@ -6,7 +6,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_shakemywidget/flutter_shakemywidget.dart';
 import '../shared/constants.dart';
 import 'package:coding_challenge/models/tax_residence.dart';
-
 
 class TaxFormWidget extends StatefulWidget {
   final List<TaxResidence> taxResidences;
@@ -29,8 +28,6 @@ class _TaxFormWidgetState extends State<TaxFormWidget> {
   bool _isChecked = false;
   bool _savingAttemptedFailed = false;
   final GlobalKey<ShakeWidgetState> _shakeKey = GlobalKey<ShakeWidgetState>();
-  List<Map<String, dynamic>> _filteredCountries = [];
-  String _searchedValue = "";
 
   @override
   void initState() {
@@ -54,8 +51,6 @@ class _TaxFormWidgetState extends State<TaxFormWidget> {
 
   @override
   Widget build(BuildContext context) {
-    _filteredCountries = _filterCountries(_searchedValue);
-
     final Size size = MediaQuery.of(context).size;
 
     return SizedBox(
@@ -95,7 +90,7 @@ class _TaxFormWidgetState extends State<TaxFormWidget> {
     String? selectedCountryCode = _countryControllers[index].text;
 
     String? selectedCountryLabel = CountriesConstants.nationality.firstWhere(
-          (country) => country['code'] == selectedCountryCode,
+      (country) => country['code'] == selectedCountryCode,
       orElse: () => {'label': ''},
     )['label'] as String?;
 
@@ -115,13 +110,18 @@ class _TaxFormWidgetState extends State<TaxFormWidget> {
           child: Text(
             index == 0
                 ? "Which country serves as your primary tax residence?*"
-                .toUpperCase()
+                    .toUpperCase()
                 : "Do you have other tax residences?".toUpperCase(),
-            style:  TextStyle(fontSize: size.width > 600 ? 13 : 10.0),
+            style: TextStyle(fontSize: size.width > 600 ? 13 : 10.0),
           ),
         ),
         const SizedBox(height: 10),
-        _buildCountryDropdown(size, updateSelectedCountry, index, selectedCountryLabel),
+        CountryDropdown(
+            updateSelectedCountry: updateSelectedCountry,
+            index: index,
+            selectedCountryLabel: selectedCountryLabel,
+            validateCountry:_validateCountry,
+            taxResidences: widget.taxResidences),
         if (_validateCountry[index])
           const Padding(
             padding: EdgeInsets.only(left: 30, top: 8),
@@ -139,8 +139,7 @@ class _TaxFormWidgetState extends State<TaxFormWidget> {
         const SizedBox(height: 10),
         _buildTaxIdTextField(index),
         const SizedBox(height: 10),
-        if (index != 0)
-          _buildRemoveButton(index, size),
+        if (index != 0) _buildRemoveButton(index, size),
         const SizedBox(height: 20),
       ],
     );
@@ -250,7 +249,8 @@ class _TaxFormWidgetState extends State<TaxFormWidget> {
               return;
             }
 
-            await TaxDataService.handleSaving(widget.customerID, widget.accessToken, widget.taxResidences);
+            await TaxDataService.handleSaving(
+                widget.customerID, widget.accessToken, widget.taxResidences);
 
             Navigator.pop(context);
           }),
@@ -271,7 +271,7 @@ class _TaxFormWidgetState extends State<TaxFormWidget> {
               _validateTaxIdentificationNumber.removeAt(index);
             });
           },
-          child:  Text("- REMOVE",
+          child: Text("- REMOVE",
               textAlign: TextAlign.right,
               style: TextStyle(
                 fontSize: size.width > 600 ? 18 : 14.0,
@@ -285,175 +285,34 @@ class _TaxFormWidgetState extends State<TaxFormWidget> {
 
   Widget _buildTaxIdTextField(int index) {
     return Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20),
-        child: TextField(
-          key: Key('taxIdentificationNumber$index'),
-          controller: _taxIdControllers[index],
-          keyboardType: TextInputType.number,
-          inputFormatters: <TextInputFormatter>[
-            FilteringTextInputFormatter.digitsOnly,
-          ],
-          onChanged: (value) {
-            setState(() {
-              _validateTaxIdentificationNumber[index] = value.isEmpty;
-              widget.taxResidences[index].id = value;
-            });
-          },
-          decoration: InputDecoration(
-            contentPadding: const EdgeInsets.symmetric(horizontal: 10.0),
-            focusedBorder: const OutlineInputBorder(
-              borderSide: BorderSide(color: kThemeColor),
-            ),
-            border: const OutlineInputBorder(),
-            labelStyle: const TextStyle(
-              color: kThemeColor,
-            ),
-            errorText: _validateTaxIdentificationNumber[index]
-                ? 'Field is required'
-                : null,
+      padding: const EdgeInsets.symmetric(horizontal: 20),
+      child: TextField(
+        key: Key('taxIdentificationNumber$index'),
+        controller: _taxIdControllers[index],
+        keyboardType: TextInputType.number,
+        inputFormatters: <TextInputFormatter>[
+          FilteringTextInputFormatter.digitsOnly,
+        ],
+        onChanged: (value) {
+          setState(() {
+            _validateTaxIdentificationNumber[index] = value.isEmpty;
+            widget.taxResidences[index].id = value;
+          });
+        },
+        decoration: InputDecoration(
+          contentPadding: const EdgeInsets.symmetric(horizontal: 10.0),
+          focusedBorder: const OutlineInputBorder(
+            borderSide: BorderSide(color: kThemeColor),
           ),
-        ),
-      );
-  }
-
-  Widget _buildCountryDropdown(Size size, void Function(String? value) updateSelectedCountry, int index, String? selectedCountryLabel) {
-    return Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20),
-        child: GestureDetector(
-          onTap: () {
-            setState(() {
-              _searchedValue = "";
-              _filteredCountries = _filterCountries(_searchedValue);
-            });
-            showModalBottomSheet(
-              isScrollControlled: true,
-              context: context,
-              constraints: const BoxConstraints(
-                minWidth: double.infinity,
-              ),
-              backgroundColor: Colors.transparent,
-              builder: (BuildContext context) => _buildCountrySelectionSheet(size, updateSelectedCountry),
-            );
-          },
-          child: Container(
-            height: 50,
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            decoration: BoxDecoration(
-              border: Border.all(
-                  color: _validateCountry[index] ? Colors.red : Colors.black),
-              borderRadius: BorderRadius.circular(5.0),
-            ),
-            child: Row(
-              children: [
-                Text(
-                  selectedCountryLabel ?? 'Select Country',
-                ),
-                const Spacer(),
-                const Icon(Icons.arrow_drop_down, color: Colors.black),
-              ],
-            ),
+          border: const OutlineInputBorder(),
+          labelStyle: const TextStyle(
+            color: kThemeColor,
           ),
+          errorText: _validateTaxIdentificationNumber[index]
+              ? 'Field is required'
+              : null,
         ),
-      );
+      ),
+    );
   }
-
-  Widget _buildCountrySelectionSheet(Size size, void Function(String? value) updateSelectedCountry) {
-    return StatefulBuilder(
-              builder: (context, state) => Container(
-                constraints: const BoxConstraints(
-                  maxHeight: 400,
-                  minWidth: double.infinity,
-                ),
-                decoration: const BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(30.0),
-                    topRight: Radius.circular(30.0),
-                  ),
-                ),
-                child: Column(
-                  children: [
-                    Container(
-                      // Container for the blue background at the top
-                      decoration: const BoxDecoration(
-                        color: kThemeColor,
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(30.0),
-                          topRight: Radius.circular(30.0),
-                        ),
-                      ),
-                      child:  Padding(
-                        padding: const EdgeInsets.all(15.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          // Center alignment
-                          children: [
-                            Text(
-                              "Country",
-                              style: TextStyle(
-                                fontSize: size.width > 600 ? 22 : 17.0,
-                                color: Colors.white,
-                                // Text color on blue background
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    SearchBox(onChanged: (value) {
-                      // Update the searched value and refresh the item manager
-                      state(() {
-                        _searchedValue = value;
-                        _filteredCountries = _filterCountries(_searchedValue);
-                      });
-                    }),
-                    Expanded(
-                      child: _filteredCountries.isNotEmpty
-                          ? ListView.builder(
-                        itemCount: _filteredCountries.length,
-                        itemBuilder: (context, index) {
-                          Map<String, dynamic> country =
-                          _filteredCountries[index];
-
-                          return ListTile(
-                            title: Text(country['label'] as String),
-                            onTap: () {
-                              /*setState(() {
-                                      filteredCountries = filterCountries(_searchedValue);
-                                    });*/
-                              // Call the callback function to update the state
-                              updateSelectedCountry(
-                                  country['code'] as String?);
-                              Navigator.pop(
-                                  context); // Close the bottom sheet
-                            },
-                          );
-                        },
-                      )
-                          : const Center(
-                        child: Text("No data found"),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            );
-  }
-
-  List<Map<String, dynamic>> _filterCountries(String searchValue) {
-    var listOfCountries = CountriesConstants.nationality
-        .where((country) => country['label']
-        .toString()
-        .toLowerCase()
-        .contains(searchValue.toLowerCase()))
-        .toList();
-
-    for (int i = 0; i < widget.taxResidences.length; i++) {
-      listOfCountries.removeWhere(
-              (item) => item['code'] == widget.taxResidences[i].country);
-    }
-    return listOfCountries;
-  }
-
 }
