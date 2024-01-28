@@ -4,44 +4,66 @@ import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   group('PasswordTextField tests', () {
-    late PasswordTextField passwordTextField;
-    late TextEditingController mockPasswordController;
+    testWidgets('UI components are rendered correctly',
+        (WidgetTester tester) async {
+      TextEditingController passwordController = TextEditingController();
+      bool validatePassword = false;
 
-    setUp(() {
-      mockPasswordController = TextEditingController();
-      passwordTextField = PasswordTextField(
-        passwordController: mockPasswordController,
-        validatePassword: false,
+      // Build our app and trigger a frame
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: PasswordTextField(
+              passwordController: passwordController,
+              validatePassword: validatePassword,
+            ),
+          ),
+        ),
+      );
+
+      // Verify if the password text field is rendered
+      expect(find.byKey(const Key('password')), findsOneWidget);
+
+      // Verify if the password visibility toggle icon is rendered
+      expect(
+        find.byKey(const Key('password_visibility_toggle')),
+        findsOneWidget,
       );
     });
 
-    testWidgets('UI components are rendered correctly', (WidgetTester tester) async {
-      await tester.pumpWidget(MaterialApp(home: passwordTextField));
+    testWidgets('Password visibility toggles correctly',
+        (WidgetTester tester) async {
+      TextEditingController passwordController = TextEditingController();
+      bool validatePassword = false;
 
-      expect(find.byType(TextField), findsOneWidget);
-      expect(find.byIcon(Icons.visibility_off), findsOneWidget);
+      // Build our app and trigger a frame
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: PasswordTextField(
+              passwordController: passwordController,
+              validatePassword: validatePassword,
+            ),
+          ),
+        ),
+      );
+
+      // Get the initial obscureText value
+      bool initialObscureText = tester
+          .widget<TextField>(find.byKey(const Key('password')))
+          .obscureText;
+
+      // Tap on the password visibility toggle icon
+      await tester.tap(find.byKey(const Key('password_visibility_toggle')));
+      await tester.pump();
+
+      // Get the obscureText value after tapping
+      bool updatedObscureText = tester
+          .widget<TextField>(find.byKey(const Key('password')))
+          .obscureText;
+
+      // Verify that the obscureText value has changed after tapping
+      expect(updatedObscureText, !initialObscureText);
     });
-
-    testWidgets('Toggling password visibility works', (WidgetTester tester) async {
-      await tester.pumpWidget(MaterialApp(home: passwordTextField));
-
-      // Initial state - password is not visible
-      expect(find.byIcon(Icons.visibility_off), findsOneWidget);
-
-      // Tap the visibility icon
-      await tester.tap(find.byIcon(Icons.visibility_off));
-      await tester.pumpAndSettle();
-
-      // Password is now visible
-      expect(find.byIcon(Icons.visibility), findsOneWidget);
-
-      // Tap the visibility icon again
-      await tester.tap(find.byIcon(Icons.visibility));
-      await tester.pumpAndSettle();
-
-      // Password is not visible again
-      expect(find.byIcon(Icons.visibility_off), findsOneWidget);
-    });
-
   });
 }
