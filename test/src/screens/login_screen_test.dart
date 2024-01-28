@@ -23,10 +23,9 @@ void main() {
       var developerInfoText = find.byKey(const Key('developer_info_text'));
       expect(developerInfoText, findsOneWidget);
 
-      final developerInfoTextwidget = tester.widget<Text>(developerInfoText);
-      expect(developerInfoTextwidget.data, "Developed by Giancarlo Mennillo");
+      final developerInfoTextWidget = tester.widget<Text>(developerInfoText);
+      expect(developerInfoTextWidget.data, "Developed by Giancarlo Mennillo");
 
-      expect(find.text("Developed by Giancarlo Mennillo"), findsOneWidget);
       expect(find.byType(HelpButton), findsOneWidget);
       expect(find.byType(EmailTextField), findsOneWidget);
       expect(find.byType(PasswordTextField), findsOneWidget);
