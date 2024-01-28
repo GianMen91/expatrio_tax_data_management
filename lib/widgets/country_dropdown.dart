@@ -1,9 +1,9 @@
-import 'package:coding_challenge/search_box.dart';
+import 'package:coding_challenge/widgets/search_box.dart';
 import 'package:coding_challenge/shared/constants.dart';
 import 'package:coding_challenge/shared/countries_constants.dart';
 import 'package:flutter/material.dart';
 
-import 'models/tax_residence.dart';
+import '../models/tax_residence.dart';
 
 class CountryDropdown extends StatefulWidget {
   const CountryDropdown({

@@ -5,7 +5,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 import '../shared/constants.dart';
-import '../tax_data_screen.dart';
+import '../src/screens/tax_data_screen.dart';
 
 // A class providing login services
 class LoginService {

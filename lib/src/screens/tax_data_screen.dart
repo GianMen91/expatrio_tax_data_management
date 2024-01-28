@@ -1,9 +1,9 @@
 // Import necessary packages and files
-import 'package:coding_challenge/tax_data_service.dart';
-import 'package:coding_challenge/tax_form_widget.dart';
+import 'package:coding_challenge/services/tax_data_service.dart';
+import 'package:coding_challenge/widgets/tax_form_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import '../shared/constants.dart';
+import '../../../shared/constants.dart';
 
 // Screen for displaying tax-related data
 class TaxDataScreen extends StatefulWidget {

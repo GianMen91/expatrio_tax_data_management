@@ -1,22 +1,22 @@
 // Import necessary packages and local dependencies
-import 'package:coding_challenge/login/password_text_field.dart';
+import 'package:coding_challenge/widgets/password_text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
-import '../shared/constants.dart';
-import 'email_text_field.dart';
-import 'help_button.dart';
-import 'login_service.dart';
+import '../../shared/constants.dart';
+import '../../widgets/email_text_field.dart';
+import '../../widgets/help_button.dart';
+import '../../services/login_service.dart';
 
 // A StatefulWidget representing the login screen
-class Login extends StatefulWidget {
-  const Login({Key? key}) : super(key: key);
+class LoginScreen extends StatefulWidget {
+  const LoginScreen({Key? key}) : super(key: key);
 
   @override
-  State<Login> createState() => _LoginState();
+  State<LoginScreen> createState() => _LoginScreenState();
 }
 
 // The corresponding State class for the Login widget
-class _LoginState extends State<Login> {
+class _LoginScreenState extends State<LoginScreen> {
   // Controllers for email and password input fields
   final TextEditingController _emailController =
       TextEditingController(text: 'tito+bs792@expatrio.com');

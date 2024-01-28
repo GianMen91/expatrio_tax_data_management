@@ -1,12 +1,12 @@
-import 'package:coding_challenge/country_dropdown.dart';
+import 'package:coding_challenge/widgets/country_dropdown.dart';
 import 'package:coding_challenge/shared/countries_constants.dart';
-import 'package:coding_challenge/tax_data_service.dart';
+import 'package:coding_challenge/services/tax_data_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_shakemywidget/flutter_shakemywidget.dart';
 
-import '../shared/constants.dart';
-import 'models/tax_residence.dart';
+import '../../shared/constants.dart';
+import '../models/tax_residence.dart';
 
 class TaxFormWidget extends StatefulWidget {
   final List<TaxResidence> taxResidences;
