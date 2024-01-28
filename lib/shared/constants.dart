@@ -1,7 +1,7 @@
 // Import the Flutter material library
 import 'package:flutter/material.dart';
 
-// Define color constants for text and background
+// Define color constants
 const kThemeColor = Color.fromRGBO(65, 171, 158, 1);
 const kErrorMessageColor = Color(0xFFFEC008);
 
