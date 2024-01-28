@@ -32,11 +32,8 @@ Welcome to the Expatrio Tax Data Management App! This Flutter application is des
 - **HTTP**: A Dart package for making HTTP requests, facilitating communication with remote APIs.
 - **Flutter Secure Storage**: A Flutter plugin for securely storing key-value pairs, ensuring sensitive data is stored safely.
 - **Flutter SVG**: A Flutter plugin for rendering SVG images, offering scalable and resolution-independent graphics.
-- **Cupertino Icons**: Icon set for iOS style icons, used for consistent visual elements in the Cupertino design language.
-- **Cupertino Flutter Shake Widget**: A Flutter package for adding a shake animation to widgets, providing visual feedback on user interactions.
 - **Flutter Lints**: A set of recommended lint rules for Flutter projects, ensuring good coding practices.
 - **Flutter Test**: The Flutter testing package for writing unit and widget tests, ensuring the reliability of the codebase.
-- **Build Runner**: A Dart package that provides a concrete way of generating files using Dart code.
 - **Flutter Shake My Widget**: A Flutter package for adding shake animations to widgets, enhancing the user interface with visual feedback.
 - **Path**: A Dart package providing common operations for manipulating file paths.
 
