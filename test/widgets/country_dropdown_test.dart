@@ -2,17 +2,12 @@ import 'package:coding_challenge/widgets/country_dropdown.dart';
 import 'package:coding_challenge/widgets/search_box.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mockito/mockito.dart';
-
-class MockBuildContext extends Mock implements BuildContext {}
 
 void main() {
   group('CountryDropdown tests', () {
     late CountryDropdown countryDropdown;
-    late MockBuildContext mockBuildContext;
 
     setUp(() {
-      mockBuildContext = MockBuildContext();
       countryDropdown = CountryDropdown(
         updateSelectedCountry: (value) {},
         index: 0,

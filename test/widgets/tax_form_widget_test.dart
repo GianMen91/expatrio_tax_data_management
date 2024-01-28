@@ -1,12 +1,8 @@
 import 'package:coding_challenge/models/tax_residence.dart';
 import 'package:coding_challenge/widgets/tax_form_widget.dart';
 import 'package:coding_challenge/widgets/country_dropdown.dart';
-import 'package:coding_challenge/services/tax_data_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mockito/mockito.dart';
-
-class MockTaxDataService extends Mock implements TaxDataService {}
 
 void main() {
   group('TaxFormWidget tests', () {
@@ -14,7 +10,6 @@ void main() {
     late List<TaxResidence> mockTaxResidences;
     late String mockAccessToken;
     late int mockCustomerID;
-    late MockTaxDataService mockTaxDataService;
 
     setUp(() {
       mockTaxResidences = [
@@ -23,7 +18,6 @@ void main() {
       ];
       mockAccessToken = 'mockAccessToken';
       mockCustomerID = 123;
-      mockTaxDataService = MockTaxDataService();
 
       taxFormWidget = TaxFormWidget(mockTaxResidences, mockAccessToken, mockCustomerID);
     });
