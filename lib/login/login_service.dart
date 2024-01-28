@@ -1,3 +1,4 @@
+// Import necessary packages and local dependencies
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -6,13 +7,17 @@ import 'dart:convert';
 import '../shared/constants.dart';
 import '../tax_data_screen.dart';
 
+// A class providing login services
 class LoginService {
+  // Base URL for API requests
   static const String baseUrl = 'https://dev-api.expatrio.com';
 
+  // Method for handling user login
   Future<bool> login(
       String email, String password, BuildContext context) async {
     final Size size = MediaQuery.of(context).size;
 
+    // Show a snack bar indicating that the login process is ongoing
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text("Trying to login...",
             style: TextStyle(
@@ -20,21 +25,29 @@ class LoginService {
             ))));
 
     try {
+      // Prepare login data
       final data = {"email": email, "password": password};
+
+      // Send a POST request to the login API
       final response = await http.post(
         Uri.parse("$baseUrl/auth/login"),
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode(data),
       );
 
+      // Decode the response body
       final responseBody = json.decode(response.body);
+
+      // Check the status code of the response
       if (response.statusCode == 200) {
+        // If successful, show a success bottom sheet
         if (context.mounted) {
           ScaffoldMessenger.of(context).removeCurrentSnackBar();
           _showSuccessBottomSheet(context, responseBody);
         }
         return true;
       } else {
+        // If unsuccessful, show an error bottom sheet
         if (context.mounted) {
           ScaffoldMessenger.of(context).removeCurrentSnackBar();
           _showErrorBottomSheet(context, responseBody['message']);
@@ -42,34 +55,29 @@ class LoginService {
         return false;
       }
     } on SocketException catch (e) {
+      // Handle socket exception (no internet connection)
       if (context.mounted) {
         ScaffoldMessenger.of(context).removeCurrentSnackBar();
-        _showErrorBottomSheet(
-            context,
+        _showErrorBottomSheet(context,
             "Unable to communicate with the server. Check your internet connection and retry! Error: $e");
       }
       return false;
     }
   }
 
-  void _showSuccessBottomSheet(BuildContext context, Map<String, dynamic> responseBody) {
-    _showBottomSheet(
-        context,
-        "Successful Login",
-        "Redirecting to your dashboard",
-        true,
-        responseBody);
+  // Method to show a success bottom sheet
+  void _showSuccessBottomSheet(
+      BuildContext context, Map<String, dynamic> responseBody) {
+    _showBottomSheet(context, "Successful Login",
+        "Redirecting to your dashboard", true, responseBody);
   }
 
+  // Method to show an error bottom sheet
   void _showErrorBottomSheet(BuildContext context, String errorMessage) {
-    _showBottomSheet(
-        context,
-        "Invalid Credentials",
-        errorMessage,
-        false,
-        null);
+    _showBottomSheet(context, "Invalid Credentials", errorMessage, false, null);
   }
 
+  // Method to show a bottom sheet with various messages
   void _showBottomSheet(BuildContext context, String title, String message,
       bool successfulAccess, Map<String, dynamic>? responseBody) {
     showModalBottomSheet<void>(
@@ -107,6 +115,7 @@ class LoginService {
                       style: TextStyle(fontSize: size.width > 600 ? 22 : 14.0)),
                 ),
                 SizedBox(height: size.width > 600 ? 35 : 15),
+                // Elevated button for user interaction
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     minimumSize: Size(size.width > 600 ? 168.0 : 48.0,
@@ -116,15 +125,16 @@ class LoginService {
                   child: Text('GOT IT',
                       style: TextStyle(fontSize: size.width > 600 ? 22 : 14.0)),
                   onPressed: () {
+                    // Navigate based on the result of the login attempt
                     if (successfulAccess) {
                       Navigator.pop(context);
                       Navigator.push(
                           context,
                           MaterialPageRoute(
                               builder: (context) => TaxDataScreen(
-                                accessToken: responseBody!['accessToken'],
-                                customerID: responseBody['userId'],
-                              )));
+                                    accessToken: responseBody!['accessToken'],
+                                    customerID: responseBody['userId'],
+                                  )));
                     } else {
                       Navigator.pop(context);
                     }
