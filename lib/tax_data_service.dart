@@ -1,14 +1,65 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:coding_challenge/models/tax_residence.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 
 class TaxDataService {
   static const String _baseUrl = 'https://dev-api.expatrio.com';
 
+  static Future<List<TaxResidence>> getTaxData(int customerId, String accessToken) async {
+    const String baseUrl = 'https://dev-api.expatrio.com';
+    List<TaxResidence> taxResidences = [];
+
+    try {
+      final response = await http.get(
+        Uri.parse("$baseUrl/v3/customers/$customerId/tax-data"),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': accessToken,
+        },
+      );
+
+      if (response.statusCode == 200) {
+        Map<String, dynamic> jsonData = json.decode(response.body);
+
+        // Handle primary tax residence separately
+        taxResidences.add(TaxResidence(
+          country: jsonData["primaryTaxResidence"]["country"],
+          id: jsonData["primaryTaxResidence"]["id"],
+        ));
+
+        // Handle other tax residences
+        for (String key in jsonData.keys) {
+          if (key.contains("TaxResidence") && jsonData[key] is List<dynamic>) {
+            List<dynamic> innerList = jsonData[key];
+            for (var innerMap in innerList) {
+              taxResidences.add(TaxResidence(
+                country: innerMap["country"],
+                id: innerMap["id"],
+              ));
+            }
+          }
+        }
+
+        return taxResidences;
+      } else {
+        // Handle non-200 status codes or other errors
+        return taxResidences;
+      }
+    } on Exception catch (e) {
+      // Handle exceptions
+      if (kDebugMode) {
+        print(e);
+      }
+      return taxResidences;
+    }
+  }
+
   static Future<void> handleSaving(
-      int customerId, String accessToken, taxResidences) async {
+      int customerId, String accessToken, List<TaxResidence> taxResidences) async {
     try {
       int id = customerId;
 

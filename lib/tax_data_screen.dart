@@ -1,19 +1,15 @@
-import 'dart:convert';
-
-import 'package:coding_challenge/models/tax_residence.dart';
+import 'package:coding_challenge/tax_data_service.dart';
 import 'package:coding_challenge/tax_form_widget.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import '../shared/constants.dart';
-import 'package:http/http.dart' as http;
 
 class TaxDataScreen extends StatefulWidget {
   const TaxDataScreen(
-      {super.key, required this.customerID, required this.accessToken});
+      {super.key, required this.customerId, required this.accessToken});
 
   final String accessToken;
-  final int customerID;
+  final int customerId;
 
   @override
   State<TaxDataScreen> createState() => _TaxDataScreenState();
@@ -70,52 +66,7 @@ class _TaxDataScreenState extends State<TaxDataScreen> {
                     ),
                   ),
                   SizedBox(height: size.width > 600 ? 35 : 15),
-                  ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: kThemeColor,
-                      minimumSize: Size(size.width > 600 ? 168.0 : 48.0,
-                          size.width > 600 ? 68.0 : 48.0),
-                    ),
-                    child: Text('UPDATE YOUR TAX DATA',
-                        style:
-                            TextStyle(fontSize: size.width > 600 ? 22 : 14.0)),
-                    onPressed: () async {
-                      if (context.mounted) {
-                        showModalBottomSheet<void>(
-                          isScrollControlled: true,
-                          context: context,
-                          constraints: const BoxConstraints(
-                            minWidth: double.infinity,
-                          ),
-                          builder: (BuildContext context) {
-                            return FutureBuilder(
-                              future: getTaxData(context),
-                              builder: (BuildContext context,
-                                  AsyncSnapshot snapshot) {
-                                if (snapshot.data == null) {
-                                  // While waiting for the response, show CircularProgressIndicator
-                                  return const Center(
-                                    child: CircularProgressIndicator(
-                                        color: kThemeColor),
-                                  );
-                                } else if (snapshot.hasError) {
-                                  return Text('Error: ${snapshot.error}');
-                                } else if (snapshot.data!.isNotEmpty) {
-                                  return TaxFormWidget(
-                                    snapshot.data!,
-                                    widget.accessToken,
-                                    widget.customerID,
-                                  );
-                                } else {
-                                  return const Text('No tax data available.');
-                                }
-                              },
-                            );
-                          },
-                        );
-                      }
-                    },
-                  ),
+                  _buildUpdateTaxDataButton(size, context),
                 ],
               ),
             ),
@@ -126,53 +77,50 @@ class _TaxDataScreenState extends State<TaxDataScreen> {
     );
   }
 
-  Future<List<TaxResidence>> getTaxData(BuildContext context) async {
-    const String baseUrl = 'https://dev-api.expatrio.com';
-    int customerId = widget.customerID;
-    List<TaxResidence> taxResidences = [];
-
-    try {
-      final response = await http.get(
-        Uri.parse("$baseUrl/v3/customers/$customerId/tax-data"),
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': widget.accessToken,
-        },
-      );
-
-      if (response.statusCode == 200) {
-        Map<String, dynamic> jsonData = json.decode(response.body);
-
-        // Handle primary tax residence separately
-        taxResidences.add(TaxResidence(
-          country: jsonData["primaryTaxResidence"]["country"],
-          id: jsonData["primaryTaxResidence"]["id"],
-        ));
-
-        // Handle other tax residences
-        for (String key in jsonData.keys) {
-          if (key.contains("TaxResidence") && jsonData[key] is List<dynamic>) {
-            List<dynamic> innerList = jsonData[key];
-            for (var innerMap in innerList) {
-              taxResidences.add(TaxResidence(
-                country: innerMap["country"],
-                id: innerMap["id"],
-              ));
-            }
-          }
+  ElevatedButton _buildUpdateTaxDataButton(Size size, BuildContext context) {
+    return ElevatedButton(
+      style: ElevatedButton.styleFrom(
+        backgroundColor: kThemeColor,
+        minimumSize: Size(
+            size.width > 600 ? 168.0 : 48.0, size.width > 600 ? 68.0 : 48.0),
+      ),
+      child: Text('UPDATE YOUR TAX DATA',
+          style: TextStyle(fontSize: size.width > 600 ? 22 : 14.0)),
+      onPressed: () async {
+        if (context.mounted) {
+          showModalBottomSheet<void>(
+            isScrollControlled: true,
+            context: context,
+            constraints: const BoxConstraints(
+              minWidth: double.infinity,
+            ),
+            builder: (BuildContext context) {
+              return FutureBuilder(
+                future: TaxDataService.getTaxData(
+                    widget.customerId, widget.accessToken),
+                builder: (BuildContext context, AsyncSnapshot snapshot) {
+                  if (snapshot.data == null) {
+                    // While waiting for the response, show CircularProgressIndicator
+                    return const Center(
+                      child: CircularProgressIndicator(color: kThemeColor),
+                    );
+                  } else if (snapshot.hasError) {
+                    return Text('Error: ${snapshot.error}');
+                  } else if (snapshot.data!.isNotEmpty) {
+                    return TaxFormWidget(
+                      snapshot.data!,
+                      widget.accessToken,
+                      widget.customerId,
+                    );
+                  } else {
+                    return const Text('No tax data available.');
+                  }
+                },
+              );
+            },
+          );
         }
-
-        return taxResidences;
-      } else {
-        // Handle non-200 status codes or other errors
-        return taxResidences;
-      }
-    } on Exception catch (e) {
-      // Handle exceptions
-      if (kDebugMode) {
-        print(e);
-      }
-      return taxResidences;
-    }
+      },
+    );
   }
 }

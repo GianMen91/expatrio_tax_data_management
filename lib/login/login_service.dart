@@ -133,7 +133,7 @@ class LoginService {
                           MaterialPageRoute(
                               builder: (context) => TaxDataScreen(
                                     accessToken: responseBody!['accessToken'],
-                                    customerID: responseBody['userId'],
+                                    customerId: responseBody['userId'],
                                   )));
                     } else {
                       Navigator.pop(context);
