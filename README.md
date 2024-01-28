@@ -21,7 +21,6 @@ Welcome to the Expatrio Tax Data Management App! This Flutter application is des
    - The user can also remove any additional countries by clicking on the "REMOVE" button. A verification is made so that by default, the user must have at least one country/tax pair available.
    - The user is forced to check a checkbox verifying the accuracy of their information before being able to submit their tax data.
    - The tax data is stored locally for the user’s ID and pushed to the backend via API call.
-   - On clicking on the "Update Tax Data" button again, the bottom sheet open with the user's populated data, allowing them to edit and update the information again.
 4. **Country Dropdown Widget**: A reusable widget for searching and selecting countries, ensuring a standardized and user-friendly approach across the application.
 5. **Search Box Widget**: A search box that enhances the user's ability to find specific information quickly, improving overall usability.
 
