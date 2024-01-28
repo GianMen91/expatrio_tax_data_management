@@ -60,7 +60,10 @@ class _LoginScreenState extends State<LoginScreen> {
                   Center(
                     child: SizedBox(
                       width: 200,
-                      child: Image.asset('assets/2019_XP_logo_white.png'),
+                      child: Image.asset(
+                        'assets/2019_XP_logo_white.png',
+                        key: const Key('expatrio_logo'),
+                      ),
                     ),
                   ),
                   const SizedBox(height: 30),
@@ -68,6 +71,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   _buildRowWithIconAndText(Icons.mail_outline, 'EMAIL ADDRESS'),
                   const SizedBox(height: 10),
                   EmailTextField(
+                      key: const Key('email_text_field'),
                       emailController: _emailController,
                       validateEmail: _validateEmail),
                   const SizedBox(height: 10),
@@ -75,18 +79,20 @@ class _LoginScreenState extends State<LoginScreen> {
                   _buildRowWithIconAndText(Icons.lock_outline, 'PASSWORD'),
                   const SizedBox(height: 10),
                   PasswordTextField(
+                      key: const Key('password_text_field'),
                       passwordController: _passwordController,
                       validatePassword: _validatePassword),
                   const SizedBox(height: 20),
                   // Custom widget for the login button
-                  _buildSaveButton(context),
+                  _buildLoginButton(context),
                   const Text("Developed by Giancarlo Mennillo",
+                      key: Key('developer_info_text'),
                       style: TextStyle(fontSize: 10)),
                 ],
               ),
             ),
             // Custom widget for the help button
-            HelpButton(size: size),
+            HelpButton(size: size, key: const Key('help_button')),
           ],
         ),
       ),
@@ -94,7 +100,7 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   // Custom widget for the login button
-  Widget _buildSaveButton(BuildContext context) {
+  Widget _buildLoginButton(BuildContext context) {
     return Container(
       width: double.infinity,
       height: 50,
@@ -105,7 +111,7 @@ class _LoginScreenState extends State<LoginScreen> {
         ),
         child: const Text(
           'LOGIN',
-          key: Key('login'),
+          key: Key('login_button'),
           style: TextStyle(
             fontSize: 17,
           ),
